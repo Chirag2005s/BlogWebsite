@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 
+import mongoose from 'mongoose';
 import connectDB from './src/config/db.js';
 import { notFound, errorHandler } from './src/middlewares/error.middleware.js';
 import authRoutes from './src/routes/auth.routes.js';
@@ -16,7 +17,13 @@ import { syncCategories } from './src/controllers/category.controller.js';
 dotenv.config();
 
 // Connect to MongoDB
-connectDB();
+connectDB().then(() => {
+  if (mongoose.connection.readyState === 1) {
+    syncCategories();
+  }
+}).catch((err) => {
+  console.error('Initial DB connection error:', err.message);
+});
 
 const app = express();
 
@@ -49,10 +56,14 @@ app.use(
 
       const cleanOrigin = origin.trim().replace(/\/+$/, '').toLowerCase();
 
-      // Allow if origin is explicitly in allowed list, matches *.vercel.app, or in development mode
+      // Allow if origin is explicitly in allowed list, matches *.vercel.app, *.netlify.app, *.onrender.com, localhost, or in development mode
       if (
         allowedOrigins.has(cleanOrigin) ||
         /^https:\/\/.*\.vercel\.app$/.test(cleanOrigin) ||
+        /^https:\/\/.*\.netlify\.app$/.test(cleanOrigin) ||
+        /^https:\/\/.*\.onrender\.com$/.test(cleanOrigin) ||
+        cleanOrigin.includes('localhost') ||
+        cleanOrigin.includes('127.0.0.1') ||
         process.env.NODE_ENV !== 'production'
       ) {
         return callback(null, true);
@@ -76,21 +87,28 @@ if (process.env.NODE_ENV === 'development') {
 
 // Health check route
 app.get('/', (req, res) => {
-  res.send('API is running...');
+  res.json({
+    status: 'online',
+    message: 'API is running...',
+    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+  });
 });
 
 // Ensure database connection is ready for incoming requests
 app.use(async (req, res, next) => {
   try {
     await connectDB();
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({
+        success: false,
+        message: 'Database connection is not ready. Please verify MONGO_URI in Render environment variables.',
+      });
+    }
     next();
   } catch (err) {
     next(err);
   }
 });
-
-// Synchronize categories with database
-syncCategories();
 
 // API Routes
 app.use('/api/auth', authRoutes);

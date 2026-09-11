@@ -1,7 +1,18 @@
 import axios from 'axios';
 
+const RENDER_BACKEND_URL = 'https://blogwebsite-vb09.onrender.com';
+
+const getBaseURL = () => {
+  const envUrl = import.meta.env.VITE_API_URL;
+  if (envUrl && envUrl.trim()) {
+    const cleanUrl = envUrl.trim().replace(/\/+$/, '');
+    return cleanUrl.endsWith('/api') ? cleanUrl : `${cleanUrl}/api`;
+  }
+  return `${RENDER_BACKEND_URL}/api`;
+};
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: getBaseURL(),
   withCredentials: true,
 });
 

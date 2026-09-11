@@ -12,15 +12,18 @@ const connectDB = async () => {
     return;
   }
 
+  if (process.env.NODE_ENV === 'production' && process.env.MONGO_URI.includes('localhost')) {
+    console.warn('⚠️ WARNING: MONGO_URI points to localhost in production. Please configure a MongoDB Atlas cloud URI in your Render environment variables!');
+  }
+
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI);
+    const conn = await mongoose.connect(process.env.MONGO_URI, {
+      serverSelectionTimeoutMS: 5000,
+    });
     isConnected = true;
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
     console.error(`MongoDB Connection Error: ${error.message}`);
-    if (!process.env.VERCEL) {
-      process.exit(1);
-    }
   }
 };
 
