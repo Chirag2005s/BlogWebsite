@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { HiOutlineSearch, HiOutlinePencil, HiOutlineTrash, HiOutlineEye } from 'react-icons/hi';
+import { HiOutlineSearch, HiOutlinePencil, HiOutlineTrash, HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
 import toast from 'react-hot-toast';
 import api from '../services/api';
+
+const TYPE_EMOJI = { blog: '✍️', article: '📄', programming: '💻' };
 
 const ContentTable = ({ articles, onRefresh, title = 'All Content' }) => {
   const navigate = useNavigate();
@@ -44,12 +46,15 @@ const ContentTable = ({ articles, onRefresh, title = 'All Content' }) => {
   };
 
   const getTypeBadge = (type) => {
-    const cls = type === 'article' ? 'badge-article' : 'badge-blog';
+    const cls = type === 'article' ? 'badge-article'
+               : type === 'programming' ? 'badge-programming'
+               : 'badge-blog';
     return <span className={`badge ${cls}`}>{type || 'blog'}</span>;
   };
 
   return (
     <div className="content-table-wrapper">
+      {/* ── Header & Filters ── */}
       <div className="table-header">
         <div className="table-title">{title} ({filtered.length})</div>
         <div className="table-actions">
@@ -70,6 +75,7 @@ const ContentTable = ({ articles, onRefresh, title = 'All Content' }) => {
             <option value="all">All Types</option>
             <option value="blog">Blogs</option>
             <option value="article">Articles</option>
+            <option value="programming">Programming</option>
           </select>
           <select
             className="table-filter"
@@ -84,71 +90,102 @@ const ContentTable = ({ articles, onRefresh, title = 'All Content' }) => {
         </div>
       </div>
 
+      {/* ── Empty State ── */}
       {filtered.length === 0 ? (
         <div className="empty-state">
           <div className="empty-state-icon">📭</div>
           <div className="empty-state-text">No content found matching your filters.</div>
         </div>
       ) : (
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Type</th>
-              <th>Category</th>
-              <th>Status</th>
-              <th>Views</th>
-              <th>Likes</th>
-              <th>Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((item) => (
-              <tr key={item._id}>
-                <td>
-                  <span className="table-content-title">{item.title}</span>
-                  <span className="table-content-meta">by {item.author?.name || 'Unknown'}</span>
-                </td>
-                <td>{getTypeBadge(item.type)}</td>
-                <td>{item.category?.name || '—'}</td>
-                <td>{getStatusBadge(item.status)}</td>
-                <td>{item.views || 0}</td>
-                <td>{item.likes || 0}</td>
-                <td>{formatDate(item.createdAt)}</td>
-                <td>
-                  <div className="action-btns">
-                    {item.status === 'Published' && (
-                      <a
-                        href={`http://localhost:5173/${item.type === 'article' ? 'article' : 'blog'}/${item.slug}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="action-btn action-btn-view"
-                        title="View Live"
-                      >
-                        <HiOutlineEye />
-                      </a>
-                    )}
-                    <button
-                      className="action-btn action-btn-edit"
-                      title="Edit"
-                      onClick={() => navigate(`/edit/${item._id}`)}
+        /* ── Card Grid ── */
+        <div className="content-card-grid">
+          {filtered.map((item) => (
+            <div key={item._id} className="content-card">
+              {/* Cover Image */}
+              {item.coverImage ? (
+                <img
+                  src={item.coverImage}
+                  alt={item.title}
+                  className="card-cover"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                    e.currentTarget.nextSibling.style.display = 'flex';
+                  }}
+                />
+              ) : null}
+              <div
+                className="card-cover-placeholder"
+                style={{ display: item.coverImage ? 'none' : 'flex' }}
+              >
+                {TYPE_EMOJI[item.type] || '📝'}
+              </div>
+
+              {/* Body */}
+              <div className="card-body">
+                <div className="card-badges">
+                  {getTypeBadge(item.type)}
+                  {getStatusBadge(item.status)}
+                </div>
+
+                <div className="card-title">{item.title}</div>
+
+                <div className="card-meta">
+                  <span>by {item.author?.name || 'Unknown'}</span>
+                  {item.category?.name && (
+                    <>
+                      <span style={{ color: 'var(--text-muted)' }}>·</span>
+                      <span>{item.category.name}</span>
+                    </>
+                  )}
+                </div>
+
+                <div className="card-stats">
+                  <span className="card-stat">👁 {item.views || 0}</span>
+                  <span className="card-stat">❤️ {item.likes || 0}</span>
+                  {item.difficulty && (
+                    <span className="card-stat">📶 {item.difficulty}</span>
+                  )}
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="card-footer">
+                <span className="card-date">{formatDate(item.createdAt)}</span>
+                <div className="action-btns">
+                  {item.status === 'Published' ? (
+                    <a
+                      href={`http://localhost:5173/${item.type === 'article' ? 'article' : item.type === 'programming' ? 'programming' : 'blog'}/${item.slug}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="action-btn action-btn-view"
+                      title="View Live"
                     >
-                      <HiOutlinePencil />
+                      <HiOutlineEye />
+                    </a>
+                  ) : (
+                    <button className="action-btn" title="Not Published" disabled style={{ opacity: 0.35 }}>
+                      <HiOutlineEyeOff />
                     </button>
-                    <button
-                      className="action-btn action-btn-delete"
-                      title="Delete"
-                      onClick={() => handleDelete(item._id, item.title)}
-                    >
-                      <HiOutlineTrash />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  )}
+                  <button
+                    className="action-btn action-btn-edit"
+                    title="Edit"
+                    onClick={() => navigate(`/edit/${item._id}`)}
+                  >
+                    <HiOutlinePencil />
+                  </button>
+                  <button
+                    className="action-btn action-btn-delete"
+                    title="Delete"
+                    onClick={() => handleDelete(item._id, item.title)}
+                  >
+                    <HiOutlineTrash />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );

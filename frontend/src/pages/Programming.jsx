@@ -352,6 +352,7 @@ const Programming = () => {
   const [running, setRunning] = useState(false);
   const [terminalOutput, setTerminalOutput] = useState(CODE_SNIPPETS[0].output);
   const [relatedArticles, setRelatedArticles] = useState([]);
+  const [communityPosts, setCommunityPosts] = useState([]);
 
   // Fetch articles related to programming / web technology
   useEffect(() => {
@@ -373,6 +374,12 @@ const Programming = () => {
             );
           }).slice(0, 4);
           setRelatedArticles(filtered);
+
+          // Community Posts: type === 'programming' and Published
+          const community = list.filter(
+            (a) => a.type === 'programming' && a.status === 'Published'
+          ).slice(0, 8);
+          setCommunityPosts(community);
         }
       } catch (err) {
         console.error('Failed to load related programming articles', err);
@@ -878,18 +885,18 @@ const Programming = () => {
             </div>
             <div className="flex items-center gap-2.5">
               <Link
-                to="/admin/add-article"
+                to="/programming/submit"
                 className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-xs font-semibold shadow-lg shadow-primary-600/20 transition-all cursor-pointer"
               >
                 <Plus size={14} />
-                Write Article
+                Post Your Content
               </Link>
               <Link
-                to="/admin"
+                to="/admin/add-article"
                 className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl glass hover:bg-white/10 text-white text-xs font-semibold transition-all cursor-pointer"
               >
                 <PenTool size={14} />
-                Write Blog
+                Admin Article
               </Link>
             </div>
           </div>
@@ -927,6 +934,67 @@ const Programming = () => {
           </div>
         </div>
       </section>
+
+      {/* ═══ Community Programming Posts ═══ */}
+      {communityPosts.length > 0 && (
+        <section className="space-y-4">
+          <div className="flex items-center gap-2">
+            <Code2 size={18} className="text-primary-400" />
+            <h2 className="text-xl font-bold text-white">Community Posts</h2>
+            <span className="ml-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-primary-500/15 text-primary-300 border border-primary-500/25">
+              {communityPosts.length}
+            </span>
+          </div>
+          <p className="text-xs text-text-secondary -mt-2">
+            Programming content submitted by community members and approved by our team.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {communityPosts.map((post) => (
+              <Link
+                key={post._id}
+                to={`/article/${post.slug}`}
+                className="group glass-card rounded-2xl overflow-hidden border border-white/5 hover:border-primary-500/30 transition-all hover:-translate-y-1"
+              >
+                {post.coverImage ? (
+                  <img
+                    src={post.coverImage}
+                    alt={post.title}
+                    className="w-full h-36 object-cover"
+                    onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                  />
+                ) : (
+                  <div className="w-full h-36 flex items-center justify-center text-4xl bg-gradient-to-br from-primary-600/20 to-purple-600/20">💻</div>
+                )}
+                <div className="p-4 space-y-2">
+                  <div className="flex items-center gap-1.5">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-primary-500/15 text-primary-300 border border-primary-500/25">Programming</span>
+                    {post.difficulty && (
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-white/5 text-text-muted border border-white/5">{post.difficulty}</span>
+                    )}
+                  </div>
+                  <h3 className="text-sm font-semibold text-white group-hover:text-primary-300 transition-colors line-clamp-2">{post.title}</h3>
+                  <p className="text-xs text-text-secondary line-clamp-2">{post.excerpt}</p>
+                  <div className="text-[11px] text-text-muted pt-2 border-t border-white/5 flex items-center justify-between">
+                    <span>by {post.author?.name || 'Community'}</span>
+                    <span className="text-primary-400 font-medium group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5">
+                      Read <ChevronRight size={12} />
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+          <div className="text-center pt-2">
+            <Link
+              to="/programming/submit"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-primary-600 to-purple-600 hover:from-primary-500 hover:to-purple-500 text-white text-sm font-semibold shadow-lg transition-all cursor-pointer"
+            >
+              <Plus size={15} />
+              Submit Your Programming Post
+            </Link>
+          </div>
+        </section>
+      )}
     </div>
   );
 };

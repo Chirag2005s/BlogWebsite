@@ -237,7 +237,7 @@ const ContentForm = ({ initialData, type = 'blog', onSuccess }) => {
           className="btn btn-primary"
           disabled={loading}
         >
-          {loading ? 'Saving...' : isEditing ? 'Update' : `Publish ${type === 'blog' ? 'Blog' : 'Article'}`}
+          {loading ? 'Saving...' : isEditing ? 'Update' : `Publish ${type === 'blog' ? 'Blog' : type === 'programming' ? 'Programming Post' : 'Article'}`}
         </button>
       </div>
     </form>

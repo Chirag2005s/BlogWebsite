@@ -10,6 +10,7 @@ import {
   HiOutlineUser,
   HiOutlineChevronLeft,
   HiOutlineChevronRight,
+  HiOutlineCode,
 } from 'react-icons/hi';
 
 const Sidebar = ({ collapsed, onToggle }) => {
@@ -20,6 +21,7 @@ const Sidebar = ({ collapsed, onToggle }) => {
     { to: '/', icon: HiOutlineViewGrid, label: 'Overview' },
     { to: '/add-blog', icon: HiOutlinePencilAlt, label: 'Add Blog' },
     { to: '/add-article', icon: HiOutlineDocumentText, label: 'Add Article' },
+    { to: '/add-programming', icon: HiOutlineCode, label: 'Add Programming' },
     { to: '/content', icon: HiOutlineCollection, label: 'Manage Content' },
     { to: '/categories', icon: HiOutlineTag, label: 'Categories' },
   ];

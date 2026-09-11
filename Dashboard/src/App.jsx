@@ -9,6 +9,7 @@ import Login from './pages/Login';
 import Overview from './pages/Overview';
 import AddBlog from './pages/AddBlog';
 import AddArticle from './pages/AddArticle';
+import AddProgramming from './pages/AddProgramming';
 import ManageContent from './pages/ManageContent';
 import EditContent from './pages/EditContent';
 import Categories from './pages/Categories';
@@ -59,6 +60,7 @@ function App() {
             <Route path="/" element={<Overview />} />
             <Route path="/add-blog" element={<AddBlog />} />
             <Route path="/add-article" element={<AddArticle />} />
+            <Route path="/add-programming" element={<AddProgramming />} />
             <Route path="/content" element={<ManageContent />} />
             <Route path="/edit/:id" element={<EditContent />} />
             <Route path="/categories" element={<Categories />} />

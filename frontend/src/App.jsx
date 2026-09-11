@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import TechNews from './pages/TechNews';
 import Programming from './pages/Programming';
+import AddProgrammingPost from './pages/AddProgrammingPost';
 import AdminLayout from './layouts/AdminLayout';
 import AddBlog from './pages/admin/AddBlog';
 import ManageArticles from './pages/admin/ManageArticles';
@@ -24,6 +25,7 @@ function App() {
           <Route path="articles" element={<ArticlesList />} />
           <Route path="article/:slug" element={<ArticleView />} />
           <Route path="programming" element={<Programming />} />
+          <Route path="programming/submit" element={<AddProgrammingPost />} />
           <Route path="news" element={<TechNews />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />

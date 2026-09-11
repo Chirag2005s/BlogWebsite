@@ -55,7 +55,7 @@ const articleSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ['blog', 'article'],
+      enum: ['blog', 'article', 'programming'],
       default: 'blog',
     },
     views: {

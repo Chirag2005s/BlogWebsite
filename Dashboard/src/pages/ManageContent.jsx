@@ -39,6 +39,9 @@ const ManageContent = () => {
           <button className="btn btn-secondary" onClick={() => navigate('/add-blog')}>
             <HiOutlinePlus /> New Blog
           </button>
+          <button className="btn btn-secondary" onClick={() => navigate('/add-programming')}>
+            <HiOutlinePlus /> New Programming
+          </button>
           <button className="btn btn-primary" onClick={() => navigate('/add-article')}>
             <HiOutlinePlus /> New Article
           </button>
