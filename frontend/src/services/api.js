@@ -4,14 +4,14 @@ const RENDER_BACKEND_URL = 'https://blogwebsite-vb09.onrender.com';
 
 // Dynamically determine the base API URL:
 // 1. If VITE_API_URL is set in environment, use it.
-// 2. Otherwise default directly to deployed Render backend: https://blogwebsite-vb09.onrender.com/api
+// 2. Otherwise default to '/api' (proxied by Vite to http://localhost:5000).
 const getBaseURL = () => {
   const envUrl = import.meta.env.VITE_API_URL;
   if (envUrl && envUrl.trim()) {
     const cleanUrl = envUrl.trim().replace(/\/+$/, '');
     return cleanUrl.endsWith('/api') ? cleanUrl : `${cleanUrl}/api`;
   }
-  return `${RENDER_BACKEND_URL}/api`;
+  return '/api';
 };
 
 const api = axios.create({

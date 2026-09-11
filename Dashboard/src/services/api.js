@@ -8,7 +8,7 @@ const getBaseURL = () => {
     const cleanUrl = envUrl.trim().replace(/\/+$/, '');
     return cleanUrl.endsWith('/api') ? cleanUrl : `${cleanUrl}/api`;
   }
-  return `${RENDER_BACKEND_URL}/api`;
+  return '/api';
 };
 
 const api = axios.create({
