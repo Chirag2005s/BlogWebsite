@@ -11,6 +11,7 @@ const protect = async (req, res, next) => {
   }
 
   if (token) {
+    try {
       const secret = process.env.JWT_SECRET || 'jwt_secret_fallback_key_2026';
       const decoded = jwt.verify(token, secret);
       req.user = await User.findById(decoded.userId).select('-password');
@@ -58,6 +59,7 @@ const optionalProtect = async (req, res, next) => {
   }
 
   if (token) {
+    try {
       const secret = process.env.JWT_SECRET || 'jwt_secret_fallback_key_2026';
       const decoded = jwt.verify(token, secret);
       req.user = await User.findById(decoded.userId).select('-password');
