@@ -8,19 +8,31 @@ export const registerUser = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
 
-    const userExists = await User.findOne({ email });
+    if (!name || !email || !password) {
+      res.status(400);
+      throw new Error('Please fill all required fields (name, email, and password)');
+    }
+
+    if (password.length < 6) {
+      res.status(400);
+      throw new Error('Password must be at least 6 characters long');
+    }
+
+    const normalizedEmail = email.toLowerCase().trim();
+
+    const userExists = await User.findOne({ email: normalizedEmail });
 
     if (userExists) {
       res.status(400);
-      throw new Error('User already exists');
+      throw new Error('An account with this email already exists');
     }
 
     const isFirstAccount = (await User.countDocuments({})) === 0;
     const role = isFirstAccount ? 'ADMIN' : 'USER';
 
     const user = await User.create({
-      name,
-      email,
+      name: name.trim(),
+      email: normalizedEmail,
       password,
       role,
     });
@@ -39,7 +51,7 @@ export const registerUser = async (req, res, next) => {
       });
     } else {
       res.status(400);
-      throw new Error('Invalid user data');
+      throw new Error('Invalid user data received');
     }
   } catch (error) {
     next(error);
@@ -53,7 +65,13 @@ export const loginUser = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    if (!email || !password) {
+      res.status(400);
+      throw new Error('Please enter both email and password');
+    }
+
+    const normalizedEmail = email.toLowerCase().trim();
+    const user = await User.findOne({ email: normalizedEmail });
 
     if (user && (await user.matchPassword(password))) {
       const token = generateToken(res, user._id);

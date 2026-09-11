@@ -36,18 +36,18 @@ const defaultOrigins = [
 ];
 
 const envOrigins = process.env.CLIENT_URL
-  ? process.env.CLIENT_URL.split(',').map((url) => url.trim().replace(/\/+$/, ''))
+  ? process.env.CLIENT_URL.split(',').map((url) => url.trim().replace(/\/+$/, '').toLowerCase())
   : [];
 
-const allowedOrigins = new Set([...defaultOrigins, ...envOrigins]);
+const allowedOrigins = new Set([...defaultOrigins.map((o) => o.toLowerCase()), ...envOrigins]);
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (e.g. mobile apps, curl, server-to-server)
+      // Allow requests with no origin (e.g., mobile apps, curl, server-to-server)
       if (!origin) return callback(null, true);
 
-      const cleanOrigin = origin.trim().replace(/\/+$/, '');
+      const cleanOrigin = origin.trim().replace(/\/+$/, '').toLowerCase();
 
       // Allow if origin is explicitly in allowed list, matches *.vercel.app, or in development mode
       if (
@@ -58,11 +58,11 @@ app.use(
         return callback(null, true);
       }
 
-      callback(new Error(`Origin ${origin} not allowed by CORS`));
+      callback(null, false);
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    // Omitting allowedHeaders allows cors to dynamically mirror request Access-Control-Request-Headers
   })
 );
 
@@ -77,6 +77,16 @@ if (process.env.NODE_ENV === 'development') {
 // Health check route
 app.get('/', (req, res) => {
   res.send('API is running...');
+});
+
+// Ensure database connection is ready for incoming requests
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    next(err);
+  }
 });
 
 // Synchronize categories with database

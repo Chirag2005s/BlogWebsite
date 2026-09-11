@@ -6,7 +6,14 @@ import api from '../services/api';
 const MainLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+  const userInfo = (() => {
+    try {
+      const raw = localStorage.getItem('userInfo');
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  })();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 

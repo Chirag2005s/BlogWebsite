@@ -15,13 +15,26 @@ const Login = () => {
     setLoading(true);
     setError('');
     try {
-      const { data } = await api.post('/auth/login', { email, password });
-      if (data.success) {
+      const { data } = await api.post('/auth/login', {
+        email: email.trim().toLowerCase(),
+        password,
+      });
+      if (data && data.success && data.data) {
         localStorage.setItem('userInfo', JSON.stringify(data.data));
         navigate('/');
+      } else {
+        setError(data?.message || 'Login failed. Please try again.');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
+      console.error('Login error:', err);
+      const serverMsg = err.response?.data?.message;
+      if (serverMsg) {
+        setError(serverMsg);
+      } else if (err.message === 'Network Error') {
+        setError('Network Error: Cannot connect to the backend server. Please check your backend URL and network connection.');
+      } else {
+        setError(err.message || 'Login failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

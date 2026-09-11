@@ -1,7 +1,12 @@
 import jwt from 'jsonwebtoken';
 
 const generateToken = (res, userId) => {
-  const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
+  const secret = process.env.JWT_SECRET || 'jwt_secret_fallback_key_2026';
+  if (!process.env.JWT_SECRET) {
+    console.warn('Warning: JWT_SECRET environment variable is missing. Using fallback key.');
+  }
+
+  const token = jwt.sign({ userId }, secret, {
     expiresIn: '30d',
   });
 
