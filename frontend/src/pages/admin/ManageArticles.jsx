@@ -15,9 +15,11 @@ const ManageArticles = () => {
   const fetchArticles = async () => {
     try {
       const { data } = await api.get('/articles/admin/all');
-      setArticles(data.data);
+      const list = Array.isArray(data?.data) ? data.data : (Array.isArray(data) ? data : []);
+      setArticles(list);
     } catch (error) {
       console.error('Failed to fetch articles', error);
+      setArticles([]);
     } finally {
       setLoading(false);
     }
@@ -27,21 +29,23 @@ const ManageArticles = () => {
     if (window.confirm('Are you sure you want to delete this publication?')) {
       try {
         await api.delete(`/articles/${id}`);
-        setArticles(articles.filter((article) => article._id !== id));
+        setArticles((prev) => (Array.isArray(prev) ? prev.filter((article) => article._id !== id) : []));
       } catch (error) {
         alert(error.response?.data?.message || 'Failed to delete');
       }
     }
   };
 
-  const filteredArticles = articles.filter((article) => {
+  const safeArticles = Array.isArray(articles) ? articles : [];
+
+  const filteredArticles = safeArticles.filter((article) => {
     if (typeFilter === 'all') return true;
     if (typeFilter === 'article') return article.type === 'article';
     return !article.type || article.type === 'blog';
   });
 
-  const blogsCount = articles.filter((a) => !a.type || a.type === 'blog').length;
-  const articlesCount = articles.filter((a) => a.type === 'article').length;
+  const blogsCount = safeArticles.filter((a) => !a.type || a.type === 'blog').length;
+  const articlesCount = safeArticles.filter((a) => a.type === 'article').length;
 
   return (
     <div className="space-y-6">

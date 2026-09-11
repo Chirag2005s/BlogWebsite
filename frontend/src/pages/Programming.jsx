@@ -358,9 +358,10 @@ const Programming = () => {
     const fetchRelated = async () => {
       try {
         const { data } = await api.get('/articles');
-        if (data.success && data.data) {
+        const list = Array.isArray(data?.data) ? data.data : (Array.isArray(data) ? data : []);
+        if (list.length > 0) {
           // Filter to technical / programming content
-          const filtered = data.data.filter((a) => {
+          const filtered = list.filter((a) => {
             const cat = a.category?.name?.toLowerCase() || '';
             const type = a.type || 'blog';
             return (

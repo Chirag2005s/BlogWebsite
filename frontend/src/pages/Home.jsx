@@ -153,9 +153,11 @@ const Home = () => {
     const fetchArticles = async () => {
       try {
         const { data } = await api.get('/articles');
-        setArticles(data.data);
+        const list = Array.isArray(data?.data) ? data.data : (Array.isArray(data) ? data : []);
+        setArticles(list);
       } catch (error) {
         console.error('Failed to fetch articles', error);
+        setArticles([]);
       } finally {
         setLoading(false);
       }
@@ -223,21 +225,24 @@ const Home = () => {
     },
   ];
 
+  // Defensive array fallback to prevent undefined errors if response is malformed or in flight
+  const safeArticles = Array.isArray(articles) ? articles : [];
+
   // Compute metrics
-  const blogs = useMemo(() => articles.filter((a) => !a.type || a.type === 'blog'), [articles]);
-  const technicalArticles = useMemo(() => articles.filter((a) => a.type === 'article'), [articles]);
-  const totalViews = useMemo(() => articles.reduce((acc, a) => acc + (a.views || 0), 0), [articles]);
-  const totalLikes = useMemo(() => articles.reduce((acc, a) => acc + (a.likes || 0), 0), [articles]);
+  const blogs = useMemo(() => safeArticles.filter((a) => !a.type || a.type === 'blog'), [safeArticles]);
+  const technicalArticles = useMemo(() => safeArticles.filter((a) => a.type === 'article'), [safeArticles]);
+  const totalViews = useMemo(() => safeArticles.reduce((acc, a) => acc + (a.views || 0), 0), [safeArticles]);
+  const totalLikes = useMemo(() => safeArticles.reduce((acc, a) => acc + (a.likes || 0), 0), [safeArticles]);
 
   // Featured Spotlight: first featured or highest view/newest article
   const spotlight = useMemo(() => {
-    if (articles.length === 0) return null;
-    return articles.find((a) => a.featured) || articles[0];
-  }, [articles]);
+    if (safeArticles.length === 0) return null;
+    return safeArticles.find((a) => a.featured) || safeArticles[0];
+  }, [safeArticles]);
 
   // Filtered publications
   const filteredArticles = useMemo(() => {
-    return articles.filter((a) => {
+    return safeArticles.filter((a) => {
       const isBlog = !a.type || a.type === 'blog';
       const matchesTab =
         activeTab === 'all' ? true : activeTab === 'article' ? a.type === 'article' : isBlog;
@@ -253,7 +258,7 @@ const Home = () => {
 
       return matchesTab && matchesSearch && matchesCategory;
     });
-  }, [articles, activeTab, searchQuery, selectedCategory]);
+  }, [safeArticles, activeTab, searchQuery, selectedCategory]);
 
   const handleNewsletterSubmit = (e) => {
     e.preventDefault();
@@ -723,7 +728,7 @@ const Home = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {categories.map((cat) => {
-            const count = articles.filter(
+            const count = safeArticles.filter(
               (a) => (a.category?.name || '').toLowerCase() === cat.name.toLowerCase()
             ).length;
             const isSelected = selectedCategory.toLowerCase() === cat.name.toLowerCase();

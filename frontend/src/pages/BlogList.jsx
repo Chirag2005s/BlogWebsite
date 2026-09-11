@@ -42,9 +42,11 @@ const BlogList = () => {
     const fetchArticles = async () => {
       try {
         const { data } = await api.get('/articles?type=blog');
-        setArticles(data.data);
+        const list = Array.isArray(data?.data) ? data.data : (Array.isArray(data) ? data : []);
+        setArticles(list);
       } catch (error) {
         console.error('Failed to fetch articles', error);
+        setArticles([]);
       } finally {
         setLoading(false);
       }
@@ -52,7 +54,9 @@ const BlogList = () => {
     fetchArticles();
   }, []);
 
-  const filteredArticles = articles.filter((a) => {
+  const safeArticles = Array.isArray(articles) ? articles : [];
+
+  const filteredArticles = safeArticles.filter((a) => {
     const matchesSearch =
       a.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       a.excerpt?.toLowerCase().includes(searchQuery.toLowerCase());
