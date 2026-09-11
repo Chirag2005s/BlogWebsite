@@ -6,7 +6,7 @@ import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 
 import mongoose from 'mongoose';
-import connectDB from './src/config/db.js';
+import connectDB, { getDBStatus } from './src/config/db.js';
 import { notFound, errorHandler } from './src/middlewares/error.middleware.js';
 import authRoutes from './src/routes/auth.routes.js';
 import articleRoutes from './src/routes/article.routes.js';
@@ -70,10 +70,17 @@ if (process.env.NODE_ENV === 'development') {
 
 // Health check route
 app.get('/', (req, res) => {
+  const db = getDBStatus();
   res.json({
     status: 'online',
     message: 'API is running...',
-    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+    database: db.isConnected ? 'connected' : 'disconnected',
+    databaseDetails: {
+      readyState: db.readyState,
+      uriConfigured: db.uriConfigured,
+      isLocalhost: db.isLocalhost,
+      error: db.error,
+    },
   });
 });
 
@@ -82,9 +89,13 @@ app.use(async (req, res, next) => {
   try {
     await connectDB();
     if (mongoose.connection.readyState !== 1) {
+      const db = getDBStatus();
       return res.status(503).json({
         success: false,
-        message: 'Database connection is not ready. Please verify MONGO_URI in Render environment variables.',
+        message: 'Database connection is not ready.',
+        details: db.error || 'MongoDB is not connected. Please verify MONGO_URI in Render Environment Variables.',
+        uriConfigured: db.uriConfigured,
+        isLocalhost: db.isLocalhost,
       });
     }
     next();
