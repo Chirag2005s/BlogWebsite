@@ -82,8 +82,11 @@ export const loginUser = async (req, res, next) => {
 // @access  Public
 export const logoutUser = async (req, res, next) => {
   try {
+    const isProduction = process.env.NODE_ENV === 'production';
     res.cookie('jwt', '', {
       httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
       expires: new Date(0),
     });
 
