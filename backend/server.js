@@ -51,25 +51,8 @@ const allowedOrigins = new Set([...defaultOrigins.map((o) => o.toLowerCase()), .
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (e.g., mobile apps, curl, server-to-server)
-      if (!origin) return callback(null, true);
-
-      const cleanOrigin = origin.trim().replace(/\/+$/, '').toLowerCase();
-
-      // Allow if origin is explicitly in allowed list, matches *.vercel.app, *.netlify.app, *.onrender.com, localhost, or in development mode
-      if (
-        allowedOrigins.has(cleanOrigin) ||
-        /^https:\/\/.*\.vercel\.app$/.test(cleanOrigin) ||
-        /^https:\/\/.*\.netlify\.app$/.test(cleanOrigin) ||
-        /^https:\/\/.*\.onrender\.com$/.test(cleanOrigin) ||
-        cleanOrigin.includes('localhost') ||
-        cleanOrigin.includes('127.0.0.1') ||
-        process.env.NODE_ENV !== 'production'
-      ) {
-        return callback(null, true);
-      }
-
-      callback(null, false);
+      // Dynamically reflect requesting origin to allow localhost, LAN IP (192.168.x.x), Vercel, Render, etc.
+      callback(null, true);
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],

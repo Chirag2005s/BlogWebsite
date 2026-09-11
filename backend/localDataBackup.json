@@ -1,0 +1,259 @@
+{
+  "users": [
+    {
+      "_id": "6aa28b8ca0217b30ceabf880",
+      "name": "chirag",
+      "email": "chirag@gmail.com",
+      "password": "$2b$10$1pJZTxlHF62NfSOe..0L/.NItHHnQPK4BDtdBTJ52Q15Yvun5ejoi",
+      "role": "ADMIN",
+      "profileImage": "",
+      "bio": "",
+      "skills": [],
+      "experience": [],
+      "createdAt": "2026-09-10T10:50:52.053Z",
+      "updatedAt": "2026-09-10T13:31:40.313Z",
+      "__v": 0
+    },
+    {
+      "_id": "6aa28eada0217b30ceabf882",
+      "name": "Thecoder",
+      "email": "thecoder@gmail.com",
+      "password": "$2b$10$rXu/HE.DkBX.xyn0m1/x3etTPdFYWyFR/H9wdMLA0mkD06o8nBkMu",
+      "role": "USER",
+      "profileImage": "",
+      "bio": "",
+      "skills": [],
+      "experience": [],
+      "createdAt": "2026-09-10T11:04:13.329Z",
+      "updatedAt": "2026-09-10T11:04:13.329Z",
+      "__v": 0
+    },
+    {
+      "_id": "6aa299e5a0217b30ceabf883",
+      "name": "vineet",
+      "email": "vineet@gmail.com",
+      "password": "$2b$10$oFr50GY5eCulZsHXA6ZS9uaBUO./l30fr67oSjZPPlV7j9j7vfwFW",
+      "role": "USER",
+      "profileImage": "",
+      "bio": "",
+      "skills": [],
+      "experience": [],
+      "createdAt": "2026-09-10T11:52:05.108Z",
+      "updatedAt": "2026-09-10T11:52:05.108Z",
+      "__v": 0
+    }
+  ],
+  "articles": [
+    {
+      "_id": "6aa28c40a0217b30ceabf881",
+      "title": "AI Agents: How They Are Changing Software Development in 2026",
+      "slug": "ai-agents-how-they-are-changing-software-development-in-2026",
+      "excerpt": "AI is no longer limited to answering questions or generating code. The next major shift is AI Agents — systems that can understand a goal, plan tasks, use tools, and take actions with much less human intervention.\n\nFor developers, this means AI is moving from being a simple coding assistant to becoming a development partner.",
+      "content": "1. What Is an AI Agent?\n\nAn AI Agent is an AI-powered system that can:\n\nUnderstand a user's goal\nBreak a problem into smaller tasks\nMake decisions\nUse external tools and APIs\nRead and modify files\nExecute code\nAnalyze results\nCorrect mistakes\nContinue working toward the goal\n\n\nHow AI Agents Work\n\nA typical AI Agent consists of several important components.\n\n1. Large Language Model\n\nThe LLM acts as the reasoning engine.\n\nExamples include models used for:\n\nUnderstanding natural language\nGenerating code\nExplaining errors\nPlanning tasks\nAnalyzing information",
+      "coverImage": "https://www.pngall.com/wp-content/uploads/15/ChatGPT-Logo-PNG-Picture.png",
+      "author": "6aa28b8ca0217b30ceabf880",
+      "category": "6aa28464ec42fdeedd67764b",
+      "tags": [],
+      "readingTime": 1,
+      "difficulty": "Beginner",
+      "status": "Published",
+      "type": "article",
+      "views": 14,
+      "likes": 1,
+      "likedBy": [
+        "6aa28b8ca0217b30ceabf880"
+      ],
+      "readers": [
+        "6aa28b8ca0217b30ceabf880"
+      ],
+      "bookmarks": 0,
+      "commentsCount": 0,
+      "featured": false,
+      "publishedAt": "2026-09-10T10:53:52.691Z",
+      "createdAt": "2026-09-10T10:53:52.695Z",
+      "updatedAt": "2026-09-10T11:17:58.329Z",
+      "__v": 2
+    },
+    {
+      "_id": "6aa29d26a0217b30ceabf884",
+      "title": "Machine Learning: How Computers Learn Without Being Explicitly Programmed",
+      "slug": "machine-learning-how-computers-learn-without-being-explicitly-programmed",
+      "excerpt": "Machine Learning (ML) is one of the most important technologies behind modern Artificial Intelligence. It allows computers to learn patterns from data and make predictions or decisions without being explicitly programmed for every possible situation.",
+      "content": "What Is Machine Learning?\n\nMachine Learning is a branch of Artificial Intelligence that focuses on building systems that can learn from data.\n\nIn traditional programming:\n\nData + Rules → Output\n\nIn machine learning:\n\nData + Expected Output → Learning Algorithm → Model\n\nOnce the model has learned patterns from existing data, it can use those patterns to make predictions on new data.\n\n\nTypes of Machine Learning\n\nThere are three major types of machine learning.\n\n1. Supervised Learning\n\nIn supervised learning, the model learns from labeled data.\n\nFor example, you provide:\n\nHouse size → House price\nStudy hours → Exam score\nEmail content → Spam/Not Spam\n\nThe model learns the relationship between input and output.\n\nCommon Algorithms\nLinear Regression\nLogistic Regression\nDecision Trees\nRandom Forest\nSupport Vector Machines\nNeural Networks\n\n\n",
+      "coverImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw6lqYVW5Y3mHpVW6vyTG2kkA-wSrADrewHTmYywG9gh0fqacPuH7tKpw&s=10",
+      "author": "6aa299e5a0217b30ceabf883",
+      "category": "6aa28464ec42fdeedd67764c",
+      "tags": [],
+      "readingTime": 1,
+      "difficulty": "Beginner",
+      "status": "Published",
+      "type": "blog",
+      "views": 4,
+      "likes": 0,
+      "likedBy": [],
+      "readers": [
+        "6aa28b8ca0217b30ceabf880",
+        "6aa299e5a0217b30ceabf883"
+      ],
+      "bookmarks": 0,
+      "commentsCount": 0,
+      "featured": false,
+      "publishedAt": "2026-09-10T12:05:58.974Z",
+      "createdAt": "2026-09-10T12:05:58.979Z",
+      "updatedAt": "2026-09-10T12:29:19.961Z",
+      "__v": 2
+    },
+    {
+      "_id": "6aa29fc4a0217b30ceabf885",
+      "title": "Dataset, Features & Labels: The Building Blocks of Machine Learning",
+      "slug": "dataset-features-and-labels-the-building-blocks-of-machine-learning",
+      "excerpt": "When starting Machine Learning, you will frequently hear three important terms:",
+      "content": "What Is a Dataset?\n\nA dataset is a collection of data used for analysis or machine learning.\n\nA dataset can contain information about:\n\nStudents\nCustomers\nProducts\nHouses\nImages\nEmails\nTransactions\nWeather\nSales\n\n\nWhat Are Features?\n\nFeatures are the input variables used by a machine-learning model to make a prediction.\n\nIn our student example, we could use:\n\nStudy Hours\nAttendance\nPrevious Score\n\n\nWhat Is a Label?\n\nA label is the target/output that the machine-learning model is trying to predict.\n\n\nTraining Data vs Testing Data\n\nUsually, we don't use the entire dataset only for training.\n\nWe divide the data into different parts.\n\nComplete Dataset\n       │\n       ├── Training Data\n       │\n       └── Testing Data\nTraining Data\n\nUsed to teach the model.\n\nTesting Data\n\nUsed to check how well the model performs on data it hasn't learned from.\n\n\n\n\nDataset → Features → Label → Model\n\nThe complete idea can be summarized as:\n\n             DATASET\n                │\n        ┌───────┴────────┐\n        ↓                ↓\n    FEATURES           LABEL\n     (Input)           (Target)\n        │                │\n        └───────┬────────┘\n                ↓\n          TRAIN ML MODEL\n                ↓\n          LEARN PATTERNS\n                ↓\n        NEW INPUT DATA\n                ↓\n           PREDICTION\n\nThis basic workflow appears in many supervised machine-learning projects.",
+      "coverImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdAVb0hLRrkr7I3xMw8D0ELSpz8RbK2ubxIgYw48NTSc_7wCXiD94qX9U&s=10",
+      "author": "6aa299e5a0217b30ceabf883",
+      "category": "6aa28464ec42fdeedd67764c",
+      "tags": [],
+      "readingTime": 1,
+      "difficulty": "Intermediate",
+      "status": "Published",
+      "type": "blog",
+      "views": 12,
+      "likes": 0,
+      "likedBy": [],
+      "readers": [
+        "6aa28b8ca0217b30ceabf880"
+      ],
+      "bookmarks": 0,
+      "commentsCount": 0,
+      "featured": false,
+      "publishedAt": "2026-09-10T12:17:08.164Z",
+      "createdAt": "2026-09-10T12:17:08.165Z",
+      "updatedAt": "2026-09-10T14:53:49.556Z",
+      "__v": 1
+    },
+    {
+      "_id": "6aa2a25ea0217b30ceabf886",
+      "title": "The Future of Artificial Intelligence",
+      "slug": "the-future-of-artificial-intelligence",
+      "excerpt": "Generative AI is a powerful branch of Artificial Intelligence that can create new content such as text, images, audio, video, and computer code. Learn how Generative AI works, its applications, benefits, challenges, and why it is becoming an important technology for the future.",
+      "content": "Introduction\n\nArtificial Intelligence has rapidly transformed the way we interact with technology. One of the most exciting developments in AI is Generative AI.\n\nTraditional AI systems are often designed to analyze information, recognize patterns, classify data, or make predictions. Generative AI goes a step further by creating new content based on patterns learned from large amounts of data.\n\nToday, Generative AI can help write articles, generate images, create computer code, summarize documents, produce audio, and assist with many other tasks.\n\nWhat Is Generative AI?\n\nGenerative AI is a type of Artificial Intelligence that can generate new content in response to a user's instructions or prompts.\n\nFor example, a user could provide a prompt such as:\n\n\"Write a beginner-friendly article about Machine Learning.\"\n\nA Generative AI model can analyze the instruction and produce a relevant response.\n\nSimilarly, a prompt such as:\n\n\"Create an image of a futuristic smart city.\"\n\ncan be used with an image-generation model to create an image based on the description.\n\nIn simple terms:\n\nPrompt → AI Model → Generated Content\n\nThe generated content can include:\n\nText\nImages\nCode\nAudio\nVideo\nSummaries\nTranslations\nOther structured content\nHow Does Generative AI Work?\n\nGenerative AI models are trained using large collections of data. During training, the model learns statistical patterns and relationships within that data.\n\nA simplified process looks like this:\n\nLarge Dataset → Model Training → Pattern Learning → AI Model → User Prompt → Generated Output\n\nWhen a user sends a prompt, the model processes the input and generates an output based on what it has learned.\n\nModern Generative AI systems can also use context from the conversation or information supplied through external tools and knowledge sources.\n\nWhat Is a Generative AI Model?\n\nA Generative AI model is a machine-learning model designed to produce new content.\n\nDifferent models can specialize in different types of content.\n\nFor example:\n\nLanguage models → Generate and understand text\nImage models → Generate images\nAudio models → Generate or transform audio\nVideo models → Generate or transform video\nCode models → Generate and explain programming code\n\nSome modern systems are multimodal, meaning they can work with more than one type of information",
+      "coverImage": "https://eu-images.contentstack.com/v3/assets/blt6b0f74e5591baa03/bltfd36e68ac7a0f3b2/651b29bb3671b45abcc7e4c8/Generative_AI_(2).png",
+      "author": "6aa299e5a0217b30ceabf883",
+      "category": "6aa28464ec42fdeedd67764d",
+      "tags": [],
+      "readingTime": 2,
+      "difficulty": "Intermediate",
+      "status": "Published",
+      "type": "blog",
+      "views": 4,
+      "likes": 0,
+      "likedBy": [],
+      "readers": [
+        "6aa28b8ca0217b30ceabf880"
+      ],
+      "bookmarks": 0,
+      "commentsCount": 0,
+      "featured": false,
+      "publishedAt": "2026-09-10T12:28:14.666Z",
+      "createdAt": "2026-09-10T12:28:14.670Z",
+      "updatedAt": "2026-09-11T10:48:03.970Z",
+      "__v": 1
+    },
+    {
+      "_id": "6aa3b1cbf14ece9cefb7063b",
+      "title": "The Complete Guide to Modern Web Development",
+      "slug": "the-complete-guide-to-modern-web-development",
+      "excerpt": "Web technology is the foundation of modern websites and web applications. From HTML and CSS to JavaScript, React, Node.js, databases, APIs, cloud computing, and cybersecurity, web development combines multiple technologies to create fast, interactive, and scalable digital experiences. This guide explains the major areas of web technology and how they work together.",
+      "content": "Introduction to Web Technology\n\nThe internet has transformed the way people communicate, work, learn, shop, and access information. Behind almost every website or web application is a collection of technologies working together.\n\nWeb technology refers to the tools, programming languages, frameworks, protocols, and systems used to build and operate websites and web applications.\n\nA modern web application can involve:\n\nHTML for page structure\nCSS for design and layout\nJavaScript for interactivity\nReact or other frameworks for frontend applications\nNode.js and Express.js for backend development\nMongoDB, PostgreSQL, or other databases for data storage\nREST APIs or GraphQL for communication\nGit and GitHub for version control\nCloud platforms for deployment\nAuthentication and security technologies for protecting users and data\n\nUnderstanding how these technologies work together is an important step toward becoming a professional web developer.\n\n1. HTML – The Structure of the Web\n\nHTML (HyperText Markup Language) provides the basic structure of a web page.\n\nHTML defines elements such as:\n\nHeadings\nParagraphs\nImages\nLinks\nForms\nTables\nButtons\nLists\nNavigation\n\nFor example:\n\n<h1>Welcome to Web Technology</h1>\n<p>Learn modern web development.</p>\n\nHTML does not primarily control how a website looks or behaves. Instead, it describes the structure and meaning of the content.\n\n2. CSS – Designing Web Pages\n\nCSS (Cascading Style Sheets) is responsible for the visual appearance of websites.\n\nWith CSS, developers can control:\n\nColors\nFonts\nSpacing\nBorders\nAnimations\nResponsive layouts\nFlexbox\nCSS Grid\nTransitions\n\nFor example:\n\nh1 {\n    font-size: 40px;\n    text-align: center;\n}\n\nModern CSS makes it possible to create responsive websites that work across desktops, tablets, and smartphones.\n\n3. JavaScript – Making Websites Interactive\n\nJavaScript is one of the most important programming languages in web development.\n\nWhile HTML creates structure and CSS creates presentation, JavaScript adds behavior and interaction.\n\nJavaScript can be used for:\n\nForm validation\nDynamic content\nAPI requests\nAnimations\nInteractive dashboards\nAuthentication logic\nBrowser applications\nServer-side programming with Node.js\n\nExample:\n\nconst button = document.querySelector(\"button\");\n\nbutton.addEventListener(\"click\", () => {\n    alert(\"Hello, Developer!\");\n});\n\nJavaScript has also evolved beyond browser programming and is now widely used for backend development.\n\n4. Frontend Web Development\n\nFrontend development focuses on everything users see and interact with in a web browser.\n\nA typical frontend stack includes:\n\nHTML → CSS → JavaScript → Framework/Library\n\nPopular frontend technologies include:\n\nReact\nAngular\nVue.js\nNext.js\nTailwind CSS\nBootstrap\n\nFrameworks and libraries help developers build complex applications more efficiently by providing reusable components and development patterns.\n\n5. Backend Web Development\n\nThe backend is the server-side part of a web application.\n\nIt handles tasks such as:\n\nBusiness logic\nUser authentication\nDatabase operations\nAPI development\nFile processing\nPayments\nAuthorization\nServer-side validation\n\nPopular backend technologies include:\n\nNode.js\nExpress.js\nPython\nDjango\nFastAPI\nJava\nSpring Boot\nPHP\nLaravel\n.NET\n\nFor example, a frontend application might send a request to:\n\nGET /api/users\n\nThe backend processes the request, retrieves information from a database, and returns a response.\n\n6. Databases and Data Management\n\nMost modern applications need to store information.\n\nDatabases can store:\n\nUser accounts\nProducts\nOrders\nBlog posts\nComments\nCourses\nPayments\nApplication settings\n\nThere are two major categories of databases.\n\nSQL Databases\n\nExamples include:\n\nPostgreSQL\nMySQL\nMicrosoft SQL Server\n\nThey generally organize data into tables and use SQL for querying.\n\nNoSQL Databases\n\nExamples include:\n\nMongoDB\nRedis\nDynamoDB\n\nNoSQL databases can be useful for applications that need flexible data models or particular scalability patterns.\n\n7. APIs – Connecting Applications\n\nAn API (Application Programming Interface) allows different software systems to communicate with each other.\n\nFor example:\n\nFrontend\n   ↓\nAPI Request\n   ↓\nBackend Server\n   ↓\nDatabase\n   ↓\nAPI Response\n   ↓\nFrontend\n\nA REST API might provide endpoints such as:\n\nGET    /api/products\nPOST   /api/products\nPUT    /api/products/:id\nDELETE /api/products/:id\n\nAPIs are an essential part of modern web applications because they allow frontend applications, mobile apps, backend services, and external systems to exchange data.\n\n8. Authentication and Web Security\n\nSecurity is a critical part of web development.\n\nDevelopers need to protect applications against threats such as:\n\nCross-Site Scripting (XSS)\nSQL Injection\nCross-Site Request Forgery (CSRF)\nBrute-force attacks\nBroken authentication\nUnauthorized access\nData leaks\n\nCommon security technologies and practices include:\n\nHTTPS\nPassword hashing\nJWT\nSecure cookies\nAuthentication middleware\nAuthorization\nInput validation\nRate limiting\nSecurity headers\nEnvironment variables\n\nSecurity should be considered during development rather than added only after an application is completed.\n\n9. Git and Version Control\n\nProfessional web development usually involves version control.\n\nGit allows developers to track changes in their source code.\n\nDevelopers commonly use platforms such as GitHub to:\n\nStore repositories\nCollaborate with teams\nReview code\nManage branches\nTrack issues\nMaintain project history\n\nA common workflow is:\n\nCode\n ↓\ngit add\n ↓\ngit commit\n ↓\ngit push\n ↓\nGitHub\n\nLearning Git is an important skill for anyone preparing for a web development career.\n\n10. Cloud and Web Deployment\n\nBuilding an application is only one part of web development. The application also needs to be deployed so users can access it.\n\nModern applications can be deployed using cloud platforms and hosting services.\n\nCommon deployment concepts include:\n\nServer hosting\nDomain names\nDNS\nHTTPS/SSL\nEnvironment variables\nCI/CD\nContainers\nCloud databases\nMonitoring\n\nA simplified deployment process looks like:\n\nDeveloper\n   ↓\nGitHub\n   ↓\nCI/CD\n   ↓\nCloud Platform\n   ↓\nProduction Application\n\nThis allows developers to automatically deploy new versions when code changes are pushed to a repository.\n\n11. Responsive Web Design\n\nUsers access websites from many different devices.\n\nA responsive website automatically adapts its layout to different screen sizes.\n\nDevelopers commonly use:\n\nCSS Media Queries\nFlexbox\nCSS Grid\nResponsive typography\nMobile-first design\n\nA good web application should provide a consistent experience across smartphones, tablets, laptops, and large displays.\n\n12. Modern Web Development\n\nWeb development continues to evolve rapidly.\n\nModern development increasingly includes technologies such as:\n\nProgressive Web Apps\nServer-side rendering\nStatic site generation\nTypeScript\nWebSockets\nServerless computing\nEdge computing\nCloud-native applications\nArtificial intelligence\nAI-powered developer tools\n\nAI is also becoming an important part of the development workflow, helping developers generate code, explain errors, write tests, document projects, and explore solutions.\n\nHowever, developers still need strong fundamentals because understanding the underlying technology is essential for reviewing and maintaining AI-assisted code.\n\n13. Full-Stack Web Development\n\nA full-stack developer works across both frontend and backend technologies.\n\nA typical full-stack stack could look like:\n\nFrontend\nHTML + CSS + JavaScript\n        ↓\nReact\n        ↓\nREST API\n        ↓\nNode.js + Express.js\n        ↓\nMongoDB\n        ↓\nCloud Deployment\n\nThe exact technology stack can vary from project to project.\n\nThe important skill is understanding how the different components communicate and how to design reliable applications.\n\nWeb Technology Learning Roadmap\n\nIf you are starting your web development journey, a practical learning path is:\n\nStep 1 – Web Fundamentals\n\nLearn:\n\nHow the internet works\nHTTP and HTTPS\nBrowsers\nDNS\nDomains\nClient-server architecture\nStep 2 – Frontend Fundamentals\n\nLearn:\n\nHTML\nCSS\nJavaScript\nResponsive design\nDOM\nFetch API\nStep 3 – Frontend Framework\n\nLearn one major framework or library, such as:\n\nReact\n\nThen learn:\n\nComponents\nProps\nState\nHooks\nRouting\nAPI integration\nStep 4 – Backend Development\n\nLearn:\n\nNode.js\nExpress.js\nREST APIs\nMiddleware\nAuthentication\nAuthorization\nError handling\nStep 5 – Database\n\nLearn:\n\nMongoDB or PostgreSQL\nDatabase design\nQueries\nIndexes\nRelationships\nTransactions where applicable\nStep 6 – Professional Development Tools\n\nLearn:\n\nGit\nGitHub\nPostman\nDocker\nEnvironment variables\nTesting\nCI/CD\nStep 7 – Deployment\n\nLearn how to deploy:\n\nFrontend\nBackend\nDatabase\nAPIs\n\nAlso understand domains, HTTPS, logs, environment configuration, and basic monitoring.\n\nConclusion\n\nWeb technology is a broad field that combines many technologies to create modern digital applications. HTML provides structure, CSS creates visual design, JavaScript adds interactivity, frontend frameworks build sophisticated interfaces, backend technologies provide business logic, databases store information, APIs connect systems, and cloud platforms make applications available to users.\n\nIf you are beginning your web development career, focus on strong fundamentals first. Once you understand how browsers, HTTP, frontend, backend, databases, APIs, and deployment work together, learning advanced frameworks and technologies becomes much easier.\n\nThe web will continue to evolve, but the fundamental concepts of building, connecting, securing, and deploying applications will remain valuable skills for developers.",
+      "coverImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoGpLqOYZ-AybbYZtsjVH5UAWIn4mWIiQswC9tSnOHoSq1hLmIlKYTE44c&s=10",
+      "author": "6aa28b8ca0217b30ceabf880",
+      "category": "6aa28464ec42fdeedd67764f",
+      "tags": [],
+      "readingTime": 7,
+      "difficulty": "Intermediate",
+      "status": "Published",
+      "type": "blog",
+      "views": 4,
+      "likes": 0,
+      "likedBy": [],
+      "readers": [
+        "6aa299e5a0217b30ceabf883"
+      ],
+      "bookmarks": 0,
+      "commentsCount": 0,
+      "featured": false,
+      "seoTitle": "Web Technology: Complete Guide to Modern Web Development",
+      "seoDescription": "Learn web technology from HTML, CSS and JavaScript to React, Node.js, APIs, databases, security, Git, cloud deployment and full-stack development.",
+      "publishedAt": "2026-09-11T07:46:19.237Z",
+      "createdAt": "2026-09-11T07:46:19.258Z",
+      "updatedAt": "2026-09-11T10:46:46.359Z",
+      "__v": 1
+    }
+  ],
+  "categories": [
+    {
+      "_id": "6aa28464ec42fdeedd67764b",
+      "slug": "artificial-intelligence",
+      "__v": 0,
+      "createdAt": "2026-09-10T10:20:20.558Z",
+      "description": "Autonomous systems, reasoning agents, AI safety, and cognitive architectures.",
+      "name": "Artificial Intelligence",
+      "updatedAt": "2026-09-11T13:25:25.754Z"
+    },
+    {
+      "_id": "6aa28464ec42fdeedd67764c",
+      "slug": "machine-learning",
+      "__v": 0,
+      "createdAt": "2026-09-10T10:20:20.595Z",
+      "description": "Statistical modeling, predictive algorithms, deep neural nets, and ML pipelines.",
+      "name": "Machine Learning",
+      "updatedAt": "2026-09-11T13:25:25.782Z"
+    },
+    {
+      "_id": "6aa28464ec42fdeedd67764d",
+      "slug": "generative-ai",
+      "__v": 0,
+      "createdAt": "2026-09-10T10:20:20.600Z",
+      "description": "Large language models, diffusion systems, transformers, and multimodal generation.",
+      "name": "Generative AI",
+      "updatedAt": "2026-09-11T13:25:25.787Z"
+    },
+    {
+      "_id": "6aa28464ec42fdeedd67764e",
+      "slug": "robotics",
+      "__v": 0,
+      "createdAt": "2026-09-10T10:20:20.608Z",
+      "description": "Physical computing, robotic arms, sensor integration, kinematics, and ROS.",
+      "name": "Robotics",
+      "updatedAt": "2026-09-11T13:25:25.797Z"
+    },
+    {
+      "_id": "6aa28464ec42fdeedd67764f",
+      "slug": "web-technology",
+      "__v": 0,
+      "createdAt": "2026-09-10T10:20:20.615Z",
+      "description": "Modern frontend, backend engines, full-stack frameworks, and web platform standards.",
+      "name": "Web Technology",
+      "updatedAt": "2026-09-11T13:25:25.805Z"
+    },
+    {
+      "_id": "6aa28464ec42fdeedd677650",
+      "slug": "internet-and-networking",
+      "__v": 0,
+      "createdAt": "2026-09-10T10:20:20.623Z",
+      "description": "Network protocols, cloud infrastructure, distributed systems, and telecommunications.",
+      "name": "Internet & Networking",
+      "updatedAt": "2026-09-11T13:25:25.816Z"
+    },
+    {
+      "_id": "6aa28464ec42fdeedd677651",
+      "slug": "hardware",
+      "__v": 0,
+      "createdAt": "2026-09-10T10:20:20.628Z",
+      "description": "Computer architecture, silicon design, GPUs, microcontrollers, and embedded devices.",
+      "name": "Hardware",
+      "updatedAt": "2026-09-11T13:25:25.826Z"
+    }
+  ],
+  "tags": []
+}

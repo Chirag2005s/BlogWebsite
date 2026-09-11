@@ -146,22 +146,28 @@ const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterSuccess, setNewsletterSuccess] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(null);
   const heroRef = useRef(null);
   const feedRef = useRef(null);
 
+  const fetchArticles = async () => {
+    try {
+      setLoading(true);
+      setErrorMsg(null);
+      const { data } = await api.get('/articles');
+      const list = Array.isArray(data?.data) ? data.data : (Array.isArray(data) ? data : []);
+      setArticles(list);
+    } catch (error) {
+      console.error('Failed to fetch articles', error);
+      const serverMsg = error.response?.data?.message || error.message || 'Failed to connect to backend';
+      setErrorMsg(serverMsg);
+      setArticles([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchArticles = async () => {
-      try {
-        const { data } = await api.get('/articles');
-        const list = Array.isArray(data?.data) ? data.data : (Array.isArray(data) ? data : []);
-        setArticles(list);
-      } catch (error) {
-        console.error('Failed to fetch articles', error);
-        setArticles([]);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchArticles();
   }, []);
 
@@ -589,24 +595,36 @@ const Home = () => {
           </div>
         ) : filteredArticles.length === 0 ? (
           <div className="glass-card rounded-2xl p-16 text-center space-y-4">
-            <div className="w-16 h-16 rounded-2xl bg-primary-500/10 flex items-center justify-center mx-auto text-primary-400">
+            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mx-auto ${errorMsg ? 'bg-amber-500/10 text-amber-400' : 'bg-primary-500/10 text-primary-400'}`}>
               <BookOpen size={30} />
             </div>
             <h3 className="text-xl font-bold text-white">
-              {searchQuery
+              {errorMsg
+                ? 'Backend Notice'
+                : searchQuery
                 ? `No results matching "${searchQuery}"`
                 : activeTab === 'article'
                 ? 'No technical articles published yet'
                 : 'No blogs published yet'}
             </h3>
-            <p className="text-text-secondary text-sm max-w-sm mx-auto">
-              {searchQuery
+            <p className="text-text-secondary text-sm max-w-lg mx-auto leading-relaxed">
+              {errorMsg
+                ? errorMsg
+                : searchQuery
                 ? 'Try clearing your search query or switching tabs.'
                 : activeTab === 'article'
                 ? 'Publish your first technical deep-dive using the Article Editor.'
                 : 'Daily blogs published will appear here.'}
             </p>
-            <div className="pt-2">
+            <div className="pt-2 flex items-center justify-center gap-3">
+              {errorMsg && (
+                <button
+                  onClick={fetchArticles}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold transition-all shadow-lg shadow-amber-600/20"
+                >
+                  🔄 Retry Connection
+                </button>
+              )}
               <Link
                 to={activeTab === 'article' ? '/admin/add-article' : '/admin'}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-xs font-semibold transition-all"
