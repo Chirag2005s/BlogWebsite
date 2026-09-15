@@ -46,7 +46,7 @@ export const syncCategories = async () => {
       await Category.findOneAndUpdate(
         { slug },
         { name: cat.name, slug, description: cat.description },
-        { upsert: true, new: true, setDefaultsOnInsert: true }
+        { upsert: true, returnDocument: 'after', setDefaultsOnInsert: true }
       );
     }
   } catch (err) {
