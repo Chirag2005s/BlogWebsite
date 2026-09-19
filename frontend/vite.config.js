@@ -9,7 +9,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: 'https://blogwebsite-vb09.onrender.com',
+        target: 'https://blogwebsite-y8o6.onrender.com',
         changeOrigin: true,
         secure: false,
       },

@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const DEPLOYED_BACKEND_URL = 'https://blogwebsite-vb09.onrender.com';
+const DEPLOYED_BACKEND_URL = 'https://blogwebsite-y8o6.onrender.com';
+
 
 const getBaseURL = () => {
   const envUrl = import.meta.env.VITE_API_URL;

@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const DEPLOYED_BACKEND_URL = 'https://blogwebsite-vb09.onrender.com';
+const DEPLOYED_BACKEND_URL = 'https://blogwebsite-y8o6.onrender.com';
+
 
 // Dynamically determine the base API URL:
 // 1. If VITE_API_URL is set in environment, use it.
@@ -38,5 +39,19 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.code === 'ERR_NETWORK' || error.message === 'Network Error') {
+      console.warn('⚠️ Network Error: Unable to connect to backend server. Please verify backend deployment and CORS settings.');
+    } else if (error.response && error.response.status === 503) {
+      console.warn('⚠️ Service Unavailable (503): Database connection is not ready on backend. Please set MONGO_URI in Render Environment Variables.');
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default api;
+
+
 
