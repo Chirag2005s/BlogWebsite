@@ -1,12 +1,15 @@
 import axios from 'axios';
 
-const RENDER_BACKEND_URL = 'https://blogwebsite-vb09.onrender.com';
+const DEPLOYED_BACKEND_URL = 'https://blogwebsite-vb09.onrender.com';
 
 const getBaseURL = () => {
   const envUrl = import.meta.env.VITE_API_URL;
   if (envUrl && envUrl.trim()) {
     const cleanUrl = envUrl.trim().replace(/\/+$/, '');
     return cleanUrl.endsWith('/api') ? cleanUrl : `${cleanUrl}/api`;
+  }
+  if (import.meta.env.PROD) {
+    return `${DEPLOYED_BACKEND_URL}/api`;
   }
   return '/api';
 };
@@ -48,3 +51,4 @@ api.interceptors.response.use(
 );
 
 export default api;
+
