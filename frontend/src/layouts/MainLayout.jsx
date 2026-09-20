@@ -215,7 +215,7 @@ const MainLayout = () => {
                 </span>
               </Link>
               <p className="text-text-secondary text-sm leading-relaxed max-w-sm">
-                A personal developer blog and technology hub. Development knowledge, real project experiences, debugging solutions, and the latest technology discoveries.
+                A personal developer blog and technology hub. Development knowledge, real project experiences, debugging solutions, and the latest technology discoveries <p><b>Develop By Chirag Visvakarma Suthar.</b></p>
               </p>
             </div>
 

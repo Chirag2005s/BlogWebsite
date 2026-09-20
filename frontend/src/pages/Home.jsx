@@ -309,7 +309,7 @@ const Home = () => {
             <span className="bg-gradient-to-r from-primary-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">
               Learnings.
             </span>{' '}
-            Code.
+            Code. Blogs
           </h1>
 
           {/* Description */}
