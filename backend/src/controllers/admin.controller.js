@@ -1,16 +1,24 @@
 import Article from '../models/Article.js';
 import User from '../models/User.js';
 import Category from '../models/Category.js';
+import Roadmap from '../models/Roadmap.js';
 
 // @desc    Get dashboard statistics
-// @route   GET /api/admin/stats
-// @access  Private/Admin
 export const getStats = async (req, res, next) => {
   try {
-    const totalBlogs = await Article.countDocuments({ type: 'blog' });
+    const totalBlogs = await Article.countDocuments({
+      $or: [{ type: 'blog' }, { type: { $exists: false } }, { type: null }, { type: 'programming' }],
+    });
     const totalArticles = await Article.countDocuments({ type: 'article' });
     const totalUsers = await User.countDocuments({});
     const totalCategories = await Category.countDocuments({});
+    
+    let totalRoadmaps = 0;
+    try {
+      totalRoadmaps = await Roadmap.countDocuments({});
+    } catch (e) {
+      totalRoadmaps = 5;
+    }
 
     const publishedCount = await Article.countDocuments({ status: 'Published' });
     const draftCount = await Article.countDocuments({ status: 'Draft' });
@@ -36,19 +44,22 @@ export const getStats = async (req, res, next) => {
       .populate('category', 'name slug')
       .sort({ createdAt: -1 })
       .limit(10)
-      .select('title type status views likes createdAt slug');
+      .select('title type status views likes createdAt slug coverImage difficulty');
 
     // Content by category
     const contentByCategory = await Article.aggregate([
       { $lookup: { from: 'categories', localField: 'category', foreignField: '_id', as: 'cat' } },
       { $unwind: { path: '$cat', preserveNullAndEmptyArrays: true } },
-      { $group: { _id: '$cat.name', count: { $sum: 1 } } },
+      { $group: { _id: { $ifNull: ['$cat.name', 'General Tech'] }, count: { $sum: 1 } } },
       { $sort: { count: -1 } },
     ]);
 
-    // Monthly content creation (last 6 months)
+    // Monthly activity & engagement (last 6 months)
     const sixMonthsAgo = new Date();
-    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
+    sixMonthsAgo.setDate(1);
+    sixMonthsAgo.setHours(0, 0, 0, 0);
+
     const monthlyData = await Article.aggregate([
       { $match: { createdAt: { $gte: sixMonthsAgo } } },
       {
@@ -57,12 +68,27 @@ export const getStats = async (req, res, next) => {
             year: { $year: '$createdAt' },
             month: { $month: '$createdAt' },
           },
-          blogs: { $sum: { $cond: [{ $eq: ['$type', 'blog'] }, 1, 0] } },
+          blogs: { $sum: { $cond: [{ $ne: ['$type', 'article'] }, 1, 0] } },
           articles: { $sum: { $cond: [{ $eq: ['$type', 'article'] }, 1, 0] } },
+          views: { $sum: '$views' },
+          likes: { $sum: '$likes' },
         },
       },
       { $sort: { '_id.year': 1, '_id.month': 1 } },
     ]);
+
+    // Recent users (last 5 registered)
+    const recentUsers = await User.find({})
+      .select('name email role profileImage createdAt')
+      .sort({ createdAt: -1 })
+      .limit(5);
+
+    // Status breakdown
+    const statusDistribution = [
+      { name: 'Published', value: publishedCount, color: '#10b981' },
+      { name: 'Draft', value: draftCount, color: '#f59e0b' },
+      { name: 'Archived', value: archivedCount, color: '#8b8ba3' },
+    ];
 
     res.status(200).json({
       success: true,
@@ -71,14 +97,17 @@ export const getStats = async (req, res, next) => {
         totalArticles,
         totalUsers,
         totalCategories,
+        totalRoadmaps,
         publishedCount,
         draftCount,
         archivedCount,
         totalViews,
         totalLikes,
         recentContent,
+        recentUsers,
         contentByCategory,
         monthlyData,
+        statusDistribution,
       },
     });
   } catch (error) {

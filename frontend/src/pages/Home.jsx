@@ -627,8 +627,8 @@ const Home = () => {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredArticles.map((article, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {filteredArticles.slice(0, 4).map((article, index) => (
               <PublicationCard key={article._id} article={article} index={index} />
             ))}
           </div>
@@ -637,7 +637,7 @@ const Home = () => {
         {/* View Full Section Footer Link */}
         <div className="flex items-center justify-between pt-4 border-t border-white/5">
           <span className="text-xs text-text-muted">
-            Showing {filteredArticles.length} of {articles.length} items
+            Showing {Math.min(filteredArticles.length, 4)} of {articles.length} items
           </span>
           <div className="flex items-center gap-4 text-xs font-semibold">
             <Link to="/blog" className="text-primary-400 hover:text-primary-300 flex items-center gap-1 transition-colors">
