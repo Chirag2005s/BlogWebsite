@@ -41,7 +41,6 @@ import {
   RadialBar,
 } from 'recharts';
 import StatsCard from '../components/StatsCard';
-import ContentTable from '../components/ContentTable';
 import api from '../services/api';
 
 const COLORS = ['#00d4ff', '#7c3aed', '#10b981', '#f59e0b', '#f43f5e', '#3b82f6', '#8b5cf6', '#ec4899'];
@@ -645,14 +644,7 @@ const Overview = () => {
           </div>
         </div>
 
-        {/* Right: Recently Created Content Table */}
-        <div>
-          <ContentTable
-            articles={stats?.recentContent || []}
-            onRefresh={() => fetchStats(true)}
-            title="Recently Created Content"
-          />
-        </div>
+
 
       </div>
 

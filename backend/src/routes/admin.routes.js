@@ -5,16 +5,17 @@ import {
   updateUserRole,
   deleteUser,
 } from '../controllers/admin.controller.js';
-import { protect, admin } from '../middlewares/auth.middleware.js';
+import { protect, admin, author } from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
-// All admin routes require authentication + admin role
-router.use(protect, admin);
+// Stats & user list — accessible to both ADMIN and AUTHOR (dashboard users)
+router.get('/stats', protect, author, getStats);
+router.get('/users', protect, author, getAllUsers);
 
-router.get('/stats', getStats);
-router.get('/users', getAllUsers);
-router.put('/users/:id/role', updateUserRole);
-router.delete('/users/:id', deleteUser);
+// Destructive operations — ADMIN only
+router.put('/users/:id/role', protect, admin, updateUserRole);
+router.delete('/users/:id', protect, admin, deleteUser);
 
 export default router;
+
