@@ -43,6 +43,7 @@ const MainLayout = () => {
     { to: '/blog', label: 'Blog' },
     { to: '/articles', label: 'Articles' },
     { to: '/programming', label: 'Programming' },
+    { to: '/roadmaps', label: 'Roadmaps' },
     { to: '/news', label: 'Tech News' },
   ];
 
@@ -228,6 +229,7 @@ const MainLayout = () => {
                   { name: 'Blog', path: '/blog' },
                   { name: 'Articles', path: '/articles' },
                   { name: 'Programming', path: '/programming' },
+                  { name: 'Roadmaps', path: '/roadmaps' },
                   { name: 'Tech News', path: '/news' },
                 ].map((item) => (
                   <li key={item.name}>

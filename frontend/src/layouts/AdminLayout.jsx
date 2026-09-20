@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { PenSquare, PlusCircle, FileText, LogOut, ArrowLeft } from 'lucide-react';
+import { PenSquare, PlusCircle, FileText, LogOut, ArrowLeft, Compass } from 'lucide-react';
 import api from '../services/api';
 
 const AdminLayout = () => {
@@ -34,6 +34,7 @@ const AdminLayout = () => {
   const navItems = [
     { to: '/admin', label: 'Add Blog', icon: PenSquare, exact: true },
     { to: '/admin/add-article', label: 'Add Article', icon: PlusCircle },
+    // { to: '/admin/add-roadmap', label: 'Add Roadmap', icon: Compass },
     // { to: '/admin/articles', label: 'Manage Content', icon: FileText },
   ];
 
@@ -67,8 +68,8 @@ const AdminLayout = () => {
                 key={item.to}
                 to={item.to}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${active
-                    ? 'bg-primary-500/10 text-primary-400 border border-primary-500/15'
-                    : 'text-text-secondary hover:bg-white/5 hover:text-white border border-transparent'
+                  ? 'bg-primary-500/10 text-primary-400 border border-primary-500/15'
+                  : 'text-text-secondary hover:bg-white/5 hover:text-white border border-transparent'
                   }`}
               >
                 <Icon size={18} />

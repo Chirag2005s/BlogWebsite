@@ -54,24 +54,22 @@ const PublicationCard = ({ article, index }) => (
       {/* Floating Badges */}
       <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
         <span
-          className={`px-2.5 py-1 rounded-full text-xs font-semibold backdrop-blur-md shadow-lg ${
-            article.type === 'article'
-              ? 'bg-purple-500/80 text-white border border-purple-400/30'
-              : 'bg-primary-600/80 text-white border border-primary-400/30'
-          }`}
+          className={`px-2.5 py-1 rounded-full text-xs font-semibold backdrop-blur-md shadow-lg ${article.type === 'article'
+            ? 'bg-purple-500/80 text-white border border-purple-400/30'
+            : 'bg-primary-600/80 text-white border border-primary-400/30'
+            }`}
         >
           {article.type === 'article' ? '📚 Article' : '📝 Blog'}
         </span>
 
         {article.difficulty && (
           <span
-            className={`px-2.5 py-1 rounded-full text-xs font-medium backdrop-blur-md shadow-md ${
-              article.difficulty === 'Beginner'
-                ? 'bg-success/20 text-green-300 border border-success/30'
-                : article.difficulty === 'Intermediate'
+            className={`px-2.5 py-1 rounded-full text-xs font-medium backdrop-blur-md shadow-md ${article.difficulty === 'Beginner'
+              ? 'bg-success/20 text-green-300 border border-success/30'
+              : article.difficulty === 'Intermediate'
                 ? 'bg-warning/20 text-yellow-300 border border-warning/30'
                 : 'bg-error/20 text-red-300 border border-error/30'
-            }`}
+              }`}
           >
             {article.difficulty}
           </span>
@@ -309,7 +307,7 @@ const Home = () => {
             <span className="bg-gradient-to-r from-primary-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">
               Learnings.
             </span>{' '}
-            Code. Blogs
+            Code. Blogs <p style={{ color: "#a04dffff" }}>.Developer Roadmaps</p>
           </h1>
 
           {/* Description */}
@@ -511,15 +509,15 @@ const Home = () => {
               {activeTab === 'article'
                 ? 'Technical Articles'
                 : activeTab === 'blog'
-                ? 'Developer Blogs'
-                : 'All Engineering Content'}
+                  ? 'Developer Blogs'
+                  : 'All Engineering Content'}
             </h2>
             <p className="text-text-secondary text-sm mt-1">
               {activeTab === 'article'
                 ? 'Deep-dive architectural patterns, production blueprints, and extensive engineering tutorials.'
                 : activeTab === 'blog'
-                ? 'Daily dev reflections, short-form learnings, debugging fixes, and tool discoveries.'
-                : 'Browse our complete dual library of short-form logs and comprehensive deep-dives.'}
+                  ? 'Daily dev reflections, short-form learnings, debugging fixes, and tool discoveries.'
+                  : 'Browse our complete dual library of short-form logs and comprehensive deep-dives.'}
             </p>
           </div>
 
@@ -527,31 +525,28 @@ const Home = () => {
           <div className="flex items-center gap-1 p-1 rounded-2xl bg-surface-800/90 border border-white/8 backdrop-blur-md self-start md:self-auto">
             <button
               onClick={() => setActiveTab('all')}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
-                activeTab === 'all'
-                  ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
-                  : 'text-text-secondary hover:text-white'
-              }`}
+              className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${activeTab === 'all'
+                ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
+                : 'text-text-secondary hover:text-white'
+                }`}
             >
               All ({articles.length})
             </button>
             <button
               onClick={() => setActiveTab('blog')}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
-                activeTab === 'blog'
-                  ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
-                  : 'text-text-secondary hover:text-white'
-              }`}
+              className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${activeTab === 'blog'
+                ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
+                : 'text-text-secondary hover:text-white'
+                }`}
             >
               📝 Blogs ({blogs.length})
             </button>
             <button
               onClick={() => setActiveTab('article')}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
-                activeTab === 'article'
-                  ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30'
-                  : 'text-text-secondary hover:text-white'
-              }`}
+              className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${activeTab === 'article'
+                ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30'
+                : 'text-text-secondary hover:text-white'
+                }`}
             >
               📚 Articles ({technicalArticles.length})
             </button>
@@ -562,11 +557,10 @@ const Home = () => {
         <div className="flex items-center gap-2 overflow-x-auto pb-2">
           <button
             onClick={() => setSelectedCategory('All')}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
-              selectedCategory === 'All'
-                ? 'bg-white text-surface-900 shadow-md font-bold'
-                : 'bg-surface-800/80 text-text-secondary hover:text-white border border-white/6 hover:bg-surface-700'
-            }`}
+            className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${selectedCategory === 'All'
+              ? 'bg-white text-surface-900 shadow-md font-bold'
+              : 'bg-surface-800/80 text-text-secondary hover:text-white border border-white/6 hover:bg-surface-700'
+              }`}
           >
             All Categories
           </button>
@@ -574,11 +568,10 @@ const Home = () => {
             <button
               key={cat.name}
               onClick={() => setSelectedCategory(cat.name)}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
-                selectedCategory.toLowerCase() === cat.name.toLowerCase()
-                  ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/25'
-                  : 'bg-surface-800/80 text-text-secondary hover:text-white border border-white/6 hover:bg-surface-700'
-              }`}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${selectedCategory.toLowerCase() === cat.name.toLowerCase()
+                ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/25'
+                : 'bg-surface-800/80 text-text-secondary hover:text-white border border-white/6 hover:bg-surface-700'
+                }`}
             >
               <span>{cat.emoji}</span>
               <span>{cat.name}</span>
@@ -602,19 +595,19 @@ const Home = () => {
               {errorMsg
                 ? 'Backend Notice'
                 : searchQuery
-                ? `No results matching "${searchQuery}"`
-                : activeTab === 'article'
-                ? 'No technical articles published yet'
-                : 'No blogs published yet'}
+                  ? `No results matching "${searchQuery}"`
+                  : activeTab === 'article'
+                    ? 'No technical articles published yet'
+                    : 'No blogs published yet'}
             </h3>
             <p className="text-text-secondary text-sm max-w-lg mx-auto leading-relaxed">
               {errorMsg
                 ? errorMsg
                 : searchQuery
-                ? 'Try clearing your search query or switching tabs.'
-                : activeTab === 'article'
-                ? 'Publish your first technical deep-dive using the Article Editor.'
-                : 'Daily blogs published will appear here.'}
+                  ? 'Try clearing your search query or switching tabs.'
+                  : activeTab === 'article'
+                    ? 'Publish your first technical deep-dive using the Article Editor.'
+                    : 'Daily blogs published will appear here.'}
             </p>
             <div className="pt-2 flex items-center justify-center gap-3">
               {errorMsg && (
@@ -755,9 +748,8 @@ const Home = () => {
               <div
                 key={cat.name}
                 onClick={() => handleCategorySelect(cat.name)}
-                className={`gradient-card p-5 cursor-pointer group transition-all hover:-translate-y-1 relative overflow-hidden flex flex-col justify-between ${
-                  isSelected ? 'border-primary-500 shadow-xl shadow-primary-500/25 ring-1 ring-primary-500/40' : 'hover:border-white/20'
-                }`}
+                className={`gradient-card p-5 cursor-pointer group transition-all hover:-translate-y-1 relative overflow-hidden flex flex-col justify-between ${isSelected ? 'border-primary-500 shadow-xl shadow-primary-500/25 ring-1 ring-primary-500/40' : 'hover:border-white/20'
+                  }`}
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${cat.color} opacity-0 group-hover:opacity-100 transition-opacity`} />
                 <div className="relative z-10 space-y-3">
