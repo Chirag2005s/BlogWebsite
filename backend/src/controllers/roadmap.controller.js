@@ -568,11 +568,21 @@ export const createRoadmap = async (req, res, next) => {
 export const deleteRoadmap = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const roadmap = await Roadmap.findById(id);
+    let roadmap = null;
+    
+    try {
+      roadmap = await Roadmap.findById(id);
+    } catch (e) {
+      // Ignore invalid ObjectId cast error
+    }
+
+    if (!roadmap) {
+      roadmap = await Roadmap.findOne({ slug: id });
+    }
 
     if (!roadmap) {
       res.status(404);
-      throw new Error('Roadmap not found or cannot be deleted');
+      throw new Error('Roadmap not found or already removed');
     }
 
     await roadmap.deleteOne();

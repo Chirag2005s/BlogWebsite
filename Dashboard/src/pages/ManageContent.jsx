@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { HiOutlinePlus } from 'react-icons/hi';
+import { HiOutlinePlus, HiOutlineRefresh } from 'react-icons/hi';
+import toast from 'react-hot-toast';
 import ContentTable from '../components/ContentTable';
 import api from '../services/api';
 
@@ -24,6 +25,11 @@ const ManageContent = () => {
     }
   };
 
+  const handleRefresh = async () => {
+    await fetchArticles();
+    toast.success('Content refreshed!');
+  };
+
   useEffect(() => {
     fetchArticles();
   }, []);
@@ -35,7 +41,10 @@ const ManageContent = () => {
           <h1 className="page-title">Manage Content</h1>
           <p className="page-description">Search, filter, edit, view, or delete all blogs and articles.</p>
         </div>
-        <div style={{ display: 'flex', gap: '12px' }}>
+        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+          <button className="btn btn-secondary" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <HiOutlineRefresh /> Refresh
+          </button>
           <button className="btn btn-secondary" onClick={() => navigate('/add-blog')}>
             <HiOutlinePlus /> New Blog
           </button>
