@@ -72,21 +72,18 @@ const ArticlesList = () => {
   const difficulties = ['All', 'Beginner', 'Intermediate', 'Advanced'];
 
   return (
-    <div className="space-y-10">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
       {/* ═══ Page Header ═══ */}
-      <div className="relative py-8 sm:py-12 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary-500/10 via-primary-700/5 to-transparent pointer-events-none" />
-        <div className="relative max-w-3xl">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary-500/10 text-primary-400 border border-primary-500/20 uppercase tracking-wider">
-              <Sparkles size={13} />
-              📚 Technical Articles
-            </span>
+      <div className="relative py-8 sm:py-12 border-b border-[#334155]/60 overflow-hidden">
+        <div className="relative max-w-3xl space-y-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1E293B] border border-[#334155] text-xs font-mono text-purple-400">
+            <Sparkles size={14} />
+            <span>Curated Engineering Knowledge</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-white tracking-tight">
-            Curated Articles & Guides
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#F8FAFC] tracking-tight">
+            Curated Articles &amp; <span className="tech-gradient-text">Guides</span>
           </h1>
-          <p className="text-text-secondary mt-3 text-lg max-w-xl leading-relaxed">
+          <p className="text-[#94A3B8] text-base sm:text-lg leading-relaxed">
             In-depth architectural patterns, production deep-dives, and detailed engineering walkthroughs.
           </p>
         </div>

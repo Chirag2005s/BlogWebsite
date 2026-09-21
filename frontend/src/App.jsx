@@ -10,6 +10,7 @@ import TechNews from './pages/TechNews';
 import Programming from './pages/Programming';
 import Roadmaps from './pages/Roadmaps';
 import AddProgrammingPost from './pages/AddProgrammingPost';
+import NotFound from './pages/NotFound';
 import AdminLayout from './layouts/AdminLayout';
 import AddBlog from './pages/admin/AddBlog';
 import ManageArticles from './pages/admin/ManageArticles';
@@ -27,17 +28,22 @@ function App() {
           <Route path="articles" element={<ArticlesList />} />
           <Route path="article/:slug" element={<ArticleView />} />
           <Route path="programming" element={<Programming />} />
+          <Route path="programming/:slug" element={<Programming />} />
           <Route path="programming/submit" element={<AddProgrammingPost />} />
           <Route path="roadmaps" element={<Roadmaps />} />
           <Route path="roadmap" element={<Roadmaps />} />
+          <Route path="roadmap/:slug" element={<Roadmaps />} />
           <Route path="news" element={<TechNews />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
 
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AddBlog />} />
+          <Route path="edit-blog/:id" element={<AddBlog />} />
           <Route path="add-article" element={<ArticleEditor />} />
+          <Route path="edit-article/:id" element={<ArticleEditor />} />
           <Route path="add-roadmap" element={<AddRoadmap />} />
           <Route path="articles" element={<ManageArticles />} />
         </Route>

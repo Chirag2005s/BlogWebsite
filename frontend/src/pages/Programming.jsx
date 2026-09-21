@@ -428,45 +428,46 @@ const Programming = () => {
   const categories = ['All', 'Algorithms & DS', 'Design Patterns', 'Concurrency', 'System Design'];
 
   return (
-    <div className="space-y-12">
-      {/* ═══ Page Hero ═══ */}
-      <div className="relative py-8 sm:py-12 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary-600/10 via-purple-600/5 to-transparent pointer-events-none" />
-        <div className="relative max-w-4xl">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary-500/15 text-primary-300 border border-primary-500/25 uppercase tracking-wider">
-              <Code2 size={13} />
-              Developer Code Hub
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      {/* ═══ Header ═══ */}
+      <div className="relative py-8 sm:py-12 border-b border-[#334155]/60 overflow-hidden">
+        <div className="relative max-w-3xl space-y-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1E293B] border border-[#334155] text-xs font-mono text-[#3B82F6]">
+              <Code2 size={14} />
+              <span>Developer Code Hub</span>
             </span>
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-purple-500/10 text-purple-300 border border-purple-500/20">
-              <Sparkles size={11} />
-              Interactive Lab
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-purple-500/10 text-purple-300 border border-purple-500/20">
+              <Sparkles size={12} />
+              <span>Interactive Architecture Lab</span>
             </span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-white tracking-tight">
-            Programming Hub & Architecture Lab
+
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#F8FAFC] tracking-tight">
+            Programming Hub &amp; <span className="tech-gradient-text">Architecture Lab</span>
           </h1>
-          <p className="text-text-secondary mt-3 text-lg max-w-2xl leading-relaxed">
+
+          <p className="text-[#94A3B8] text-base sm:text-lg leading-relaxed">
             Algorithmic patterns, production-grade snippets, multi-language system blueprints, and clean code principles.
           </p>
 
           {/* Quick Metrics Bar */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-8 max-w-2xl">
-            <div className="glass-card rounded-xl p-3 text-center border-white/5">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 max-w-2xl">
+            <div className="p-3 rounded-xl bg-[#1E293B]/80 border border-[#334155] text-center">
               <div className="text-xl font-bold text-white">6+</div>
-              <div className="text-[11px] text-text-muted mt-0.5">Languages</div>
+              <div className="text-[11px] text-[#94A3B8] mt-0.5">Languages</div>
             </div>
-            <div className="glass-card rounded-xl p-3 text-center border-white/5">
-              <div className="text-xl font-bold text-primary-400">O(1)</div>
-              <div className="text-[11px] text-text-muted mt-0.5">Optimized Patterns</div>
+            <div className="p-3 rounded-xl bg-[#1E293B]/80 border border-[#334155] text-center">
+              <div className="text-xl font-bold text-[#3B82F6]">O(1)</div>
+              <div className="text-[11px] text-[#94A3B8] mt-0.5">Optimized Patterns</div>
             </div>
-            <div className="glass-card rounded-xl p-3 text-center border-white/5">
-              <div className="text-xl font-bold text-purple-400">Live</div>
-              <div className="text-[11px] text-text-muted mt-0.5">Sandbox Preview</div>
+            <div className="p-3 rounded-xl bg-[#1E293B]/80 border border-[#334155] text-center">
+              <div className="text-xl font-bold text-[#8B5CF6]">Live</div>
+              <div className="text-[11px] text-[#94A3B8] mt-0.5">Sandbox Preview</div>
             </div>
-            <div className="glass-card rounded-xl p-3 text-center border-white/5">
-              <div className="text-xl font-bold text-green-400">100%</div>
-              <div className="text-[11px] text-text-muted mt-0.5">Tested Snippets</div>
+            <div className="p-3 rounded-xl bg-[#1E293B]/80 border border-[#334155] text-center">
+              <div className="text-xl font-bold text-[#22C55E]">100%</div>
+              <div className="text-[11px] text-[#94A3B8] mt-0.5">Tested Snippets</div>
             </div>
           </div>
         </div>

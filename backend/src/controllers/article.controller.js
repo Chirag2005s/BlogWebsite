@@ -74,8 +74,13 @@ export const getArticles = async (req, res, next) => {
 // @access  Private
 export const getAllArticlesForAdmin = async (req, res, next) => {
   try {
-    const isAdmin = req.user?.role === 'ADMIN';
-    const filter = isAdmin ? {} : (req.user?._id ? { author: req.user._id } : {});
+    if (!req.user?._id) {
+      res.status(401);
+      throw new Error('Not authorized, login required');
+    }
+
+    // Only return articles personally uploaded by the logged-in user
+    const filter = { author: req.user._id };
 
     if (req.query.type) {
       const typeParam = req.query.type.toLowerCase();
@@ -296,12 +301,11 @@ export const updateArticle = async (req, res, next) => {
 
     if (article) {
       const currentUserId = req.user?._id?.toString();
-      const isAdmin = req.user?.role === 'ADMIN';
       const isAuthor = article.author && currentUserId && article.author.toString() === currentUserId;
 
-      if (!isAdmin && !isAuthor) {
+      if (!isAuthor) {
         res.status(403);
-        throw new Error('Not authorized to update this article');
+        throw new Error('Not authorized to update this publication. You can only update your own blogs or articles.');
       }
 
       const {
@@ -368,12 +372,11 @@ export const deleteArticle = async (req, res, next) => {
 
     if (article) {
       const currentUserId = req.user?._id?.toString();
-      const isAdmin = req.user?.role === 'ADMIN';
       const isAuthor = article.author && currentUserId && article.author.toString() === currentUserId;
 
-      if (!isAdmin && !isAuthor) {
+      if (!isAuthor) {
         res.status(403);
-        throw new Error('Not authorized to delete this article');
+        throw new Error('Not authorized to delete this publication. You can only delete your own blogs or articles.');
       }
 
       await article.deleteOne();

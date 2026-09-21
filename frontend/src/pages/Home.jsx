@@ -1,833 +1,598 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  ArrowRight, BookOpen, Code2, Clock, Eye, Sparkles, TrendingUp,
-  Zap, Newspaper, FileText, Heart, Search, CheckCircle2, Layers,
-  Compass, Flame, Terminal, Send, Star, Cpu, ShieldCheck, Tag
+import { 
+  ArrowRight, Sparkles, BookOpen, Compass, Code2, Terminal, 
+  Globe, Server, BrainCircuit, Binary, Network, Cpu, Clock, 
+  User, ExternalLink, Flame, CheckCircle2, ChevronRight, Zap,
+  Layers, Newspaper, ShieldCheck
 } from 'lucide-react';
+import { 
+  CATEGORIES, ROADMAPS, PROGRAMMING_LANGUAGES, 
+  TECH_NEWS, ARTICLES 
+} from '../data/mockData';
+import CodeEditorSnippet from '../components/CodeEditorSnippet';
+import StatsCounter from '../components/StatsCounter';
+import RoadmapInteractiveFlow from '../components/RoadmapInteractiveFlow';
+import NewsletterBanner from '../components/NewsletterBanner';
 import api from '../services/api';
 
-/* ─── Skeleton Card ─── */
-const SkeletonCard = () => (
-  <div className="glass-card rounded-2xl overflow-hidden">
-    <div className="aspect-video skeleton" />
-    <div className="p-6 space-y-3">
-      <div className="skeleton h-3 w-20 rounded-full" />
-      <div className="skeleton h-5 w-full rounded-lg" />
-      <div className="skeleton h-5 w-3/4 rounded-lg" />
-      <div className="skeleton h-3 w-full rounded-lg mt-4" />
-      <div className="skeleton h-3 w-2/3 rounded-lg" />
-      <div className="flex justify-between mt-4 pt-4 border-t border-white/5">
-        <div className="skeleton h-3 w-16 rounded-full" />
-        <div className="skeleton h-3 w-20 rounded-full" />
-      </div>
-    </div>
-  </div>
-);
+// Map icon name string to Lucide component
+const getCategoryIcon = (iconName) => {
+  switch (iconName) {
+    case 'Code2': return <Code2 size={24} className="text-[#3B82F6]" />;
+    case 'Globe': return <Globe size={24} className="text-[#06B6D4]" />;
+    case 'Server': return <Server size={24} className="text-[#8B5CF6]" />;
+    case 'BrainCircuit': return <BrainCircuit size={24} className="text-[#A855F7]" />;
+    case 'Binary': return <Binary size={24} className="text-[#06B6D4]" />;
+    case 'Network': return <Network size={24} className="text-[#3B82F6]" />;
+    case 'Terminal': return <Terminal size={24} className="text-[#22C55E]" />;
+    case 'Cpu': return <Cpu size={24} className="text-[#F59E0B]" />;
+    default: return <Code2 size={24} className="text-[#3B82F6]" />;
+  }
+};
 
-/* ─── Modern Publication Card ─── */
-const PublicationCard = ({ article, index }) => (
-  <Link
-    to={`/blog/${article.slug}`}
-    className="blog-card glass-card rounded-2xl overflow-hidden group flex flex-col hover:border-primary-500/30 transition-all"
-    style={{ animationDelay: `${index * 80}ms` }}
-  >
-    {/* Image Container */}
-    <div className="aspect-video overflow-hidden bg-surface-800 relative">
-      {article.coverImage ? (
-        <img
-          src={article.coverImage}
-          alt={article.title}
-          className="blog-card-image w-full h-full object-cover"
-          loading="lazy"
-        />
-      ) : (
-        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary-950/40 via-surface-800 to-surface-900">
-          {article.type === 'article' ? (
-            <FileText size={36} className="text-primary-400/50" />
-          ) : (
-            <BookOpen size={36} className="text-primary-400/50" />
-          )}
-        </div>
-      )}
-
-      {/* Floating Badges */}
-      <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
-        <span
-          className={`px-2.5 py-1 rounded-full text-xs font-semibold backdrop-blur-md shadow-lg ${article.type === 'article'
-            ? 'bg-purple-500/80 text-white border border-purple-400/30'
-            : 'bg-primary-600/80 text-white border border-primary-400/30'
-            }`}
-        >
-          {article.type === 'article' ? '📚 Article' : '📝 Blog'}
-        </span>
-
-        {article.difficulty && (
-          <span
-            className={`px-2.5 py-1 rounded-full text-xs font-medium backdrop-blur-md shadow-md ${article.difficulty === 'Beginner'
-              ? 'bg-success/20 text-green-300 border border-success/30'
-              : article.difficulty === 'Intermediate'
-                ? 'bg-warning/20 text-yellow-300 border border-warning/30'
-                : 'bg-error/20 text-red-300 border border-error/30'
-              }`}
-          >
-            {article.difficulty}
-          </span>
-        )}
-      </div>
-    </div>
-
-    {/* Content */}
-    <div className="p-5 sm:p-6 flex flex-col flex-grow space-y-3">
-      <div className="flex items-center gap-2">
-        <span className="text-[11px] font-semibold text-primary-400 uppercase tracking-wider">
-          {article.category?.name || (article.type === 'article' ? 'Architecture & Engineering' : 'Daily Dev Log')}
-        </span>
-      </div>
-
-      <h3 className="text-lg font-bold text-white group-hover:text-primary-300 transition-colors duration-200 line-clamp-2 leading-snug">
-        {article.title}
-      </h3>
-
-      <p className="text-sm text-text-secondary line-clamp-2 flex-grow leading-relaxed">
-        {article.excerpt}
-      </p>
-
-      {/* Footer Meta */}
-      <div className="flex items-center justify-between text-xs text-text-muted pt-4 border-t border-white/5 mt-auto">
-        <div className="flex items-center gap-3">
-          <span className="flex items-center gap-1">
-            <Clock size={12} />
-            {article.readingTime || 3} min
-          </span>
-          <span className="flex items-center gap-1">
-            <Eye size={12} />
-            {article.views || 0}
-          </span>
-          <span className="flex items-center gap-1 text-red-400/80">
-            <Heart size={12} />
-            {article.likes || 0}
-          </span>
-        </div>
-        <div className="flex items-center gap-1 text-primary-400 font-medium group-hover:translate-x-0.5 transition-transform">
-          Read <ArrowRight size={12} />
-        </div>
-      </div>
-    </div>
-  </Link>
-);
-
-/* ─── Metric Stat Card ─── */
-const StatCard = ({ icon: Icon, label, value, sublabel, color, borderGlow }) => (
-  <div className={`gradient-card p-5 group hover:-translate-y-1 transition-all ${borderGlow}`}>
-    <div className="flex items-center justify-between mb-3">
-      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${color} group-hover:scale-110 transition-transform shadow-md`}>
-        <Icon size={20} />
-      </div>
-      <Sparkles size={14} className="text-white/20 group-hover:text-primary-400 transition-colors" />
-    </div>
-    <p className="text-2xl font-black text-white tracking-tight">{value}</p>
-    <p className="text-xs font-semibold text-text-primary mt-0.5">{label}</p>
-    <p className="text-[11px] text-text-muted mt-0.5">{sublabel}</p>
-  </div>
-);
-
-/* ═══════════════════════════════════════════
-   HOME PAGE
-   ═══════════════════════════════════════════ */
-
-const Home = () => {
-  const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('all'); // 'all' | 'blog' | 'article'
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [newsletterEmail, setNewsletterEmail] = useState('');
-  const [newsletterSuccess, setNewsletterSuccess] = useState(false);
-  const [errorMsg, setErrorMsg] = useState(null);
-  const heroRef = useRef(null);
-  const feedRef = useRef(null);
-
-  const fetchArticles = async () => {
-    try {
-      setLoading(true);
-      setErrorMsg(null);
-      const { data } = await api.get('/articles');
-      const list = Array.isArray(data?.data) ? data.data : (Array.isArray(data) ? data : []);
-      setArticles(list);
-    } catch (error) {
-      console.error('Failed to fetch articles', error);
-      const serverMsg = error.response?.data?.message || error.message || 'Failed to connect to backend';
-      setErrorMsg(serverMsg);
-      setArticles([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+export default function Home() {
+  const [blogs, setBlogs] = useState(ARTICLES);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    // Optionally fetch articles from backend if available, fallback smoothly to mockData
+    const fetchArticles = async () => {
+      try {
+        const res = await api.get('/articles');
+        if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+          // Merge API data with mock data so required articles are always present
+          const existingSlugs = new Set(res.data.map((a) => a.slug));
+          const missingRequired = ARTICLES.filter((a) => !existingSlugs.has(a.slug));
+          setBlogs([...res.data, ...missingRequired]);
+        }
+      } catch (err) {
+        // Fallback to rich mockData
+        console.log('Using local developer mock dataset for immediate fast loading.');
+      }
+    };
     fetchArticles();
   }, []);
 
-  // The 7 official categories
-  const categories = [
-    {
-      name: 'Artificial Intelligence',
-      slug: 'artificial-intelligence',
-      emoji: '🤖',
-      description: 'Autonomous systems, reasoning agents, neural cognition, and AI safety.',
-      color: 'from-blue-500/20 to-indigo-500/10',
-      badgeColor: 'bg-blue-500/15 text-blue-300 border-blue-500/25',
-    },
-    {
-      name: 'Machine Learning',
-      slug: 'machine-learning',
-      emoji: '🧠',
-      description: 'Predictive modeling, deep neural architectures, and data pipelines.',
-      color: 'from-indigo-500/20 to-purple-500/10',
-      badgeColor: 'bg-indigo-500/15 text-indigo-300 border-indigo-500/25',
-    },
-    {
-      name: 'Generative AI',
-      slug: 'generative-ai',
-      emoji: '✨',
-      description: 'Large language models, diffusion systems, and multimodal synthesis.',
-      color: 'from-purple-500/20 to-pink-500/10',
-      badgeColor: 'bg-purple-500/15 text-purple-300 border-purple-500/25',
-    },
-    {
-      name: 'Robotics',
-      slug: 'robotics',
-      emoji: '🦾',
-      description: 'Kinematics, sensory feedback loops, embedded ROS, and physical computing.',
-      color: 'from-amber-500/20 to-orange-500/10',
-      badgeColor: 'bg-amber-500/15 text-amber-300 border-amber-500/25',
-    },
-    {
-      name: 'Web Technology',
-      slug: 'web-technology',
-      emoji: '🌐',
-      description: 'Full-stack platforms, modern browser APIs, frontend frameworks, and runtimes.',
-      color: 'from-emerald-500/20 to-teal-500/10',
-      badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/25',
-    },
-    {
-      name: 'Internet & Networking',
-      slug: 'internet-networking',
-      emoji: '📡',
-      description: 'Distributed network routing, cloud infrastructure, TCP/IP, and protocols.',
-      color: 'from-cyan-500/20 to-sky-500/10',
-      badgeColor: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/25',
-    },
-    {
-      name: 'Hardware',
-      slug: 'hardware',
-      emoji: '💻',
-      description: 'Silicon processors, GPUs, custom ASICs, microcontrollers, and circuits.',
-      color: 'from-rose-500/20 to-red-500/10',
-      badgeColor: 'bg-rose-500/15 text-rose-300 border-rose-500/25',
-    },
-  ];
-
-  // Defensive array fallback to prevent undefined errors if response is malformed or in flight
-  const safeArticles = Array.isArray(articles) ? articles : [];
-
-  // Compute metrics
-  const blogs = useMemo(() => safeArticles.filter((a) => !a.type || a.type === 'blog'), [safeArticles]);
-  const technicalArticles = useMemo(() => safeArticles.filter((a) => a.type === 'article'), [safeArticles]);
-  const totalViews = useMemo(() => safeArticles.reduce((acc, a) => acc + (a.views || 0), 0), [safeArticles]);
-  const totalLikes = useMemo(() => safeArticles.reduce((acc, a) => acc + (a.likes || 0), 0), [safeArticles]);
-
-  // Featured Spotlight: first featured or highest view/newest article
-  const spotlight = useMemo(() => {
-    if (safeArticles.length === 0) return null;
-    return safeArticles.find((a) => a.featured) || safeArticles[0];
-  }, [safeArticles]);
-
-  // Filtered publications
-  const filteredArticles = useMemo(() => {
-    return safeArticles.filter((a) => {
-      const isBlog = !a.type || a.type === 'blog';
-      const matchesTab =
-        activeTab === 'all' ? true : activeTab === 'article' ? a.type === 'article' : isBlog;
-
-      const matchesSearch =
-        searchQuery.trim() === '' ||
-        a.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        a.excerpt?.toLowerCase().includes(searchQuery.toLowerCase());
-
-      const articleCat = (a.category?.name || '').toLowerCase();
-      const matchesCategory =
-        selectedCategory === 'All' || articleCat === selectedCategory.toLowerCase();
-
-      return matchesTab && matchesSearch && matchesCategory;
-    });
-  }, [safeArticles, activeTab, searchQuery, selectedCategory]);
-
-  const handleNewsletterSubmit = (e) => {
-    e.preventDefault();
-    if (!newsletterEmail.trim()) return;
-    setNewsletterSuccess(true);
-    setNewsletterEmail('');
-    setTimeout(() => setNewsletterSuccess(false), 5000);
-  };
-
-  const handleCategorySelect = (catName) => {
-    setSelectedCategory(catName);
-    if (feedRef.current) {
-      feedRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
-    <div className="space-y-28 -mt-6">
-      {/* Ambient background light orbs */}
-      <div className="floating-orb w-[500px] h-[500px] bg-primary-600/10 top-0 left-1/2 -translate-x-1/2" />
-      <div className="floating-orb w-[400px] h-[400px] bg-purple-600/10 top-[600px] right-0" />
-
-      {/* ═══════════════════════════════════
-           HERO SECTION
-         ═══════════════════════════════════ */}
-      <section ref={heroRef} className="relative py-16 sm:py-24 lg:py-32 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <div className="space-y-24 sm:space-y-32">
+      {/* ═══════════════════════════════════════════
+          1. HERO SECTION
+          ═══════════════════════════════════════════ */}
+      <section className="relative pt-6 sm:pt-12 pb-8 overflow-hidden">
+        {/* Background glow orbs */}
         <div className="hero-grid" />
-        <div className="hero-glow" />
+        <div className="hero-glow-primary" />
+        <div className="hero-glow-cyan" />
+        <div className="hero-glow-purple" />
 
-        <div className="relative z-10 max-w-5xl mx-auto text-center space-y-8">
-          {/* Live Status Pill */}
-          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass-card border border-primary-500/20 text-xs font-semibold text-primary-300 shadow-xl shadow-primary-500/10 animate-fade-in">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-sm shadow-emerald-400" />
-            <span>DAILY DEV DISPATCH • 2026 EDITION</span>
-            <span className="text-white/20">|</span>
-            <span className="text-text-secondary font-normal">Blogs & Technical Articles</span>
-          </div>
-
-          {/* Headline */}
-          <h1 className="animate-fade-up text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tight text-white leading-[0.98]">
-            Architectures.{' '}
-            <span className="bg-gradient-to-r from-primary-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">
-              Learnings.
-            </span>{' '}
-            Code. Blogs <p style={{ color: "#a04dffff" }}>.Developer Roadmaps</p>
-          </h1>
-
-          {/* Description */}
-          <p className="animate-fade-up text-lg sm:text-xl text-text-secondary max-w-2xl mx-auto leading-relaxed" style={{ animationDelay: '100ms' }}>
-            A curated engineering hub separating daily developer logs from in-depth architectural deep-dives. Real production lessons, zero fluff.
-          </p>
-
-          {/* Hero CTAs */}
-          <div className="animate-fade-up flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2" style={{ animationDelay: '200ms' }}>
-            <Link
-              to="/blog"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-semibold transition-all shadow-xl shadow-primary-600/30 hover:shadow-primary-500/40 hover:-translate-y-0.5"
-            >
-              <BookOpen size={18} />
-              Explore Daily Blogs
-              <ArrowRight size={16} />
-            </Link>
-
-            <Link
-              to="/articles"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-surface-800 hover:bg-surface-700 text-white font-semibold border border-purple-500/30 hover:border-purple-500/60 transition-all shadow-lg hover:-translate-y-0.5"
-            >
-              <FileText size={18} className="text-purple-400" />
-              Read Technical Articles
-            </Link>
-          </div>
-
-          {/* Quick Search Bar */}
-          <div className="animate-fade-up max-w-lg mx-auto pt-4" style={{ animationDelay: '300ms' }}>
-            <div className="relative">
-              <Search size={17} className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search across all blogs and articles..."
-                className="w-full pl-11 pr-4 py-3 rounded-2xl bg-surface-800/80 border border-white/10 text-white placeholder-text-muted text-sm focus:outline-none focus:border-primary-500/50 focus:ring-2 focus:ring-primary-500/20 backdrop-blur-md transition-all shadow-xl"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-text-muted hover:text-white"
-                >
-                  Clear
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════
-           LIVE METRICS STRIP
-         ═══════════════════════════════════ */}
-      <section className="-mt-16 relative z-20">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-          <StatCard
-            icon={BookOpen}
-            label="Developer Blogs"
-            value={blogs.length}
-            sublabel="Daily engineering logs"
-            color="bg-primary-500/20 text-primary-300"
-            borderGlow="hover:border-primary-500/30"
-          />
-          <StatCard
-            icon={FileText}
-            label="Technical Articles"
-            value={technicalArticles.length}
-            sublabel="In-depth architectures"
-            color="bg-purple-500/20 text-purple-300"
-            borderGlow="hover:border-purple-500/30"
-          />
-          <StatCard
-            icon={Eye}
-            label="Total Readership"
-            value={totalViews.toLocaleString()}
-            sublabel="Verified post reads"
-            color="bg-emerald-500/20 text-emerald-300"
-            borderGlow="hover:border-emerald-500/30"
-          />
-          <StatCard
-            icon={Heart}
-            label="Community Likes"
-            value={totalLikes.toLocaleString()}
-            sublabel="Appreciations"
-            color="bg-red-500/20 text-red-300"
-            borderGlow="hover:border-red-500/30"
-          />
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════
-           FEATURED SPOTLIGHT (EDITORIAL HERO)
-         ═══════════════════════════════════ */}
-      {spotlight && !searchQuery && (
-        <section className="relative">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2">
-              <Flame size={18} className="text-amber-400" />
-              <h2 className="text-xs font-bold text-amber-400 uppercase tracking-wider">
-                Featured Spotlight
-              </h2>
-            </div>
-            <span className="text-xs text-text-muted">Editor's recommendation</span>
-          </div>
-
-          <div className="gradient-card overflow-hidden p-6 sm:p-8 lg:p-10 border border-white/10 hover:border-primary-500/40 transition-all">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              {/* Image Col */}
-              <div className="lg:col-span-6 overflow-hidden rounded-xl bg-surface-800 aspect-video relative group">
-                {spotlight.coverImage ? (
-                  <img
-                    src={spotlight.coverImage}
-                    alt={spotlight.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-tr from-primary-950 via-surface-800 to-purple-950/40">
-                    <Sparkles size={48} className="text-primary-400/40" />
-                  </div>
-                )}
-                <div className="absolute top-3 left-3">
-                  <span className="px-3 py-1 rounded-full text-xs font-bold bg-black/60 backdrop-blur-md text-primary-300 border border-white/10">
-                    {spotlight.type === 'article' ? '📚 Technical Article' : '📝 Daily Blog'}
-                  </span>
-                </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+            {/* Left Content (7 cols) */}
+            <div className="lg:col-span-7 space-y-6 sm:space-y-8 text-center lg:text-left">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1E293B] border border-[#334155] text-xs font-semibold text-[#06B6D4] shadow-lg shadow-cyan-500/10">
+                <span className="w-2 h-2 rounded-full bg-[#06B6D4] animate-pulse" />
+                <span>Next-Gen Developer Knowledge Platform</span>
+                <span className="text-[#334155]">|</span>
+                <span className="text-[#94A3B8] font-mono">v2.6</span>
               </div>
 
-              {/* Text Col */}
-              <div className="lg:col-span-6 space-y-4">
-                <div className="flex items-center gap-2">
-                  <span className="tech-tag text-xs">
-                    {spotlight.category?.name || 'Featured Publication'}
+              {/* Main Heading */}
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-[#F8FAFC] leading-[1.08]">
+                Explore Technology.{' '}
+                <span className="tech-gradient-text block mt-1 sm:mt-2">
+                  Build Skills.
+                </span>{' '}
+                Shape Your Journey.
+              </h1>
+
+              {/* Description */}
+              <p className="text-base sm:text-xl text-[#94A3B8] leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                TechJourney helps developers explore programming, technology, roadmaps, tutorials, and the latest trends in the software world.
+              </p>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                <Link
+                  to="/blog"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 via-cyan-600 to-purple-600 hover:opacity-95 text-white font-bold text-base shadow-xl shadow-cyan-500/25 transition-all duration-300 hover:scale-[1.02] active:scale-95 group"
+                >
+                  <BookOpen size={18} />
+                  <span>Explore Blogs</span>
+                  <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                </Link>
+
+                <Link
+                  to="/roadmaps"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-[#1E293B] hover:bg-[#26334A] border border-[#334155] hover:border-blue-500/40 text-[#F8FAFC] font-semibold text-base transition-all duration-300 shadow-md shadow-black/40 group"
+                >
+                  <Compass size={18} className="text-[#06B6D4] group-hover:rotate-45 transition-transform duration-300" />
+                  <span>View Roadmaps</span>
+                </Link>
+              </div>
+
+              {/* Tech Badges Row */}
+              <div className="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-2.5 text-xs text-[#94A3B8]">
+                <span className="text-[#64748B] font-mono">Popular:</span>
+                {['React 19', 'System Design', 'AI Agents', 'Linux Kernel', 'TypeScript', 'eBPF'].map((topic) => (
+                  <Link
+                    key={topic}
+                    to={`/blog?search=${encodeURIComponent(topic)}`}
+                    className="px-2.5 py-1 rounded-md bg-[#111827] border border-[#334155] hover:border-[#06B6D4] hover:text-white transition-colors"
+                  >
+                    #{topic}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Right Futuristic Developer Illustration (5 cols) */}
+            <div className="lg:col-span-5 relative">
+              <div className="relative mx-auto max-w-lg lg:max-w-none card-3d-perspective">
+                {/* 3D Floating Terminal Window */}
+                <div className="relative rounded-2xl bg-[#020617] border border-[#334155] p-5 shadow-2xl shadow-cyan-950/40 card-3d-tilt">
+                  {/* Window Bar */}
+                  <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#334155]">
+                    <div className="flex items-center gap-2">
+                      <span className="w-3 h-3 rounded-full bg-[#EF4444]" />
+                      <span className="w-3 h-3 rounded-full bg-[#F59E0B]" />
+                      <span className="w-3 h-3 rounded-full bg-[#22C55E]" />
+                      <span className="ml-2 text-xs font-mono text-[#94A3B8]">techjourney-core.ts</span>
+                    </div>
+                    <span className="text-[11px] font-mono text-[#06B6D4]">AI Engine Active</span>
+                  </div>
+
+                  {/* Code Editor Content */}
+                  <div className="font-mono text-xs sm:text-sm space-y-1.5 text-[#F8FAFC]">
+                    <div>
+                      <span className="text-[#8B5CF6]">interface</span>{' '}
+                      <span className="text-[#06B6D4]">DevJourney</span> {'{'}
+                    </div>
+                    <div className="pl-4">
+                      <span className="text-[#3B82F6]">skills</span>: <span className="text-[#22C55E]">string[]</span>;
+                    </div>
+                    <div className="pl-4">
+                      <span className="text-[#3B82F6]">curiosity</span>: <span className="text-[#8B5CF6]">Infinity</span>;
+                    </div>
+                    <div className="pl-4">
+                      <span className="text-[#3B82F6]">roadmap</span>: <span className="text-[#06B6D4]">'Frontend' | 'Backend' | 'AI'</span>;
+                    </div>
+                    <div>{'}'}</div>
+                    <div className="pt-2 text-[#64748B] italic">
+                      // Deploying knowledge node to mesh...
+                    </div>
+                    <div className="text-[#22C55E]">
+                      &gt; Compiling roadmaps: <span className="text-white">100% complete</span>
+                    </div>
+                  </div>
+
+                  {/* Connected Roadmap Node Flow inside terminal */}
+                  <div className="mt-4 pt-4 border-t border-[#334155] flex items-center justify-between text-[11px] font-mono">
+                    <div className="flex items-center gap-1 text-[#3B82F6]">
+                      <span className="w-2 h-2 rounded-full bg-[#3B82F6]" />
+                      <span>Syntax</span>
+                    </div>
+                    <ChevronRight size={12} className="text-[#64748B]" />
+                    <div className="flex items-center gap-1 text-[#06B6D4]">
+                      <span className="w-2 h-2 rounded-full bg-[#06B6D4]" />
+                      <span>Architecture</span>
+                    </div>
+                    <ChevronRight size={12} className="text-[#64748B]" />
+                    <div className="flex items-center gap-1 text-[#8B5CF6]">
+                      <span className="w-2 h-2 rounded-full bg-[#8B5CF6]" />
+                      <span>Scale</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Floating Floating Code Badge 1 (Top Right) */}
+                <div className="absolute -top-6 -right-6 p-3 rounded-xl bg-[#1E293B]/90 border border-cyan-500/40 shadow-xl backdrop-blur-md animate-float-fast hidden sm:flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center text-[#06B6D4]">
+                    <BrainCircuit size={18} />
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-white">AI / LLM Agents</div>
+                    <div className="text-[10px] text-cyan-300 font-mono">Autonomous Loop</div>
+                  </div>
+                </div>
+
+                {/* Floating Floating Code Badge 2 (Bottom Left) */}
+                <div className="absolute -bottom-8 -left-6 p-3 rounded-xl bg-[#1E293B]/90 border border-purple-500/40 shadow-xl backdrop-blur-md animate-float-slow hidden sm:flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-[#8B5CF6]">
+                    <Layers size={18} />
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-white">Full Stack Node</div>
+                    <div className="text-[10px] text-purple-300 font-mono">Connected &amp; Live</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          2. EXPLORE TECHNOLOGY CATEGORIES
+          ═══════════════════════════════════════════ */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-xs font-mono uppercase tracking-wider text-[#06B6D4] font-semibold">
+                Domains &amp; Verticals
+              </span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#F8FAFC] tracking-tight">
+              Explore Technology
+            </h2>
+            <p className="text-sm sm:text-base text-[#94A3B8] mt-1 max-w-xl">
+              Curated deep dives into the foundational pillars of modern software engineering.
+            </p>
+          </div>
+
+          <Link
+            to="/blog"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-[#06B6D4] hover:text-cyan-300 transition-colors group"
+          >
+            <span>Browse All Domains</span>
+            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+
+        {/* 8 Categories Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {CATEGORIES.map((cat) => (
+            <Link
+              key={cat.id}
+              to={`/blog?category=${encodeURIComponent(cat.name)}`}
+              className="group relative p-6 rounded-2xl bg-[#1E293B] border border-[#334155] hover:border-blue-500/40 hover:-translate-y-1.5 transition-all duration-300 shadow-xl shadow-black/30 flex flex-col justify-between overflow-hidden"
+            >
+              {/* Subtle top-right gradient flare on hover */}
+              <div className={`absolute -top-16 -right-16 w-32 h-32 bg-gradient-to-bl ${cat.color} opacity-0 group-hover:opacity-15 rounded-full blur-2xl transition-opacity duration-500 pointer-events-none`} />
+
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-[#111827] border border-[#334155] flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    {getCategoryIcon(cat.icon)}
+                  </div>
+                  <span className="text-xs font-mono text-[#94A3B8] px-2.5 py-1 rounded-full bg-[#111827] border border-[#334155]">
+                    {cat.articleCount} Articles
                   </span>
-                  {spotlight.difficulty && (
-                    <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-white/5 text-text-secondary border border-white/5">
-                      {spotlight.difficulty}
+                </div>
+
+                <h3 className="text-lg font-bold text-[#F8FAFC] group-hover:text-blue-300 transition-colors mb-2">
+                  {cat.name}
+                </h3>
+
+                <p className="text-xs text-[#94A3B8] leading-relaxed line-clamp-2">
+                  {cat.description}
+                </p>
+              </div>
+
+              <div className="mt-5 pt-4 border-t border-[#334155]/60 flex items-center justify-between text-xs font-semibold text-[#06B6D4]">
+                <span>Explore Domain</span>
+                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          3. CODE OF THE DAY COMPONENT
+          ═══════════════════════════════════════════ */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-xl mx-auto mb-8 space-y-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#1E293B] border border-[#334155] text-xs font-mono text-[#06B6D4]">
+            <Flame size={13} />
+            <span>Interactive Terminal</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#F8FAFC] tracking-tight">
+            Code of the Day
+          </h2>
+          <p className="text-sm text-[#94A3B8]">
+            Sharpen your fundamentals with daily syntax snippets and computational mental models.
+          </p>
+        </div>
+
+        <CodeEditorSnippet />
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          4. LATEST FROM TECHJOURNEY (BLOGS)
+          ═══════════════════════════════════════════ */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-xs font-mono uppercase tracking-wider text-[#3B82F6] font-semibold">
+                Technical Publication
+              </span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#F8FAFC] tracking-tight">
+              Latest From TechJourney
+            </h2>
+            <p className="text-sm sm:text-base text-[#94A3B8] mt-1 max-w-xl">
+              Deep architectural guides, network internals, and interview masterclasses written by seasoned engineers.
+            </p>
+          </div>
+
+          <Link
+            to="/blog"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1E293B] border border-[#334155] hover:border-blue-500/40 text-sm font-semibold text-[#F8FAFC] hover:text-white transition-all group shrink-0"
+          >
+            <span>View All Articles</span>
+            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+
+        {/* Blog Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {blogs.slice(0, 6).map((article) => (
+            <Link
+              key={article._id || article.slug}
+              to={`/blog/${article.slug}`}
+              className="blog-card rounded-2xl overflow-hidden group flex flex-col hover:border-blue-500/40 transition-all duration-300"
+            >
+              {/* Cover Image Container */}
+              <div className="aspect-[16/9] w-full overflow-hidden bg-[#111827] relative">
+                <img
+                  src={article.coverImage}
+                  alt={article.title}
+                  className="blog-card-image w-full h-full object-cover"
+                  loading="lazy"
+                />
+
+                {/* Floating Badges */}
+                <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
+                  <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#0B1120]/80 text-[#06B6D4] border border-cyan-500/30 backdrop-blur-md">
+                    {article.category?.name || 'Engineering'}
+                  </span>
+
+                  {article.difficulty && (
+                    <span className="px-2.5 py-1 rounded-full text-[10px] font-medium bg-[#0B1120]/80 text-[#F8FAFC] border border-[#334155] backdrop-blur-md">
+                      {article.difficulty}
                     </span>
                   )}
                 </div>
+              </div>
 
-                <h3 className="text-2xl sm:text-3xl font-extrabold text-white leading-tight">
-                  <Link to={`/blog/${spotlight.slug}`} className="hover:text-primary-300 transition-colors">
-                    {spotlight.title}
-                  </Link>
+              {/* Content Body */}
+              <div className="p-6 flex flex-col flex-grow space-y-3">
+                <div className="flex items-center gap-3 text-xs text-[#94A3B8]">
+                  <span className="flex items-center gap-1">
+                    <Clock size={12} /> {article.readingTime} min read
+                  </span>
+                  <span>•</span>
+                  <span>{new Date(article.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                </div>
+
+                <h3 className="text-lg font-bold text-[#F8FAFC] group-hover:text-blue-300 transition-colors line-clamp-2 leading-snug">
+                  {article.title}
                 </h3>
 
-                <p className="text-sm sm:text-base text-text-secondary leading-relaxed">
-                  {spotlight.excerpt}
+                <p className="text-xs sm:text-sm text-[#94A3B8] line-clamp-2 flex-grow leading-relaxed">
+                  {article.excerpt}
                 </p>
 
-                {/* Author & Metrics */}
-                <div className="flex flex-wrap items-center gap-4 text-xs text-text-muted pt-2">
+                {/* Author & Read More Footer */}
+                <div className="pt-4 border-t border-[#334155] flex items-center justify-between text-xs mt-auto">
                   <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full bg-primary-600 flex items-center justify-center text-xs font-bold text-white uppercase">
-                      {spotlight.author?.name?.charAt(0) || 'A'}
-                    </div>
-                    <span className="text-text-secondary font-medium">{spotlight.author?.name || 'Editor'}</span>
+                    {article.author?.avatar ? (
+                      <img
+                        src={article.author.avatar}
+                        alt={article.author.name}
+                        className="w-6 h-6 rounded-full object-cover border border-[#334155]"
+                      />
+                    ) : (
+                      <div className="w-6 h-6 rounded-full bg-blue-600/30 flex items-center justify-center text-[10px] font-bold text-blue-300">
+                        {article.author?.name?.charAt(0) || 'A'}
+                      </div>
+                    )}
+                    <span className="text-[#F8FAFC] font-medium text-xs">
+                      {article.author?.name || 'TechJourney Contributor'}
+                    </span>
                   </div>
-                  <span className="w-px h-3.5 bg-white/10" />
-                  <span className="flex items-center gap-1">
-                    <Clock size={13} />
-                    {spotlight.readingTime || 3} min read
+
+                  <span className="font-semibold text-[#3B82F6] group-hover:text-cyan-400 transition-colors flex items-center gap-1">
+                    Read More <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
                   </span>
-                  <span className="flex items-center gap-1">
-                    <Eye size={13} />
-                    {spotlight.views || 0} reads
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          5. DEVELOPER ROADMAPS (INTERACTIVE JOURNEY)
+          ═══════════════════════════════════════════ */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1E293B] border border-[#334155] text-xs font-mono text-[#8B5CF6]">
+            <Compass size={14} />
+            <span>Structured Learning Paths</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight">
+            Choose Your <span className="tech-gradient-text">Developer Journey</span>
+          </h2>
+          <p className="text-sm sm:text-base text-[#94A3B8]">
+            Interactive career roadmaps mapped to the actual skills demanded by top engineering organizations.
+          </p>
+        </div>
+
+        {/* Connected Node Flow Component */}
+        <RoadmapInteractiveFlow />
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          6. LEARN PROGRAMMING
+          ═══════════════════════════════════════════ */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-xs font-mono uppercase tracking-wider text-[#22C55E] font-semibold">
+                Language Hub
+              </span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#F8FAFC] tracking-tight">
+              Learn Programming
+            </h2>
+            <p className="text-sm sm:text-base text-[#94A3B8] mt-1 max-w-xl">
+              Master the core syntax, paradigms, and design patterns across industry-standard languages.
+            </p>
+          </div>
+
+          <Link
+            to="/programming"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-[#22C55E] hover:text-emerald-300 transition-colors group"
+          >
+            <span>Explore All Languages</span>
+            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+
+        {/* Languages Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {PROGRAMMING_LANGUAGES.map((lang) => (
+            <div
+              key={lang.slug}
+              className="p-6 rounded-2xl bg-[#1E293B] border border-[#334155] hover:border-blue-500/40 hover:-translate-y-1.5 transition-all duration-300 shadow-xl shadow-black/30 flex flex-col justify-between group"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-3xl p-2 rounded-xl bg-[#111827] border border-[#334155] inline-block group-hover:scale-110 transition-transform">
+                    {lang.icon}
+                  </span>
+                  <span className="text-[11px] font-mono text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded-full font-semibold">
+                    {lang.difficulty}
                   </span>
                 </div>
 
-                <div className="pt-2">
+                <h3 className="text-lg font-bold text-[#F8FAFC] group-hover:text-blue-300 transition-colors mb-1.5">
+                  {lang.name}
+                </h3>
+
+                <p className="text-xs text-[#94A3B8] leading-relaxed line-clamp-2">
+                  {lang.description}
+                </p>
+
+                <div className="mt-3 flex items-center gap-2 text-xs text-[#64748B]">
+                  <span>{lang.tutorialCount} Tutorials</span>
+                  <span>•</span>
+                  <span>{lang.popularity} Usage</span>
+                </div>
+              </div>
+
+              <div className="mt-5 pt-4 border-t border-[#334155] flex items-center justify-between">
+                <Link
+                  to="/programming"
+                  className="w-full py-2 px-3 rounded-xl bg-[#111827] hover:bg-blue-600/20 border border-[#334155] hover:border-blue-500/40 text-xs font-semibold text-[#F8FAFC] hover:text-blue-300 transition-all text-center flex items-center justify-center gap-1"
+                >
+                  <span>Explore {lang.name}</span>
+                  <ArrowRight size={13} />
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          7. WHAT'S HAPPENING IN TECH? (TECH NEWS)
+          ═══════════════════════════════════════════ */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-xs font-mono uppercase tracking-wider text-[#EF4444] font-semibold">
+                Industry Radar
+              </span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#F8FAFC] tracking-tight">
+              What's Happening in Tech?
+            </h2>
+            <p className="text-sm sm:text-base text-[#94A3B8] mt-1 max-w-xl">
+              Breakthrough developments in AI, cloud runtimes, browser standards, and quantum silicon.
+            </p>
+          </div>
+
+          <Link
+            to="/news"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1E293B] border border-[#334155] hover:border-red-500/40 text-sm font-semibold text-[#F8FAFC] hover:text-white transition-all group shrink-0"
+          >
+            <Newspaper size={16} className="text-[#EF4444]" />
+            <span>Tech News Feed</span>
+            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+
+        {/* Horizontal News Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {TECH_NEWS.slice(0, 4).map((item) => (
+            <div
+              key={item.id}
+              className="p-5 rounded-2xl bg-[#1E293B] border border-[#334155] hover:border-blue-500/40 transition-all duration-300 flex flex-col sm:flex-row gap-4 sm:items-center group"
+            >
+              {/* Image */}
+              <div className="w-full sm:w-36 h-28 shrink-0 rounded-xl overflow-hidden bg-[#0B1120] relative">
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+
+              {/* Text */}
+              <div className="space-y-1.5 flex-grow">
+                <div className="flex items-center justify-between gap-2">
+                  <span className={`text-[10px] px-2 py-0.5 rounded-full border font-semibold ${item.badgeColor}`}>
+                    {item.category}
+                  </span>
+                  <span className="text-[11px] text-[#64748B] font-mono">
+                    {item.date}
+                  </span>
+                </div>
+
+                <h4 className="text-sm sm:text-base font-bold text-[#F8FAFC] group-hover:text-blue-300 transition-colors line-clamp-2 leading-snug">
+                  {item.title}
+                </h4>
+
+                <p className="text-xs text-[#94A3B8] line-clamp-2 leading-relaxed">
+                  {item.description}
+                </p>
+
+                <div className="pt-2 flex items-center justify-between text-xs">
+                  <span className="text-[11px] text-[#64748B]">{item.source} • {item.readTime}</span>
                   <Link
-                    to={`/blog/${spotlight.slug}`}
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-semibold text-sm transition-all shadow-lg shadow-primary-600/25 hover:shadow-primary-500/35"
+                    to="/news"
+                    className="text-xs font-semibold text-[#06B6D4] hover:underline inline-flex items-center gap-1"
                   >
-                    Read Full Story
-                    <ArrowRight size={15} />
+                    Read <ArrowRight size={12} />
                   </Link>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
-      )}
-
-      {/* ═══════════════════════════════════
-           MAIN FEED: BLOGS & ARTICLES
-         ═══════════════════════════════════ */}
-      <section ref={feedRef} className="space-y-6">
-        {/* Section Header with Segmented Switch */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 border-b border-white/5 pb-6">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-xs font-bold text-primary-400 uppercase tracking-wider">
-                ⚡ Comprehensive Publications
-              </span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-              {activeTab === 'article'
-                ? 'Technical Articles'
-                : activeTab === 'blog'
-                  ? 'Developer Blogs'
-                  : 'All Engineering Content'}
-            </h2>
-            <p className="text-text-secondary text-sm mt-1">
-              {activeTab === 'article'
-                ? 'Deep-dive architectural patterns, production blueprints, and extensive engineering tutorials.'
-                : activeTab === 'blog'
-                  ? 'Daily dev reflections, short-form learnings, debugging fixes, and tool discoveries.'
-                  : 'Browse our complete dual library of short-form logs and comprehensive deep-dives.'}
-            </p>
-          </div>
-
-          {/* Segmented Control Tabs */}
-          <div className="flex items-center gap-1 p-1 rounded-2xl bg-surface-800/90 border border-white/8 backdrop-blur-md self-start md:self-auto">
-            <button
-              onClick={() => setActiveTab('all')}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${activeTab === 'all'
-                ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
-                : 'text-text-secondary hover:text-white'
-                }`}
-            >
-              All ({articles.length})
-            </button>
-            <button
-              onClick={() => setActiveTab('blog')}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${activeTab === 'blog'
-                ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
-                : 'text-text-secondary hover:text-white'
-                }`}
-            >
-              📝 Blogs ({blogs.length})
-            </button>
-            <button
-              onClick={() => setActiveTab('article')}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${activeTab === 'article'
-                ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30'
-                : 'text-text-secondary hover:text-white'
-                }`}
-            >
-              📚 Articles ({technicalArticles.length})
-            </button>
-          </div>
-        </div>
-
-        {/* Category Filter Pills Bar */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2">
-          <button
-            onClick={() => setSelectedCategory('All')}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${selectedCategory === 'All'
-              ? 'bg-white text-surface-900 shadow-md font-bold'
-              : 'bg-surface-800/80 text-text-secondary hover:text-white border border-white/6 hover:bg-surface-700'
-              }`}
-          >
-            All Categories
-          </button>
-          {categories.map((cat) => (
-            <button
-              key={cat.name}
-              onClick={() => setSelectedCategory(cat.name)}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${selectedCategory.toLowerCase() === cat.name.toLowerCase()
-                ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/25'
-                : 'bg-surface-800/80 text-text-secondary hover:text-white border border-white/6 hover:bg-surface-700'
-                }`}
-            >
-              <span>{cat.emoji}</span>
-              <span>{cat.name}</span>
-            </button>
           ))}
         </div>
-
-        {/* Publications Grid */}
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, i) => (
-              <SkeletonCard key={i} />
-            ))}
-          </div>
-        ) : filteredArticles.length === 0 ? (
-          <div className="glass-card rounded-2xl p-16 text-center space-y-4">
-            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mx-auto ${errorMsg ? 'bg-amber-500/10 text-amber-400' : 'bg-primary-500/10 text-primary-400'}`}>
-              <BookOpen size={30} />
-            </div>
-            <h3 className="text-xl font-bold text-white">
-              {errorMsg
-                ? 'Backend Notice'
-                : searchQuery
-                  ? `No results matching "${searchQuery}"`
-                  : activeTab === 'article'
-                    ? 'No technical articles published yet'
-                    : 'No blogs published yet'}
-            </h3>
-            <p className="text-text-secondary text-sm max-w-lg mx-auto leading-relaxed">
-              {errorMsg
-                ? errorMsg
-                : searchQuery
-                  ? 'Try clearing your search query or switching tabs.'
-                  : activeTab === 'article'
-                    ? 'Publish your first technical deep-dive using the Article Editor.'
-                    : 'Daily blogs published will appear here.'}
-            </p>
-            <div className="pt-2 flex items-center justify-center gap-3">
-              {errorMsg && (
-                <button
-                  onClick={fetchArticles}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold transition-all shadow-lg shadow-amber-600/20"
-                >
-                  🔄 Retry Connection
-                </button>
-              )}
-              <Link
-                to={activeTab === 'article' ? '/admin/add-article' : '/admin'}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-xs font-semibold transition-all"
-              >
-                {activeTab === 'article' ? '+ Create Article' : '+ Write Blog'}
-              </Link>
-            </div>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredArticles.slice(0, 4).map((article, index) => (
-              <PublicationCard key={article._id} article={article} index={index} />
-            ))}
-          </div>
-        )}
-
-        {/* View Full Section Footer Link */}
-        <div className="flex items-center justify-between pt-4 border-t border-white/5">
-          <span className="text-xs text-text-muted">
-            Showing {Math.min(filteredArticles.length, 4)} of {articles.length} items
-          </span>
-          <div className="flex items-center gap-4 text-xs font-semibold">
-            <Link to="/blog" className="text-primary-400 hover:text-primary-300 flex items-center gap-1 transition-colors">
-              All Blogs <ArrowRight size={13} />
-            </Link>
-            <span className="text-white/20">•</span>
-            <Link to="/articles" className="text-purple-400 hover:text-purple-300 flex items-center gap-1 transition-colors">
-              All Articles <ArrowRight size={13} />
-            </Link>
-          </div>
-        </div>
       </section>
 
-      {/* ═══════════════════════════════════
-           THREE CORE PILLARS (WHY TECHJOURNEY)
-         ═══════════════════════════════════ */}
-      <section className="space-y-8">
-        <div className="text-center max-w-2xl mx-auto space-y-3">
-          <span className="text-xs font-bold text-primary-400 uppercase tracking-wider">
-            🧠 Editorial Philosophy
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Designed for Modern Engineers
-          </h2>
-          <p className="text-text-secondary text-sm">
-            Everything structured with strict separation of concerns, high technical accuracy, and zero fluff.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="gradient-card p-8 space-y-4 hover:-translate-y-1 transition-transform">
-            <div className="w-12 h-12 rounded-xl bg-primary-500/15 flex items-center justify-center text-primary-400 mb-2">
-              <Terminal size={24} />
-            </div>
-            <h3 className="text-lg font-bold text-white">Daily Developer Logs</h3>
-            <p className="text-sm text-text-secondary leading-relaxed">
-              Fast, practical write-ups documenting real everyday bugs, tricky API quirks, and workflow productivity wins.
-            </p>
-            <Link to="/blog" className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary-400 hover:underline pt-2">
-              Explore logs <ArrowRight size={12} />
-            </Link>
-          </div>
-
-          <div className="gradient-card p-8 space-y-4 hover:-translate-y-1 transition-transform border-purple-500/20">
-            <div className="w-12 h-12 rounded-xl bg-purple-500/15 flex items-center justify-center text-purple-400 mb-2">
-              <Layers size={24} />
-            </div>
-            <h3 className="text-lg font-bold text-white">Technical Deep-Dives</h3>
-            <p className="text-sm text-text-secondary leading-relaxed">
-              Long-form architectural case studies covering microservices, caching layers, distributed databases, and high availability.
-            </p>
-            <Link to="/articles" className="inline-flex items-center gap-1.5 text-xs font-semibold text-purple-400 hover:underline pt-2">
-              Read articles <ArrowRight size={12} />
-            </Link>
-          </div>
-
-          <div className="gradient-card p-8 space-y-4 hover:-translate-y-1 transition-transform">
-            <div className="w-12 h-12 rounded-xl bg-emerald-500/15 flex items-center justify-center text-emerald-400 mb-2">
-              <Cpu size={24} />
-            </div>
-            <h3 className="text-lg font-bold text-white">Curated Tech Radar</h3>
-            <p className="text-sm text-text-secondary leading-relaxed">
-              Stay ahead of emerging tools, AI frameworks, runtimes, and engineering best practices shaping modern software teams.
-            </p>
-            <Link to="/news" className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 hover:underline pt-2">
-              Read Tech News <ArrowRight size={12} />
-            </Link>
-          </div>
-        </div>
+      {/* ═══════════════════════════════════════════
+          8. ANIMATED STATISTICS
+          ═══════════════════════════════════════════ */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <StatsCounter />
       </section>
 
-      {/* ═══════════════════════════════════
-           BROWSE BY CATEGORY (7 OFFICIAL CATEGORIES)
-         ═══════════════════════════════════ */}
-      <section className="space-y-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-xs font-bold text-primary-400 uppercase tracking-wider">
-                🏷️ Core Disciplines
-              </span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-              Explore by Category
-            </h2>
-            <p className="text-text-secondary text-sm mt-1">
-              Select any discipline to filter through our published blogs and technical articles.
-            </p>
-          </div>
-          {selectedCategory !== 'All' && (
-            <button
-              onClick={() => setSelectedCategory('All')}
-              className="text-xs text-primary-400 hover:text-primary-300 font-medium self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary-500/10 border border-primary-500/20"
-            >
-              Showing: <span className="font-bold text-white">{selectedCategory}</span> · Reset ✕
-            </button>
-          )}
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {categories.map((cat) => {
-            const count = safeArticles.filter(
-              (a) => (a.category?.name || '').toLowerCase() === cat.name.toLowerCase()
-            ).length;
-            const isSelected = selectedCategory.toLowerCase() === cat.name.toLowerCase();
-
-            return (
-              <div
-                key={cat.name}
-                onClick={() => handleCategorySelect(cat.name)}
-                className={`gradient-card p-5 cursor-pointer group transition-all hover:-translate-y-1 relative overflow-hidden flex flex-col justify-between ${isSelected ? 'border-primary-500 shadow-xl shadow-primary-500/25 ring-1 ring-primary-500/40' : 'hover:border-white/20'
-                  }`}
-              >
-                <div className={`absolute inset-0 bg-gradient-to-br ${cat.color} opacity-0 group-hover:opacity-100 transition-opacity`} />
-                <div className="relative z-10 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-2xl p-2 rounded-xl bg-surface-800/90 border border-white/8 inline-block shadow-sm">
-                      {cat.emoji}
-                    </span>
-                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-white/5 text-text-muted border border-white/5">
-                      {count} {count === 1 ? 'post' : 'posts'}
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="text-base font-bold text-white group-hover:text-primary-300 transition-colors">
-                      {cat.name}
-                    </h3>
-                    <p className="text-xs text-text-secondary mt-1.5 leading-relaxed line-clamp-2">
-                      {cat.description}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="relative z-10 pt-4 mt-3 border-t border-white/5 flex items-center justify-between text-xs text-primary-400 font-medium">
-                  <span>{isSelected ? 'Currently filtering' : 'Filter publications'}</span>
-                  <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════
-           NEWSLETTER / DISPATCH CTA
-         ═══════════════════════════════════ */}
-      <section className="relative rounded-3xl overflow-hidden p-8 sm:p-14 border border-white/10 gradient-card">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary-600/15 via-purple-600/15 to-transparent pointer-events-none" />
-        <div className="relative z-10 max-w-2xl mx-auto text-center space-y-6">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-text-secondary">
-            <Sparkles size={13} className="text-primary-400" />
-            <span>Developer Dispatch • Zero Spam</span>
-          </div>
-
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-            Stay Ahead of the Engineering Curve
-          </h2>
-
-          <p className="text-sm sm:text-base text-text-secondary leading-relaxed">
-            Get curated summaries of our latest blogs, architectural deep-dives, and emerging software paradigms delivered straight to your inbox.
-          </p>
-
-          <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto pt-2">
-            <input
-              type="email"
-              value={newsletterEmail}
-              onChange={(e) => setNewsletterEmail(e.target.value)}
-              placeholder="Enter your developer email..."
-              className="w-full px-4 py-3 rounded-xl bg-surface-900/90 border border-white/10 text-white placeholder-text-muted text-sm focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all"
-              required
-            />
-            <button
-              type="submit"
-              className="w-full sm:w-auto px-6 py-3 rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-semibold text-sm transition-all shadow-lg shadow-primary-600/30 whitespace-nowrap flex items-center justify-center gap-2"
-            >
-              <Send size={15} />
-              Subscribe
-            </button>
-          </form>
-
-          {newsletterSuccess && (
-            <div className="inline-flex items-center gap-2 text-xs text-emerald-400 font-medium bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-xl animate-fade-in">
-              <CheckCircle2 size={14} />
-              <span>You're in! You'll receive our next technical digest.</span>
-            </div>
-          )}
-        </div>
+      {/* ═══════════════════════════════════════════
+          9. NEWSLETTER BANNER
+          ═══════════════════════════════════════════ */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <NewsletterBanner />
       </section>
     </div>
   );
-};
-
-export default Home;
+}

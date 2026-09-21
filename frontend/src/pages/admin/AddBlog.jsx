@@ -1,13 +1,18 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Save, Send, CheckCircle, AlertCircle, Image, Type, AlignLeft, FileText, BarChart3, Tag } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams, Link } from 'react-router-dom';
+import { Save, Send, CheckCircle, AlertCircle, Image, Type, AlignLeft, FileText, BarChart3, Tag, ArrowLeft } from 'lucide-react';
 import api from '../../services/api';
 
 const AddBlog = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const isEditing = Boolean(id);
+
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(isEditing);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [notAuthorized, setNotAuthorized] = useState(false);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -17,6 +22,50 @@ const AddBlog = () => {
     category: 'Web Technology',
     difficulty: 'Beginner',
   });
+
+  const userInfo = (() => {
+    try {
+      const raw = localStorage.getItem('userInfo');
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  })();
+
+  useEffect(() => {
+    if (isEditing && id) {
+      const fetchBlogForEdit = async () => {
+        try {
+          setFetching(true);
+          const { data } = await api.get(`/articles/id/${id}`);
+          const blog = data?.data || data;
+
+          // Check author ownership
+          const authorId = blog?.author?._id ? blog.author._id : blog?.author;
+          if (userInfo?._id && authorId && String(userInfo._id) !== String(authorId)) {
+            setNotAuthorized(true);
+            setError('Unauthorized: You can only edit blogs that you personally uploaded.');
+            return;
+          }
+
+          setFormData({
+            title: blog.title || '',
+            excerpt: blog.excerpt || '',
+            content: blog.content || '',
+            coverImage: blog.coverImage || '',
+            category: blog.category?.name || blog.category || 'Web Technology',
+            difficulty: blog.difficulty || 'Beginner',
+          });
+        } catch (err) {
+          setError(err.response?.data?.message || 'Failed to fetch blog for editing');
+        } finally {
+          setFetching(false);
+        }
+      };
+
+      fetchBlogForEdit();
+    }
+  }, [id, isEditing]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -48,20 +97,33 @@ const AddBlog = () => {
     }
 
     try {
-      const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
       const payload = { 
         ...formData, 
         status: publishStatus, 
         type: 'blog',
         author: userInfo?._id || undefined,
       };
-      const { data } = await api.post('/articles', payload);
-      if (data.success) {
-        setSuccess(publishStatus === 'Published' ? '🎉 Blog published successfully!' : '📝 Blog saved as draft!');
-        resetForm();
+
+      if (isEditing) {
+        const { data } = await api.put(`/articles/${id}`, payload);
+        if (data.success) {
+          setSuccess(publishStatus === 'Published' ? '🎉 Blog updated and published successfully!' : '📝 Blog update saved as draft!');
+          setTimeout(() => {
+            navigate('/admin/articles');
+          }, 1200);
+        }
+      } else {
+        const { data } = await api.post('/articles', payload);
+        if (data.success) {
+          setSuccess(publishStatus === 'Published' ? '🎉 Blog published successfully!' : '📝 Blog saved as draft!');
+          resetForm();
+          setTimeout(() => {
+            navigate('/admin/articles');
+          }, 1200);
+        }
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to save blog. Please try again.');
+      setError(err.response?.data?.message || (isEditing ? 'Failed to update blog. You can only update your own content.' : 'Failed to save blog. Please try again.'));
     } finally {
       setLoading(false);
     }
@@ -69,12 +131,46 @@ const AddBlog = () => {
 
   const inputClass = "w-full bg-surface-900/60 border border-white/8 rounded-xl px-4 py-3 text-white placeholder-text-muted text-sm focus:outline-none focus:border-primary-500/40 focus:ring-1 focus:ring-primary-500/20 transition-all";
 
+  if (fetching) {
+    return (
+      <div className="max-w-4xl mx-auto py-16 text-center">
+        <div className="inline-block w-8 h-8 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mb-3" />
+        <p className="text-text-secondary text-sm">Loading blog data for editing...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-4xl mx-auto">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white tracking-tight">Add Daily Blog</h1>
-        <p className="text-text-secondary text-sm mt-1.5">Write and publish your daily blog post.</p>
+      <div className="mb-8 flex items-center justify-between">
+        <div>
+          <div className="flex items-center gap-3">
+            {isEditing && (
+              <Link
+                to="/admin/articles"
+                className="p-2 rounded-xl bg-surface-800 border border-white/8 text-text-secondary hover:text-white transition-all"
+                title="Back to Manage Content"
+              >
+                <ArrowLeft size={16} />
+              </Link>
+            )}
+            <h1 className="text-2xl font-bold text-white tracking-tight">
+              {isEditing ? 'Update Blog Post' : 'Add Daily Blog'}
+            </h1>
+          </div>
+          <p className="text-text-secondary text-sm mt-1.5">
+            {isEditing ? 'Modify and update your published blog.' : 'Write and publish your daily blog post.'}
+          </p>
+        </div>
+        {isEditing && (
+          <Link
+            to="/admin/articles"
+            className="text-xs text-primary-400 hover:underline font-medium"
+          >
+            Manage All Content →
+          </Link>
+        )}
       </div>
 
       {/* Messages */}
@@ -176,13 +272,22 @@ const AddBlog = () => {
 
         {/* Buttons */}
         <div className="flex flex-col sm:flex-row gap-3">
-          <button type="submit" disabled={loading} className="flex-1 bg-primary-600 hover:bg-primary-500 text-white px-6 py-3.5 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all disabled:opacity-50 shadow-lg shadow-primary-600/20 text-sm">
+          <button
+            type="submit"
+            disabled={loading || notAuthorized}
+            className="flex-1 bg-primary-600 hover:bg-primary-500 text-white px-6 py-3.5 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all disabled:opacity-50 shadow-lg shadow-primary-600/20 text-sm"
+          >
             <Send size={16} />
-            {loading ? 'Publishing...' : 'Publish Blog'}
+            {loading ? (isEditing ? 'Updating...' : 'Publishing...') : (isEditing ? 'Update & Publish' : 'Publish Blog')}
           </button>
-          <button type="button" onClick={(e) => handleSubmit(e, 'Draft')} disabled={loading} className="flex-1 glass hover:bg-white/10 text-white px-6 py-3.5 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all disabled:opacity-50 text-sm">
+          <button
+            type="button"
+            onClick={(e) => handleSubmit(e, 'Draft')}
+            disabled={loading || notAuthorized}
+            className="flex-1 glass hover:bg-white/10 text-white px-6 py-3.5 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all disabled:opacity-50 text-sm"
+          >
             <Save size={16} />
-            {loading ? 'Saving...' : 'Save as Draft'}
+            {loading ? 'Saving...' : (isEditing ? 'Save Update as Draft' : 'Save as Draft')}
           </button>
         </div>
       </form>

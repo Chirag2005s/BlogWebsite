@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Trash2, Eye, Clock, ExternalLink, BookOpen, FileText, Heart, Plus } from 'lucide-react';
+import { Trash2, Eye, Clock, ExternalLink, BookOpen, Heart, Plus, Edit3, ShieldCheck, AlertCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
 
@@ -7,6 +7,17 @@ const ManageArticles = () => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [typeFilter, setTypeFilter] = useState('all');
+  const [deletingId, setDeletingId] = useState(null);
+  const [deleteError, setDeleteError] = useState('');
+
+  const userInfo = (() => {
+    try {
+      const raw = localStorage.getItem('userInfo');
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  })();
 
   useEffect(() => {
     fetchArticles();
@@ -16,7 +27,15 @@ const ManageArticles = () => {
     try {
       const { data } = await api.get('/articles/admin/all');
       const list = Array.isArray(data?.data) ? data.data : (Array.isArray(data) ? data : []);
-      setArticles(list);
+
+      // Strict author isolation: only keep publications authored by this user
+      const userOnlyArticles = list.filter((article) => {
+        if (!userInfo?._id) return false;
+        const authorId = article.author?._id ? article.author._id : article.author;
+        return String(authorId) === String(userInfo._id);
+      });
+
+      setArticles(userOnlyArticles);
     } catch (error) {
       console.error('Failed to fetch articles', error);
       setArticles([]);
@@ -26,13 +45,18 @@ const ManageArticles = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this publication?')) {
-      try {
-        await api.delete(`/articles/${id}`);
-        setArticles((prev) => (Array.isArray(prev) ? prev.filter((article) => article._id !== id) : []));
-      } catch (error) {
-        alert(error.response?.data?.message || 'Failed to delete');
-      }
+    if (!window.confirm('Are you sure you want to permanently delete this publication? This action cannot be undone.')) {
+      return;
+    }
+    setDeletingId(id);
+    setDeleteError('');
+    try {
+      await api.delete(`/articles/${id}`);
+      setArticles((prev) => (Array.isArray(prev) ? prev.filter((article) => article._id !== id) : []));
+    } catch (error) {
+      setDeleteError(error.response?.data?.message || 'Failed to delete publication. You can only delete your own content.');
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -52,9 +76,15 @@ const ManageArticles = () => {
       {/* ═══ Header ═══ */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Content Manager</h1>
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-2xl font-bold text-white">Manage Content</h1>
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
+              <ShieldCheck size={12} />
+              Your Uploads Only
+            </span>
+          </div>
           <p className="text-text-secondary text-sm mt-1">
-            {articles.length} total publication{articles.length !== 1 ? 's' : ''} ({blogsCount} blogs, {articlesCount} articles)
+            {articles.length} publication{articles.length !== 1 ? 's' : ''} personally uploaded by {userInfo?.name || 'you'} ({blogsCount} blogs, {articlesCount} articles).
           </p>
         </div>
         <div className="flex items-center gap-2.5">
@@ -207,19 +237,30 @@ const ManageArticles = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <div className="flex justify-end gap-1">
+                      <div className="flex justify-end items-center gap-1">
+                        {/* View Link */}
                         {article.status === 'Published' && (
                           <Link
-                            to={`/blog/${article.slug}`}
+                            to={article.type === 'article' ? `/article/${article.slug}` : `/blog/${article.slug}`}
                             className="text-text-muted hover:text-primary-400 transition-colors p-2 rounded-lg hover:bg-primary-500/10"
-                            title="View"
+                            title="View Publication"
                           >
                             <ExternalLink size={15} />
                           </Link>
                         )}
+                        {/* Edit / Update Button */}
+                        <Link
+                          to={article.type === 'article' ? `/admin/edit-article/${article._id}` : `/admin/edit-blog/${article._id}`}
+                          className="text-text-muted hover:text-cyan-400 transition-colors p-2 rounded-lg hover:bg-cyan-500/10"
+                          title="Update / Edit"
+                        >
+                          <Edit3 size={15} />
+                        </Link>
+                        {/* Delete Button */}
                         <button
                           onClick={() => handleDelete(article._id)}
-                          className="text-text-muted hover:text-red-400 transition-colors p-2 rounded-lg hover:bg-error/10"
+                          disabled={deletingId === article._id}
+                          className="text-text-muted hover:text-red-400 transition-colors p-2 rounded-lg hover:bg-error/10 disabled:opacity-40"
                           title="Delete"
                         >
                           <Trash2 size={15} />

@@ -182,44 +182,44 @@ export default function Roadmaps() {
   };
 
   return (
-    <div className="space-y-10 pb-16">
-      {/* ═══ Hero Header ═══ */}
-      <div className="relative py-10 sm:py-14 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 overflow-hidden rounded-3xl bg-gradient-to-b from-primary-900/40 via-surface-900/60 to-surface-900 border border-white/8">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-primary-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="relative max-w-4xl space-y-4">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 pb-16">
+      {/* ═══ Header ═══ */}
+      <div className="relative py-8 sm:py-12 border-b border-[#334155]/60 overflow-hidden">
+        <div className="relative max-w-3xl space-y-4">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary-500/20 text-primary-300 border border-primary-500/30 uppercase tracking-wider">
-              <Compass size={13} />
-              Developer Career Paths
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1E293B] border border-[#334155] text-xs font-mono text-[#06B6D4]">
+              <Compass size={14} />
+              <span>Developer Career Paths</span>
             </span>
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-purple-500/15 text-purple-300 border border-purple-500/25">
-              <Sparkles size={11} />
-              Backend Connected Roadmaps
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-purple-500/10 text-purple-300 border border-purple-500/20">
+              <Sparkles size={12} />
+              <span>Interactive Skill Blueprints</span>
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
-            Programmer Learning Roadmaps
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#F8FAFC] tracking-tight">
+            Developer <span className="tech-gradient-text">Roadmaps</span>
           </h1>
-          <p className="text-text-secondary text-base sm:text-lg max-w-2xl leading-relaxed">
-            Step-by-step technical blueprints for modern developers. Filter by domain (Web, Backend, Frontend, Full Stack, AI, DevOps), track progress, and learn core competencies.
+
+          <p className="text-[#94A3B8] text-base sm:text-lg leading-relaxed">
+            Step-by-step technical blueprints for modern software engineers. Filter by domain (Web, Backend, Frontend, Full Stack, AI, DevOps), track progress, and master core engineering competencies.
           </p>
 
           <div className="pt-2 flex flex-wrap items-center gap-4">
             <div className="relative flex-1 max-w-md">
-              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" />
+              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#94A3B8]" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search topics, frameworks, or skills..."
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-surface-800/90 border border-white/10 text-white placeholder-text-muted text-xs focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#111827] border border-[#334155] text-white placeholder-text-muted text-xs focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/20 transition-all"
               />
             </div>
 
             <button
               onClick={handleShare}
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl glass hover:bg-white/10 text-text-secondary hover:text-white text-xs font-medium border border-white/10 transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#1E293B] hover:bg-[#1E293B]/80 text-[#94A3B8] hover:text-white text-xs font-medium border border-[#334155] transition-all cursor-pointer"
             >
               {copiedShare ? <Check size={14} className="text-green-400" /> : <Share2 size={14} />}
               <span>{copiedShare ? 'Link Copied!' : 'Share Roadmap'}</span>

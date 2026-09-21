@@ -1,13 +1,18 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Save, Send, CheckCircle, AlertCircle, Image, Type, AlignLeft, FileText, BarChart3, Tag } from 'lucide-react';
 import api from '../../services/api';
 
 const ArticleEditor = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const isEditing = Boolean(id);
+
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(isEditing);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [notAuthorized, setNotAuthorized] = useState(false);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -17,6 +22,50 @@ const ArticleEditor = () => {
     category: 'Artificial Intelligence',
     difficulty: 'Beginner',
   });
+
+  const userInfo = (() => {
+    try {
+      const raw = localStorage.getItem('userInfo');
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  })();
+
+  useEffect(() => {
+    if (isEditing && id) {
+      const fetchArticleForEdit = async () => {
+        try {
+          setFetching(true);
+          const { data } = await api.get(`/articles/id/${id}`);
+          const article = data?.data || data;
+
+          // Check author ownership
+          const authorId = article?.author?._id ? article.author._id : article?.author;
+          if (userInfo?._id && authorId && String(userInfo._id) !== String(authorId)) {
+            setNotAuthorized(true);
+            setError('Unauthorized: You can only edit articles that you personally uploaded.');
+            return;
+          }
+
+          setFormData({
+            title: article.title || '',
+            excerpt: article.excerpt || '',
+            content: article.content || '',
+            coverImage: article.coverImage || '',
+            category: article.category?.name || article.category || 'Artificial Intelligence',
+            difficulty: article.difficulty || 'Beginner',
+          });
+        } catch (err) {
+          setError(err.response?.data?.message || 'Failed to fetch article for editing');
+        } finally {
+          setFetching(false);
+        }
+      };
+
+      fetchArticleForEdit();
+    }
+  }, [id, isEditing]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -48,24 +97,33 @@ const ArticleEditor = () => {
     }
 
     try {
-      const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
       const payload = { 
         ...formData, 
         status: publishStatus, 
         type: 'article',
         author: userInfo?._id || undefined,
       };
-      const { data } = await api.post('/articles', payload);
-      
-      if (data.success) {
-        setSuccess(publishStatus === 'Published' ? '🎉 Article published successfully!' : '📝 Article saved as draft!');
-        resetForm();
-        setTimeout(() => {
-          navigate('/admin/articles');
-        }, 1500);
+
+      if (isEditing) {
+        const { data } = await api.put(`/articles/${id}`, payload);
+        if (data.success) {
+          setSuccess(publishStatus === 'Published' ? '🎉 Article updated and published successfully!' : '📝 Article update saved as draft!');
+          setTimeout(() => {
+            navigate('/admin/articles');
+          }, 1200);
+        }
+      } else {
+        const { data } = await api.post('/articles', payload);
+        if (data.success) {
+          setSuccess(publishStatus === 'Published' ? '🎉 Article published successfully!' : '📝 Article saved as draft!');
+          resetForm();
+          setTimeout(() => {
+            navigate('/admin/articles');
+          }, 1200);
+        }
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to save article. Please try again.');
+      setError(err.response?.data?.message || (isEditing ? 'Failed to update article. You can only update your own content.' : 'Failed to save article. Please try again.'));
     } finally {
       setLoading(false);
     }
@@ -73,19 +131,40 @@ const ArticleEditor = () => {
 
   const inputClass = "w-full bg-surface-900/60 border border-white/8 rounded-xl px-4 py-3 text-white placeholder-text-muted text-sm focus:outline-none focus:border-primary-500/40 focus:ring-1 focus:ring-primary-500/20 transition-all";
 
+  if (fetching) {
+    return (
+      <div className="max-w-4xl mx-auto py-16 text-center">
+        <div className="inline-block w-8 h-8 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mb-3" />
+        <p className="text-text-secondary text-sm">Loading article data for editing...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-4">
-          <Link to="/admin/articles" className="text-text-secondary hover:text-white transition-colors p-2 hover:bg-white/5 rounded-xl">
+          <Link to="/admin/articles" className="text-text-secondary hover:text-white transition-colors p-2 hover:bg-white/5 rounded-xl" title="Back to Manage Content">
             <ArrowLeft size={20} />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-white tracking-tight">Create New Article</h1>
-            <p className="text-text-secondary text-sm mt-0.5">Write and publish premium technical articles.</p>
+            <h1 className="text-2xl font-bold text-white tracking-tight">
+              {isEditing ? 'Update Article' : 'Create New Article'}
+            </h1>
+            <p className="text-text-secondary text-sm mt-0.5">
+              {isEditing ? 'Modify and update your technical article.' : 'Write and publish premium technical articles.'}
+            </p>
           </div>
         </div>
+        {isEditing && (
+          <Link
+            to="/admin/articles"
+            className="text-xs text-primary-400 hover:underline font-medium"
+          >
+            Manage All Content →
+          </Link>
+        )}
       </div>
 
       {/* Messages */}
@@ -235,20 +314,20 @@ const ArticleEditor = () => {
         <div className="flex flex-col sm:flex-row gap-3">
           <button 
             type="submit" 
-            disabled={loading} 
+            disabled={loading || notAuthorized} 
             className="flex-1 bg-primary-600 hover:bg-primary-500 text-white px-6 py-3.5 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all disabled:opacity-50 shadow-lg shadow-primary-600/20 text-sm"
           >
             <Send size={16} />
-            {loading ? 'Publishing...' : 'Publish Article'}
+            {loading ? (isEditing ? 'Updating...' : 'Publishing...') : (isEditing ? 'Update & Publish' : 'Publish Article')}
           </button>
           <button 
             type="button" 
             onClick={(e) => handleSubmit(e, 'Draft')} 
-            disabled={loading} 
+            disabled={loading || notAuthorized} 
             className="flex-1 glass hover:bg-white/10 text-white px-6 py-3.5 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all disabled:opacity-50 text-sm"
           >
             <Save size={16} />
-            {loading ? 'Saving...' : 'Save as Draft'}
+            {loading ? 'Saving...' : (isEditing ? 'Save Update as Draft' : 'Save as Draft')}
           </button>
         </div>
       </form>

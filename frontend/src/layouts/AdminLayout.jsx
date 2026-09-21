@@ -34,8 +34,7 @@ const AdminLayout = () => {
   const navItems = [
     { to: '/admin', label: 'Add Blog', icon: PenSquare, exact: true },
     { to: '/admin/add-article', label: 'Add Article', icon: PlusCircle },
-    // { to: '/admin/add-roadmap', label: 'Add Roadmap', icon: Compass },
-    // { to: '/admin/articles', label: 'Manage Content', icon: FileText },
+    { to: '/admin/articles', label: 'Manage Content', icon: FileText },
   ];
 
   const isActive = (path, exact = false) => {
@@ -129,8 +128,11 @@ const AdminLayout = () => {
             })}
           </div>
           <div className="hidden md:flex items-center gap-3">
-            <span className="text-xs text-text-muted">{userInfo?.role ? `${userInfo.role} User` : 'User'}</span>
-            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-xs font-bold text-white">
+            <div className="text-right">
+              <span className="block text-xs font-semibold text-white">{userInfo?.name || 'User'}</span>
+              <span className="block text-[10px] text-text-muted">{userInfo?.role ? `${userInfo.role} Author` : 'Member'}</span>
+            </div>
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-xs font-bold text-white shadow-sm">
               {userInfo?.name ? userInfo.name.charAt(0).toUpperCase() : 'U'}
             </div>
           </div>
