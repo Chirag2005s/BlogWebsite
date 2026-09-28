@@ -400,6 +400,9 @@ export default function MainLayout() {
               </p>
               {/* Social Icons */}
               <div className="flex items-center gap-3 pt-2">
+                <a href="https://www.instagram.com/techjourney822/" target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-surface/50 text-slate-400 hover:text-white hover:bg-surface border border-line transition-all group" aria-label="Instagram">
+                  <InstagramIcon size={18} className="group-hover:scale-110 transition-transform" />
+                </a>
               </div>
             </div>
 
