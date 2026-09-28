@@ -42,32 +42,28 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-[70vh] flex items-center justify-center py-12">
+    <div className="min-h-[70vh] flex items-center justify-center py-12 px-4">
       <div className="w-full max-w-md">
-        {/* Card */}
-        <div className="glass-card rounded-2xl p-8 sm:p-10 space-y-7">
-          {/* Header */}
+        <div className="glass-card rounded-2xl p-8 sm:p-10 space-y-7 shadow-lg shadow-[#0F6B4F]/5">
           <div className="text-center space-y-2">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center mx-auto mb-3 shadow-lg shadow-primary-500/20">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0F6B4F] to-[#16805E] flex items-center justify-center mx-auto mb-3 shadow-lg shadow-[#0F6B4F]/20">
               <LogIn size={22} className="text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-white">Welcome Back</h1>
-            <p className="text-sm text-text-secondary">Sign in to your TechJourney account</p>
+            <h1 className="text-2xl font-bold text-heading">Welcome Back</h1>
+            <p className="text-sm text-muted">Sign in to your TechJourney account</p>
           </div>
 
-          {/* Error */}
           {error && (
-            <div className="flex items-center gap-3 bg-error/10 border border-error/20 text-red-400 px-4 py-3 rounded-xl text-sm animate-fade-in">
+            <div className="flex items-center gap-3 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm animate-fade-in">
               <AlertCircle size={16} className="flex-shrink-0" />
               <span>{error}</span>
             </div>
           )}
 
-          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="flex items-center gap-2 text-sm font-medium text-text-secondary mb-2">
-                <Mail size={14} className="text-primary-400" />
+              <label className="flex items-center gap-2 text-sm font-medium text-muted mb-2">
+                <Mail size={14} className="text-[#0F6B4F]" />
                 Email
               </label>
               <input
@@ -76,12 +72,12 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full bg-surface-900/60 border border-white/8 rounded-xl px-4 py-3 text-white placeholder-text-muted text-sm focus:outline-none focus:border-primary-500/40 focus:ring-1 focus:ring-primary-500/20 transition-all"
+                className="input-field"
               />
             </div>
             <div>
-              <label className="flex items-center gap-2 text-sm font-medium text-text-secondary mb-2">
-                <Lock size={14} className="text-primary-400" />
+              <label className="flex items-center gap-2 text-sm font-medium text-muted mb-2">
+                <Lock size={14} className="text-[#0F6B4F]" />
                 Password
               </label>
               <div className="relative">
@@ -91,12 +87,12 @@ const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-surface-900/60 border border-white/8 rounded-xl pl-4 pr-11 py-3 text-white placeholder-text-muted text-sm focus:outline-none focus:border-primary-500/40 focus:ring-1 focus:ring-primary-500/20 transition-all"
+                  className="input-field pl-4 pr-11"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-text-muted hover:text-white transition-colors cursor-pointer"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#94A3B8] hover:text-heading transition-colors cursor-pointer"
                   title={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -106,7 +102,7 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-primary-600 hover:bg-primary-500 text-white font-semibold py-3 rounded-xl transition-all shadow-lg shadow-primary-600/20 hover:shadow-primary-500/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full btn-primary py-3 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -119,10 +115,9 @@ const Login = () => {
             </button>
           </form>
 
-          {/* Footer */}
-          <p className="text-center text-sm text-text-muted">
-            Don't have an account?{' '}
-            <Link to="/register" className="text-primary-400 hover:text-primary-300 font-medium transition-colors">
+          <p className="text-center text-sm text-[#94A3B8]">
+            Don&apos;t have an account?{' '}
+            <Link to="/register" className="link-accent">
               Register
             </Link>
           </p>

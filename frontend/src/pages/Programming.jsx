@@ -430,10 +430,10 @@ const Programming = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
       {/* ═══ Header ═══ */}
-      <div className="relative py-8 sm:py-12 border-b border-[#334155]/60 overflow-hidden">
+      <div className="relative py-8 sm:py-12 border-b border-line overflow-hidden">
         <div className="relative max-w-3xl space-y-4">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1E293B] border border-[#334155] text-xs font-mono text-[#3B82F6]">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full surface-card border border-line text-xs font-mono text-[#0F6B4F]">
               <Code2 size={14} />
               <span>Developer Code Hub</span>
             </span>
@@ -443,31 +443,31 @@ const Programming = () => {
             </span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#F8FAFC] tracking-tight">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-heading tracking-tight">
             Programming Hub &amp; <span className="tech-gradient-text">Architecture Lab</span>
           </h1>
 
-          <p className="text-[#94A3B8] text-base sm:text-lg leading-relaxed">
+          <p className="text-muted text-base sm:text-lg leading-relaxed">
             Algorithmic patterns, production-grade snippets, multi-language system blueprints, and clean code principles.
           </p>
 
           {/* Quick Metrics Bar */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 max-w-2xl">
-            <div className="p-3 rounded-xl bg-[#1E293B]/80 border border-[#334155] text-center">
+            <div className="p-3 rounded-xl bg-[#1E293B]/80 border border-line text-center">
               <div className="text-xl font-bold text-white">6+</div>
-              <div className="text-[11px] text-[#94A3B8] mt-0.5">Languages</div>
+              <div className="text-[11px] text-muted mt-0.5">Languages</div>
             </div>
-            <div className="p-3 rounded-xl bg-[#1E293B]/80 border border-[#334155] text-center">
-              <div className="text-xl font-bold text-[#3B82F6]">O(1)</div>
-              <div className="text-[11px] text-[#94A3B8] mt-0.5">Optimized Patterns</div>
+            <div className="p-3 rounded-xl bg-[#1E293B]/80 border border-line text-center">
+              <div className="text-xl font-bold text-[#0F6B4F]">O(1)</div>
+              <div className="text-[11px] text-muted mt-0.5">Optimized Patterns</div>
             </div>
-            <div className="p-3 rounded-xl bg-[#1E293B]/80 border border-[#334155] text-center">
+            <div className="p-3 rounded-xl bg-[#1E293B]/80 border border-line text-center">
               <div className="text-xl font-bold text-[#8B5CF6]">Live</div>
-              <div className="text-[11px] text-[#94A3B8] mt-0.5">Sandbox Preview</div>
+              <div className="text-[11px] text-muted mt-0.5">Sandbox Preview</div>
             </div>
-            <div className="p-3 rounded-xl bg-[#1E293B]/80 border border-[#334155] text-center">
+            <div className="p-3 rounded-xl bg-[#1E293B]/80 border border-line text-center">
               <div className="text-xl font-bold text-[#22C55E]">100%</div>
-              <div className="text-[11px] text-[#94A3B8] mt-0.5">Tested Snippets</div>
+              <div className="text-[11px] text-muted mt-0.5">Tested Snippets</div>
             </div>
           </div>
         </div>

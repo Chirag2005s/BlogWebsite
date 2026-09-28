@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+﻿import { useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserPlus, Mail, Lock, User, AlertCircle, ArrowRight, Eye, EyeOff, Check, X, ShieldCheck } from 'lucide-react';
 import api from '../services/api';
@@ -84,11 +84,11 @@ const Register = () => {
         <div className="glass-card rounded-2xl p-8 sm:p-10 space-y-7">
           {/* Header */}
           <div className="text-center space-y-2">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center mx-auto mb-3 shadow-lg shadow-primary-500/20">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0F6B4F] to-[#16805E] flex items-center justify-center mx-auto mb-3 shadow-lg shadow-[#0F6B4F]/20">
               <UserPlus size={22} className="text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-white">Create Account</h1>
-            <p className="text-sm text-text-secondary">Join the TechJourney community</p>
+            <h1 className="text-2xl font-bold text-heading">Create Account</h1>
+            <p className="text-sm text-muted">Join the TechJourney community</p>
           </div>
 
           {/* Error */}
@@ -113,7 +113,7 @@ const Register = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="John Doe"
-                className="w-full bg-surface-900/60 border border-white/8 rounded-xl px-4 py-3 text-white placeholder-text-muted text-sm focus:outline-none focus:border-primary-500/40 focus:ring-1 focus:ring-primary-500/20 transition-all"
+                className="input-field"
               />
             </div>
 
@@ -129,7 +129,7 @@ const Register = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full bg-surface-900/60 border border-white/8 rounded-xl px-4 py-3 text-white placeholder-text-muted text-sm focus:outline-none focus:border-primary-500/40 focus:ring-1 focus:ring-primary-500/20 transition-all"
+                className="input-field"
               />
             </div>
 
@@ -146,7 +146,7 @@ const Register = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-surface-900/60 border border-white/8 rounded-xl pl-4 pr-11 py-3 text-white placeholder-text-muted text-sm focus:outline-none focus:border-primary-500/40 focus:ring-1 focus:ring-primary-500/20 transition-all"
+                  className="input-field pl-4 pr-11"
                 />
                 <button
                   type="button"
@@ -164,7 +164,7 @@ const Register = () => {
                   {/* Strength Bar */}
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-[#94A3B8] font-medium">Password Strength</span>
+                      <span className="text-muted font-medium">Password Strength</span>
                       <span
                         className="font-bold font-mono"
                         style={{ color: STRENGTH_LEVELS[Math.max(strength, 0)]?.color }}
@@ -191,13 +191,13 @@ const Register = () => {
                       <li
                         key={rule.id}
                         className={`flex items-center gap-2 text-xs transition-colors duration-200 ${
-                          rule.passed ? 'text-[#22C55E]' : 'text-[#94A3B8]'
+                          rule.passed ? 'text-[#22C55E]' : 'text-muted'
                         }`}
                       >
                         {rule.passed ? (
                           <Check size={13} className="flex-shrink-0" />
                         ) : (
-                          <X size={13} className="flex-shrink-0 text-[#64748B]" />
+                          <X size={13} className="flex-shrink-0 text-muted" />
                         )}
                         <span>{rule.label}</span>
                       </li>

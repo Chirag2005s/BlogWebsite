@@ -15,6 +15,7 @@ import ManageRoadmaps from './pages/ManageRoadmaps';
 import ManageContent from './pages/ManageContent';
 import EditContent from './pages/EditContent';
 import Categories from './pages/Categories';
+import ManageInterviewQuestions from './pages/ManageInterviewQuestions';
 import Users from './pages/Users';
 import Profile from './pages/Profile';
 
@@ -68,6 +69,7 @@ function App() {
             <Route path="/content" element={<ManageContent />} />
             <Route path="/edit/:id" element={<EditContent />} />
             <Route path="/categories" element={<Categories />} />
+            <Route path="/interview-questions" element={<ManageInterviewQuestions />} />
             <Route
               path="/users"
               element={

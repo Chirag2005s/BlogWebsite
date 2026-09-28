@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, X, BookOpen, Compass, Code2, ArrowRight, Clock, Sparkles } from 'lucide-react';
 import { ARTICLES, ROADMAPS, PROGRAMMING_LANGUAGES } from '../data/mockData';
@@ -85,41 +85,41 @@ export default function SearchModal({ isOpen, onClose }) {
 
       {/* Modal Dialog */}
       <div 
-        className="relative w-full max-w-3xl bg-[#111827] border border-[#334155] rounded-2xl shadow-2xl shadow-black/80 overflow-hidden z-10 animate-fade-in"
+        className="relative w-full max-w-3xl bg-white border border-line rounded-2xl shadow-2xl shadow-[#172B2A]/10 overflow-hidden z-10 animate-fade-in"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Header */}
-        <div className="flex items-center px-4 sm:px-6 py-4 border-b border-[#334155] gap-3 bg-[#0B1120]">
-          <Search className="text-[#06B6D4] shrink-0" size={20} />
+        <div className="flex items-center px-4 sm:px-6 py-4 border-b border-line gap-3 bg-page">
+          <Search className="text-[#0F6B4F] shrink-0" size={20} />
           <input
             ref={inputRef}
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search programming, tutorials, roadmaps..."
-            className="w-full bg-transparent text-[#F8FAFC] placeholder-[#94A3B8] text-base sm:text-lg focus:outline-none"
+            className="w-full bg-transparent text-heading placeholder-[#94A3B8] text-base sm:text-lg focus:outline-none"
           />
           {query && (
             <button 
               onClick={() => setQuery('')}
-              className="p-1 rounded-md text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[#1E293B]"
+              className="p-1 rounded-md text-muted hover:text-heading hover:bg-soft"
             >
               <X size={18} />
             </button>
           )}
-          <kbd className="hidden sm:inline-flex items-center gap-1 px-2 py-1 text-xs font-mono text-[#94A3B8] bg-[#1E293B] border border-[#334155] rounded">
+          <kbd className="hidden sm:inline-flex items-center gap-1 px-2 py-1 text-xs font-mono text-muted bg-white border border-line rounded">
             ESC
           </kbd>
         </div>
 
         {/* Filter Pills */}
-        <div className="flex items-center gap-2 px-4 sm:px-6 py-3 border-b border-[#334155]/60 bg-[#111827]/80 text-xs overflow-x-auto">
+        <div className="flex items-center gap-2 px-4 sm:px-6 py-3 border-b border-line bg-white text-xs overflow-x-auto">
           <button
             onClick={() => setActiveTab('all')}
             className={`px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap font-medium ${
               activeTab === 'all'
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'text-[#94A3B8] hover:text-white hover:bg-[#1E293B]'
+                ? 'pill-active shadow-sm'
+                : 'pill-inactive hover:text-heading hover:bg-soft'
             }`}
           >
             All Results ({totalResults})
@@ -128,8 +128,8 @@ export default function SearchModal({ isOpen, onClose }) {
             onClick={() => setActiveTab('articles')}
             className={`px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap font-medium ${
               activeTab === 'articles'
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'text-[#94A3B8] hover:text-white hover:bg-[#1E293B]'
+                ? 'pill-active shadow-sm'
+                : 'pill-inactive hover:text-heading hover:bg-soft'
             }`}
           >
             Articles ({matchedArticles.length})
@@ -138,8 +138,8 @@ export default function SearchModal({ isOpen, onClose }) {
             onClick={() => setActiveTab('roadmaps')}
             className={`px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap font-medium ${
               activeTab === 'roadmaps'
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'text-[#94A3B8] hover:text-white hover:bg-[#1E293B]'
+                ? 'pill-active shadow-sm'
+                : 'pill-inactive hover:text-heading hover:bg-soft'
             }`}
           >
             Roadmaps ({matchedRoadmaps.length})
@@ -148,8 +148,8 @@ export default function SearchModal({ isOpen, onClose }) {
             onClick={() => setActiveTab('languages')}
             className={`px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap font-medium ${
               activeTab === 'languages'
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'text-[#94A3B8] hover:text-white hover:bg-[#1E293B]'
+                ? 'pill-active shadow-sm'
+                : 'pill-inactive hover:text-heading hover:bg-soft'
             }`}
           >
             Languages ({matchedLanguages.length})
@@ -160,11 +160,11 @@ export default function SearchModal({ isOpen, onClose }) {
         <div className="max-h-[60vh] overflow-y-auto p-4 sm:p-6 space-y-4">
           {totalResults === 0 ? (
             <div className="py-12 text-center">
-              <div className="w-12 h-12 rounded-full bg-[#1E293B] flex items-center justify-center mx-auto mb-3 text-[#94A3B8]">
+              <div className="w-12 h-12 rounded-full bg-page flex items-center justify-center mx-auto mb-3 text-muted">
                 <Search size={22} />
               </div>
-              <h4 className="text-base font-semibold text-[#F8FAFC] mb-1">No matching results found</h4>
-              <p className="text-sm text-[#94A3B8] max-w-sm mx-auto">
+              <h4 className="text-base font-semibold text-heading mb-1">No matching results found</h4>
+              <p className="text-sm text-muted max-w-sm mx-auto">
                 We couldn't find anything matching "{query}". Try checking your spelling or searching for a broader term.
               </p>
             </div>
@@ -182,13 +182,13 @@ export default function SearchModal({ isOpen, onClose }) {
                       <div
                         key={art._id}
                         onClick={() => handleSelect(`/blog/${art.slug}`)}
-                        className="p-3.5 rounded-xl bg-[#1E293B]/70 hover:bg-[#1E293B] border border-[#334155]/60 hover:border-blue-500/40 transition-all cursor-pointer group"
+                        className="p-3.5 rounded-xl bg-page/70 hover:bg-page border border-line hover:border-[#0F6B4F]/35 transition-all cursor-pointer group"
                       >
                         <div className="flex items-center justify-between gap-2 mb-1.5">
                           <span className="text-[11px] font-semibold text-[#06B6D4] px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20">
                             {art.category.name}
                           </span>
-                          <div className="flex items-center gap-2 text-xs text-[#94A3B8]">
+                          <div className="flex items-center gap-2 text-xs text-muted">
                             <span className="flex items-center gap-1">
                               <Clock size={12} /> {art.readingTime} min
                             </span>
@@ -197,10 +197,10 @@ export default function SearchModal({ isOpen, onClose }) {
                             </span>
                           </div>
                         </div>
-                        <h4 className="text-sm sm:text-base font-semibold text-[#F8FAFC] group-hover:text-blue-300 transition-colors line-clamp-1">
+                        <h4 className="text-sm sm:text-base font-semibold text-heading group-hover:text-[#0F6B4F] transition-colors line-clamp-1">
                           {art.title}
                         </h4>
-                        <p className="text-xs text-[#94A3B8] line-clamp-2 mt-1">
+                        <p className="text-xs text-muted line-clamp-2 mt-1">
                           {art.excerpt}
                         </p>
                       </div>
@@ -221,22 +221,22 @@ export default function SearchModal({ isOpen, onClose }) {
                       <div
                         key={rm.id}
                         onClick={() => handleSelect('/roadmaps')}
-                        className="p-3.5 rounded-xl bg-[#1E293B]/70 hover:bg-[#1E293B] border border-[#334155]/60 hover:border-purple-500/40 transition-all cursor-pointer group flex items-center justify-between"
+                        className="p-3.5 rounded-xl bg-page/70 hover:bg-page border border-line hover:border-purple-500/40 transition-all cursor-pointer group flex items-center justify-between"
                       >
                         <div>
                           <div className="flex items-center gap-2 mb-1">
-                            <h4 className="text-sm sm:text-base font-semibold text-[#F8FAFC] group-hover:text-purple-300 transition-colors">
+                            <h4 className="text-sm sm:text-base font-semibold text-heading group-hover:text-purple-300 transition-colors">
                               {rm.title}
                             </h4>
                             <span className="text-[10px] px-2 py-0.5 rounded bg-purple-500/10 text-purple-300 border border-purple-500/20 font-medium">
                               {rm.difficulty}
                             </span>
                           </div>
-                          <p className="text-xs text-[#94A3B8] line-clamp-1 max-w-xl">
+                          <p className="text-xs text-muted line-clamp-1 max-w-xl">
                             {rm.description}
                           </p>
                         </div>
-                        <ArrowRight size={16} className="text-[#94A3B8] group-hover:text-purple-400 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
+                        <ArrowRight size={16} className="text-muted group-hover:text-purple-400 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
                       </div>
                     ))}
                   </div>
@@ -246,7 +246,7 @@ export default function SearchModal({ isOpen, onClose }) {
               {/* Languages Section */}
               {(activeTab === 'all' || activeTab === 'languages') && matchedLanguages.length > 0 && (
                 <div className="space-y-2 pt-2">
-                  <div className="text-xs font-semibold uppercase tracking-wider text-[#3B82F6] px-2 flex items-center gap-1.5">
+                  <div className="text-xs font-semibold uppercase tracking-wider text-[#0F6B4F] px-2 flex items-center gap-1.5">
                     <Code2 size={14} />
                     <span>Languages & Tools</span>
                   </div>
@@ -255,16 +255,16 @@ export default function SearchModal({ isOpen, onClose }) {
                       <div
                         key={lang.slug}
                         onClick={() => handleSelect('/programming')}
-                        className="p-3 rounded-xl bg-[#1E293B]/70 hover:bg-[#1E293B] border border-[#334155]/60 hover:border-blue-500/40 transition-all cursor-pointer group flex items-center gap-3"
+                        className="p-3 rounded-xl bg-page/70 hover:bg-page border border-line hover:border-[#0F6B4F]/35 transition-all cursor-pointer group flex items-center gap-3"
                       >
-                        <span className="text-2xl p-1.5 rounded-lg bg-[#0B1120] border border-[#334155]">
+                        <span className="text-2xl p-1.5 rounded-lg bg-[#0B1120] border border-line">
                           {lang.icon}
                         </span>
                         <div>
-                          <h4 className="text-sm font-semibold text-[#F8FAFC] group-hover:text-blue-300 transition-colors">
+                          <h4 className="text-sm font-semibold text-heading group-hover:text-[#0F6B4F] transition-colors">
                             {lang.name}
                           </h4>
-                          <span className="text-[11px] text-[#94A3B8]">
+                          <span className="text-[11px] text-muted">
                             {lang.tutorialCount} Tutorials • {lang.difficulty}
                           </span>
                         </div>
@@ -278,10 +278,10 @@ export default function SearchModal({ isOpen, onClose }) {
         </div>
 
         {/* Footer info */}
-        <div className="px-4 sm:px-6 py-3 bg-[#0B1120] border-t border-[#334155] flex items-center justify-between text-xs text-[#94A3B8]">
+        <div className="px-4 sm:px-6 py-3 bg-[#0B1120] border-t border-line flex items-center justify-between text-xs text-muted">
           <div className="flex items-center gap-2">
             <span>Navigation:</span>
-            <kbd className="px-1.5 py-0.5 bg-[#1E293B] border border-[#334155] rounded text-[10px]">Enter</kbd>
+            <kbd className="px-1.5 py-0.5 bg-page border border-line rounded text-[10px]">Enter</kbd>
             <span>to select</span>
           </div>
           <div className="flex items-center gap-1.5">

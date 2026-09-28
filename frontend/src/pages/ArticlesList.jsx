@@ -74,46 +74,46 @@ const ArticlesList = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
       {/* ═══ Page Header ═══ */}
-      <div className="relative py-8 sm:py-12 border-b border-[#334155]/60 overflow-hidden">
+      <div className="relative py-8 sm:py-12 border-b border-line overflow-hidden">
         <div className="relative max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1E293B] border border-[#334155] text-xs font-mono text-purple-400">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full surface-card border border-line text-xs font-mono text-purple-400">
             <Sparkles size={14} />
             <span>Curated Engineering Knowledge</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#F8FAFC] tracking-tight">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-heading tracking-tight">
             Curated Articles &amp; <span className="tech-gradient-text">Guides</span>
           </h1>
-          <p className="text-[#94A3B8] text-base sm:text-lg leading-relaxed">
+          <p className="text-muted text-base sm:text-lg leading-relaxed">
             In-depth architectural patterns, production deep-dives, and detailed engineering walkthroughs.
           </p>
         </div>
       </div>
 
       {/* ═══ Controls: Search & Difficulty Filter ═══ */}
-      <div className="space-y-3">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+      <div className="space-y-6">
+        <div className="p-4 sm:p-5 rounded-2xl surface-card border border-line shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
           {/* Search Bar */}
-          <div className="relative flex-1 max-w-md">
-            <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted" />
+          <div className="relative flex-1 max-w-md group">
+            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-[#0F6B4F] transition-colors" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search articles..."
-              className="w-full pl-11 pr-4 py-3 rounded-xl bg-surface-700/50 border border-white/6 text-white placeholder-text-muted text-sm focus:outline-none focus:border-primary-500/40 focus:ring-1 focus:ring-primary-500/20 transition-all"
+              className="w-full pl-12 pr-4 py-3 rounded-xl bg-page border border-line hover:border-[#0F6B4F]/40 focus:border-[#0F6B4F] focus:ring-4 focus:ring-[#0F6B4F]/10 outline-none text-heading placeholder:text-muted/70 text-sm transition-all shadow-inner"
             />
           </div>
 
           {/* Difficulty Filter Pills */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-none px-1">
             {difficulties.map((diff) => (
               <button
                 key={diff}
                 onClick={() => setSelectedDifficulty(diff)}
-                className={`px-3.5 py-2 rounded-xl text-xs font-medium transition-all whitespace-nowrap ${
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap shadow-sm shrink-0 ${
                   selectedDifficulty === diff
-                    ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/25'
-                    : 'bg-surface-700/40 text-text-secondary hover:text-white hover:bg-surface-700 border border-white/5'
+                    ? 'bg-gradient-to-r from-[#0F6B4F] to-[#16805E] text-white shadow-md shadow-[#0F6B4F]/30 scale-105 border border-transparent'
+                    : 'bg-page text-muted border border-line hover:text-heading hover:border-[#0F6B4F]/50 hover:bg-[#0F6B4F]/5'
                 }`}
               >
                 {diff}
@@ -123,16 +123,15 @@ const ArticlesList = () => {
         </div>
 
         {/* Category Filter Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1">
-          <span className="text-xs text-text-muted mr-1 whitespace-nowrap">Category:</span>
+        <div className="flex items-center gap-2.5 overflow-x-auto pb-4 scrollbar-none px-1">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap ${
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap shadow-sm shrink-0 ${
                 selectedCategory === cat
-                  ? 'bg-purple-600 text-white shadow-md shadow-purple-600/25'
-                  : 'bg-surface-800/60 text-text-secondary hover:text-white border border-white/5 hover:bg-surface-700'
+                  ? 'bg-gradient-to-r from-[#0F6B4F] to-[#16805E] text-white shadow-md shadow-[#0F6B4F]/30 scale-105 border border-transparent'
+                  : 'bg-page text-muted border border-line hover:text-heading hover:border-[#0F6B4F]/50 hover:bg-[#0F6B4F]/5'
               }`}
             >
               {cat}

@@ -69,7 +69,7 @@ export default function CodeEditorSnippet() {
         <table className="w-full border-collapse">
           <tbody>
             <tr>
-              <td className="select-none pr-4 text-right text-[#64748B] text-xs align-top w-6">1</td>
+              <td className="select-none pr-4 text-right text-muted text-xs align-top w-6">1</td>
               <td className="text-[#F8FAFC]">
                 <span className="text-[#8B5CF6] font-semibold">const</span>{' '}
                 <span className="text-[#3B82F6]">developer</span>{' '}
@@ -77,36 +77,36 @@ export default function CodeEditorSnippet() {
               </td>
             </tr>
             <tr>
-              <td className="select-none pr-4 text-right text-[#64748B] text-xs align-top">2</td>
+              <td className="select-none pr-4 text-right text-muted text-xs align-top">2</td>
               <td className="text-[#F8FAFC] pl-4">
                 <span className="text-[#94A3B8]">learn:</span>{' '}
                 <span className="text-[#22C55E] font-semibold">true</span>,
               </td>
             </tr>
             <tr>
-              <td className="select-none pr-4 text-right text-[#64748B] text-xs align-top">3</td>
+              <td className="select-none pr-4 text-right text-muted text-xs align-top">3</td>
               <td className="text-[#F8FAFC] pl-4">
                 <span className="text-[#94A3B8]">build:</span>{' '}
                 <span className="text-[#22C55E] font-semibold">true</span>,
               </td>
             </tr>
             <tr>
-              <td className="select-none pr-4 text-right text-[#64748B] text-xs align-top">4</td>
+              <td className="select-none pr-4 text-right text-muted text-xs align-top">4</td>
               <td className="text-[#F8FAFC] pl-4">
                 <span className="text-[#94A3B8]">improve:</span>{' '}
                 <span className="text-[#22C55E] font-semibold">true</span>
               </td>
             </tr>
             <tr>
-              <td className="select-none pr-4 text-right text-[#64748B] text-xs align-top">5</td>
+              <td className="select-none pr-4 text-right text-muted text-xs align-top">5</td>
               <td className="text-[#F8FAFC]">{'};'}</td>
             </tr>
             <tr>
-              <td className="select-none pr-4 text-right text-[#64748B] text-xs align-top">6</td>
+              <td className="select-none pr-4 text-right text-muted text-xs align-top">6</td>
               <td>&nbsp;</td>
             </tr>
             <tr>
-              <td className="select-none pr-4 text-right text-[#64748B] text-xs align-top">7</td>
+              <td className="select-none pr-4 text-right text-muted text-xs align-top">7</td>
               <td className="text-[#F8FAFC]">
                 <span className="text-[#3B82F6]">console</span>
                 <span className="text-[#94A3B8]">.</span>
@@ -125,15 +125,15 @@ export default function CodeEditorSnippet() {
       {outputVisible && (
         <div className="px-5 py-3 bg-[#0B1120] border-t border-[#334155] font-mono text-xs flex items-center justify-between animate-slide-down">
           <div className="flex items-center gap-2 text-emerald-400">
-            <span className="text-[#64748B]">&gt;</span>
+            <span className="text-muted">&gt;</span>
             <span className="font-semibold">Keep Coding 🚀</span>
           </div>
-          <span className="text-[#64748B]">Process exited with code 0 (2ms)</span>
+          <span className="text-muted">Process exited with code 0 (2ms)</span>
         </div>
       )}
 
       {/* Bottom Bar Status */}
-      <div className="px-4 py-2 bg-[#080D1A] border-t border-[#334155]/60 flex items-center justify-between text-[11px] font-mono text-[#64748B]">
+      <div className="px-4 py-2 bg-[#080D1A] border-t border-[#334155]/60 flex items-center justify-between text-[11px] font-mono text-muted">
         <div className="flex items-center gap-3">
           <span className="flex items-center gap-1 text-[#06B6D4]">
             <Flame size={12} /> TechJourney Code of the Day

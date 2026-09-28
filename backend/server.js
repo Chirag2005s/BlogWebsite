@@ -13,6 +13,8 @@ import articleRoutes from './src/routes/article.routes.js';
 import categoryRoutes from './src/routes/category.routes.js';
 import adminRoutes from './src/routes/admin.routes.js';
 import roadmapRoutes from './src/routes/roadmap.routes.js';
+import interviewRoutes from './src/routes/interview.routes.js';
+import contactRoutes from './src/routes/contact.routes.js';
 import { syncCategories } from './src/controllers/category.controller.js';
 
 dotenv.config();
@@ -111,6 +113,8 @@ app.use('/api/articles', articleRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/roadmaps', roadmapRoutes);
+app.use('/api/interviews', interviewRoutes);
+app.use('/api/contact', contactRoutes);
 
 // Error Handling
 app.use(notFound);

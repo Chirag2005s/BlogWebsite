@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import {
-  Menu, X, Search, Sparkles, ChevronRight, Moon, Sun, ArrowUpRight,
-  User, PenTool, LogOut, ChevronDown, FileText, PlusCircle
+  Menu, X, Search, ChevronRight,
+  PenTool, LogOut, ChevronDown, FileText, PlusCircle
 } from 'lucide-react';
 
 const GithubIcon = ({ size = 16, className = '' }) => (
@@ -44,7 +44,6 @@ export default function MainLayout() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
-  const [cyberMode, setCyberMode] = useState(true);
   const [writeMenuOpen, setWriteMenuOpen] = useState(false);
   const writeMenuRef = useRef(null);
 
@@ -106,9 +105,11 @@ export default function MainLayout() {
     { to: '/', label: 'Home' },
     { to: '/blog', label: 'Blog' },
     { to: '/articles', label: 'Articles' },
-    { to: '/programming', label: 'Programming' },
     { to: '/news', label: 'Tech News' },
     { to: '/roadmaps', label: 'Roadmaps' },
+    // { to: '/interview-questions', label: 'Interviews' },
+    { to: '/about', label: 'About' },
+    // { to: '/contact', label: 'Contact' },
   ];
 
   const isActive = (path) => {
@@ -117,11 +118,11 @@ export default function MainLayout() {
   };
 
   return (
-    <div className={`min-h-screen flex flex-col bg-[#0B1120] text-[#F8FAFC] selection:bg-blue-500 selection:text-white ${cyberMode ? 'cyber-theme' : ''}`}>
+    <div className="min-h-screen flex flex-col bg-page text-heading selection:bg-[#0F6B4F] selection:text-white">
       {/* ═══ STICKY RESPONSIVE NAVBAR ═══ */}
       <header
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${scrolled
-          ? 'bg-[#0B1120]/85 backdrop-blur-xl border-b border-[#334155]/80 py-3.5 shadow-2xl shadow-black/60'
+          ? 'bg-nav backdrop-blur-xl border-b border-line py-3.5 shadow-lg shadow-black/10'
           : 'bg-transparent py-5'
           }`}
       >
@@ -132,7 +133,7 @@ export default function MainLayout() {
           </Link>
 
           {/* Desktop Nav Links */}
-          <nav className="hidden lg:flex items-center gap-1 bg-[#111827]/60 p-1 rounded-2xl border border-[#334155]/60 backdrop-blur-md">
+          <nav className="hidden lg:flex items-center gap-1 bg-card/80 p-1 rounded-2xl border border-line backdrop-blur-md">
             {navLinks.map((link) => {
               const active = isActive(link.to);
               return (
@@ -140,8 +141,8 @@ export default function MainLayout() {
                   key={link.to}
                   to={link.to}
                   className={`px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 ${active
-                    ? 'text-white bg-gradient-to-r from-blue-600/90 to-cyan-600/90 shadow-sm font-semibold'
-                    : 'text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-white/5'
+                    ? 'text-white bg-gradient-to-r from-[#0F6B4F] to-[#16805E] shadow-sm font-semibold'
+                    : 'text-muted hover:text-heading hover:bg-soft'
                     }`}
                 >
                   {link.label}
@@ -155,112 +156,92 @@ export default function MainLayout() {
             {/* Search Trigger Button (Ctrl + K) */}
             <button
               onClick={() => setSearchModalOpen(true)}
-              className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-[#1E293B]/80 hover:bg-[#1E293B] border border-[#334155] text-xs text-[#94A3B8] hover:text-[#F8FAFC] transition-all shadow-sm group"
+              className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-card hover:bg-soft border border-line text-xs text-muted hover:text-heading transition-all shadow-sm group"
               title="Search TechJourney (Ctrl + K)"
             >
-              <Search size={14} className="text-[#06B6D4] group-hover:scale-110 transition-transform" />
+              <Search size={14} className="text-[#0F6B4F] group-hover:scale-110 transition-transform" />
               <span className="hidden xl:inline">Search...</span>
-              <kbd className="inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono text-[#94A3B8] bg-[#0B1120] border border-[#334155] rounded">
+              <kbd className="inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono text-muted bg-page border border-line rounded">
                 Ctrl K
               </kbd>
             </button>
 
-            {/* GitHub Link */}
-            {/* <a
-              href="https://github.com/Chirag2005s/BlogWebsite"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2 rounded-xl bg-[#1E293B]/80 hover:bg-[#1E293B] border border-[#334155] text-[#94A3B8] hover:text-white transition-all"
-              title="GitHub Repository"
-            >
-              <GithubIcon size={16} />
-            </a> */}
-
-            {/* Theme / Cyber Mode Toggle */}
-            {/* <button
-              onClick={() => setCyberMode(!cyberMode)}
-              className="p-2 rounded-xl bg-[#1E293B]/80 hover:bg-[#1E293B] border border-[#334155] text-[#94A3B8] hover:text-[#06B6D4] transition-all"
-              title="Toggle Cyber Mode"
-            >
-              {cyberMode ? <Sparkles size={16} className="text-[#06B6D4]" /> : <Moon size={16} />}
-            </button> */}
-
             {/* Write Button & Session / Sign In */}
-            <div className="flex items-center gap-2 pl-2 border-l border-[#334155]">
+            <div className="flex items-center gap-2 pl-2 border-l border-line">
               {/* Write & Manage Dropdown - Always visible in Navbar */}
               <div className="relative" ref={writeMenuRef}>
                 <button
                   onClick={() => setWriteMenuOpen((prev) => !prev)}
-                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all border shadow-sm ${writeMenuOpen
-                    ? 'bg-blue-600/25 text-blue-300 border-blue-500/50 shadow-blue-500/10'
-                    : 'bg-blue-600/15 text-blue-400 border-blue-500/30 hover:bg-blue-600/25 hover:border-blue-500/50 hover:text-white'
+                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all border shadow-sm group ${writeMenuOpen
+                    ? 'bg-[#111827] text-white border-[#334155] shadow-black/20'
+                    : 'bg-[#111827]/60 text-muted border-[#1E293B] hover:bg-[#111827] hover:text-white hover:border-[#334155]'
                     }`}
                   aria-expanded={writeMenuOpen}
                   title="Write, Update or Manage Content"
                 >
-                  <PenTool size={13} className="text-blue-400" />
+                  <PenTool size={13} className="currentColor" />
                   <span>Write</span>
                   <ChevronDown
                     size={12}
-                    className={`transition-transform duration-200 ${writeMenuOpen ? 'rotate-180 text-blue-300' : 'text-blue-400/70'
+                    className={`transition-transform duration-200 currentColor ${writeMenuOpen ? 'rotate-180' : 'opacity-70'
                       }`}
                   />
                 </button>
 
                 {/* Dropdown Menu */}
                 {writeMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-64 rounded-2xl bg-[#111827]/95 border border-[#334155] shadow-2xl shadow-black/80 py-2 z-50 backdrop-blur-xl animate-fade-in">
-                    <div className="px-3.5 py-2 border-b border-[#334155]/60 mb-1">
-                      <p className="text-[11px] font-semibold text-white uppercase tracking-wider">Content Studio</p>
-                      <p className="text-[11px] text-[#94A3B8]">Write, update & manage your posts</p>
+                  <div className="absolute right-0 mt-2 w-64 rounded-2xl bg-card border border-line shadow-2xl shadow-black/20 py-2 z-50 backdrop-blur-xl animate-fade-in">
+                    <div className="px-3.5 py-2 border-b border-line/60 mb-1">
+                      <p className="text-[11px] font-semibold text-heading uppercase tracking-wider">Content Studio</p>
+                      <p className="text-[11px] text-muted">Write, update & manage your posts</p>
                     </div>
 
                     <Link
                       to="/admin"
                       onClick={() => setWriteMenuOpen(false)}
-                      className="flex items-center gap-3 px-3.5 py-2 text-xs text-[#F8FAFC] hover:bg-[#1E293B] hover:text-blue-400 transition-colors group"
+                      className="flex items-center gap-3 px-3.5 py-2 text-xs text-heading hover:bg-soft hover:text-[#0F6B4F] transition-colors group"
                     >
-                      <div className="w-7 h-7 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 group-hover:bg-blue-500/20">
+                      <div className="w-7 h-7 rounded-lg bg-[#0F6B4F]/10 border border-[#0F6B4F]/20 flex items-center justify-center text-[#0F6B4F] group-hover:bg-[#0F6B4F]/20">
                         <PenTool size={14} />
                       </div>
                       <div>
-                        <div className="font-semibold text-white">Write Blog</div>
-                        <div className="text-[10px] text-[#94A3B8]">Post daily development blog</div>
+                        <div className="font-semibold text-heading">Write Blog</div>
+                        <div className="text-[10px] text-muted">Post daily development blog</div>
                       </div>
                     </Link>
 
                     <Link
                       to="/admin/add-article"
                       onClick={() => setWriteMenuOpen(false)}
-                      className="flex items-center gap-3 px-3.5 py-2 text-xs text-[#F8FAFC] hover:bg-[#1E293B] hover:text-purple-400 transition-colors group"
+                      className="flex items-center gap-3 px-3.5 py-2 text-xs text-heading hover:bg-soft hover:text-[#F4A62A] transition-colors group"
                     >
-                      <div className="w-7 h-7 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 group-hover:bg-purple-500/20">
+                      <div className="w-7 h-7 rounded-lg bg-[#F4A62A]/10 border border-[#F4A62A]/20 flex items-center justify-center text-[#F4A62A] group-hover:bg-[#F4A62A]/20">
                         <PlusCircle size={14} />
                       </div>
                       <div>
-                        <div className="font-semibold text-white">Write Article</div>
-                        <div className="text-[10px] text-[#94A3B8]">Technical deep-dive publication</div>
+                        <div className="font-semibold text-heading">Write Article</div>
+                        <div className="text-[10px] text-muted">Technical deep-dive publication</div>
                       </div>
                     </Link>
 
-                    <div className="my-1 border-t border-[#334155]/60" />
+                    <div className="my-1 border-t border-line/60" />
 
                     <Link
                       to="/admin/articles"
                       onClick={() => setWriteMenuOpen(false)}
-                      className="flex items-center gap-3 px-3.5 py-2.5 text-xs text-[#F8FAFC] hover:bg-[#1E293B] hover:text-cyan-400 transition-colors group"
+                      className="flex items-center gap-3 px-3.5 py-2.5 text-xs text-heading hover:bg-soft hover:text-[#16805E] transition-colors group"
                     >
-                      <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:bg-cyan-500/20">
+                      <div className="w-7 h-7 rounded-lg bg-[#16805E]/10 border border-[#16805E]/20 flex items-center justify-center text-[#16805E] group-hover:bg-[#16805E]/20">
                         <FileText size={14} />
                       </div>
                       <div>
-                        <div className="font-semibold text-white flex items-center gap-1.5">
+                        <div className="font-semibold text-heading flex items-center gap-1.5">
                           <span>Manage Content</span>
-                          <span className="px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 text-[9px] font-mono">
+                          <span className="px-1.5 py-0.5 rounded bg-[#16805E]/15 text-[#16805E] text-[9px] font-mono">
                             Update / Delete
                           </span>
                         </div>
-                        <div className="text-[10px] text-[#94A3B8]">Update or delete your own publications</div>
+                        <div className="text-[10px] text-muted">Update or delete your own publications</div>
                       </div>
                     </Link>
                   </div>
@@ -270,17 +251,17 @@ export default function MainLayout() {
               {/* User Session or Sign In */}
               {userInfo ? (
                 <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-2 px-2.5 py-1 rounded-xl bg-[#1E293B]/80 border border-[#334155] shadow-sm">
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-blue-500 to-cyan-400 flex items-center justify-center text-[11px] font-bold text-white shadow-sm flex-shrink-0">
+                  <div className="flex items-center gap-2 px-2.5 py-1 rounded-xl bg-card border border-line shadow-sm">
+                    <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-[#0F6B4F] to-[#16805E] flex items-center justify-center text-[11px] font-bold text-white shadow-sm flex-shrink-0">
                       {userInfo.name?.charAt(0).toUpperCase()}
                     </div>
-                    <span className="text-xs font-medium text-[#F8FAFC] max-w-[130px] truncate" title={userInfo.name}>
+                    <span className="text-xs font-medium text-heading max-w-[130px] truncate" title={userInfo.name}>
                       {userInfo.name}
                     </span>
                   </div>
                   <button
                     onClick={handleLogout}
-                    className="p-1.5 rounded-lg text-[#94A3B8] hover:text-[#EF4444] hover:bg-red-500/10 transition-all"
+                    className="p-1.5 rounded-lg text-muted hover:text-[#EF4444] hover:bg-red-500/10 transition-all"
                     title="Logout"
                   >
                     <LogOut size={15} />
@@ -289,7 +270,7 @@ export default function MainLayout() {
               ) : (
                 <Link
                   to="/login"
-                  className="px-3.5 py-1.5 rounded-xl bg-surface-800 hover:bg-surface-700 text-white text-xs font-semibold border border-white/10 hover:border-white/20 transition-all shadow-sm"
+                  className="px-3.5 py-1.5 rounded-xl bg-[#0F6B4F] hover:bg-[#0C5A42] text-white text-xs font-semibold border border-[#0F6B4F] transition-all shadow-sm"
                 >
                   Sign In
                 </Link>
@@ -301,14 +282,14 @@ export default function MainLayout() {
           <div className="flex md:hidden items-center gap-2">
             <button
               onClick={() => setSearchModalOpen(true)}
-              className="p-2 rounded-xl bg-[#1E293B] border border-[#334155] text-[#94A3B8] hover:text-white"
+              className="p-2 rounded-xl bg-card border border-line text-muted hover:text-heading"
               aria-label="Open search"
             >
               <Search size={18} />
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-xl bg-[#1E293B] border border-[#334155] text-[#94A3B8] hover:text-white"
+              className="p-2 rounded-xl bg-card border border-line text-muted hover:text-heading"
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -318,15 +299,15 @@ export default function MainLayout() {
 
         {/* ═══ MOBILE MENU DRAWER ═══ */}
         {mobileMenuOpen && (
-          <div className="lg:hidden mx-4 mt-3 p-4 rounded-2xl bg-[#111827] border border-[#334155] shadow-2xl shadow-black animate-slide-down">
+          <div className="lg:hidden mx-4 mt-3 p-4 rounded-2xl bg-card border border-line shadow-2xl shadow-black/20 animate-slide-down">
             <nav className="space-y-1 mb-4">
               {navLinks.map((link) => (
                 <Link
                   key={link.to}
                   to={link.to}
                   className={`flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${isActive(link.to)
-                    ? 'text-white bg-gradient-to-r from-blue-600 to-cyan-600 font-semibold'
-                    : 'text-[#94A3B8] hover:text-white hover:bg-[#1E293B]'
+                    ? 'text-white bg-gradient-to-r from-[#0F6B4F] to-[#16805E] font-semibold'
+                    : 'text-muted hover:text-heading hover:bg-soft'
                     }`}
                 >
                   <span>{link.label}</span>
@@ -335,12 +316,12 @@ export default function MainLayout() {
               ))}
             </nav>
 
-            <div className="pt-3 border-t border-[#334155] flex items-center justify-between gap-3">
+            <div className="pt-3 border-t border-line flex items-center justify-between gap-3">
               <a
                 href="https://github.com/Chirag2005s/BlogWebsite"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-xs text-[#94A3B8] hover:text-white"
+                className="flex items-center gap-2 text-xs text-muted hover:text-heading"
               >
                 <GithubIcon size={16} />
                 <span>GitHub</span>
@@ -349,8 +330,8 @@ export default function MainLayout() {
               {userInfo ? (
                 <div className="flex flex-col gap-2 w-full pt-1">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-white">{userInfo.name}</span>
-                    <button onClick={handleLogout} className="text-xs text-red-400 hover:underline">
+                    <span className="text-xs font-semibold text-heading">{userInfo.name}</span>
+                    <button onClick={handleLogout} className="text-xs text-red-500 hover:underline">
                       Logout
                     </button>
                   </div>
@@ -358,21 +339,21 @@ export default function MainLayout() {
                     <Link
                       to="/admin"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="px-2.5 py-2 text-center rounded-xl bg-[#1E293B] text-[11px] text-blue-400 font-medium hover:bg-blue-600/20 border border-[#334155]"
+                      className="px-2.5 py-2 text-center rounded-xl bg-soft text-[11px] text-[#0F6B4F] font-medium hover:bg-[#0F6B4F]/15 border border-line"
                     >
                       Write Blog
                     </Link>
                     <Link
                       to="/admin/add-article"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="px-2.5 py-2 text-center rounded-xl bg-[#1E293B] text-[11px] text-purple-400 font-medium hover:bg-purple-600/20 border border-[#334155]"
+                      className="px-2.5 py-2 text-center rounded-xl bg-soft text-[11px] text-[#F4A62A] font-medium hover:bg-[#F4A62A]/15 border border-line"
                     >
                       Write Article
                     </Link>
                     <Link
                       to="/admin/articles"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="px-2.5 py-2 text-center rounded-xl bg-[#1E293B] text-[11px] text-cyan-400 font-medium hover:bg-cyan-600/20 border border-[#334155]"
+                      className="px-2.5 py-2 text-center rounded-xl bg-soft text-[11px] text-[#16805E] font-medium hover:bg-[#16805E]/15 border border-line"
                     >
                       Manage
                     </Link>
@@ -383,7 +364,7 @@ export default function MainLayout() {
                   <Link
                     to="/admin"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-blue-600/15 text-blue-400 border border-blue-500/30 text-xs font-semibold hover:bg-blue-600/25"
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-soft text-[#0F6B4F] border border-[#0F6B4F]/20 text-xs font-semibold hover:bg-[#0F6B4F]/15"
                   >
                     <PenTool size={13} />
                     <span>Write</span>
@@ -391,7 +372,7 @@ export default function MainLayout() {
                   <Link
                     to="/login"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-semibold hover:bg-blue-500"
+                    className="px-4 py-2 rounded-xl bg-[#0F6B4F] text-white text-xs font-semibold hover:bg-[#0C5A42]"
                   >
                     Sign In
                   </Link>
@@ -408,65 +389,28 @@ export default function MainLayout() {
       </main>
 
       {/* ═══ MULTI-COLUMN FOOTER ═══ */}
-      <footer className="border-t border-[#334155] bg-[#080D1A]">
+      <footer className="border-t border-line bg-footer">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10 mb-14">
             {/* Brand & Description (2 cols) */}
             <div className="lg:col-span-2 space-y-4">
-              <TechJourneyLogo size={36} />
-              <p className="text-sm text-[#94A3B8] leading-relaxed max-w-sm">
+              <TechJourneyLogo size={36} inverted />
+              <p className="text-sm text-slate-400 leading-relaxed max-w-sm">
                 Your journey through technology, programming, and modern software development.
               </p>
               {/* Social Icons */}
               <div className="flex items-center gap-3 pt-2">
-                {/* <a
-                  href="https://github.com/Chirag2005s/BlogWebsite"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-xl bg-[#111827] border border-[#334155] flex items-center justify-center text-[#94A3B8] hover:text-white hover:border-blue-500/40 transition-all"
-                  aria-label="GitHub"
-                >
-                  <GithubIcon size={16} />
-                </a> */}
-                {/* <a
-                  href="https://linkedin.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-xl bg-[#111827] border border-[#334155] flex items-center justify-center text-[#94A3B8] hover:text-[#3B82F6] hover:border-blue-500/40 transition-all"
-                  aria-label="LinkedIn"
-                >
-                  <LinkedinIcon size={16} />
-                </a>
-                <a
-                  href="https://instagram.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-xl bg-[#111827] border border-[#334155] flex items-center justify-center text-[#94A3B8] hover:text-[#8B5CF6] hover:border-purple-500/40 transition-all"
-                  aria-label="Instagram"
-                >
-                  <InstagramIcon size={16} />
-                </a>
-                <a
-                  href="https://youtube.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-xl bg-[#111827] border border-[#334155] flex items-center justify-center text-[#94A3B8] hover:text-[#EF4444] hover:border-red-500/40 transition-all"
-                  aria-label="YouTube"
-                >
-                  <YoutubeIcon size={16} />
-                </a> */}
               </div>
             </div>
 
             {/* Column 1: Explore */}
             <div className="space-y-3">
-              <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-[#06B6D4]">
+              <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-[#0F6B4F]">
                 Explore
               </h4>
-              <ul className="space-y-2 text-sm text-[#94A3B8]">
+              <ul className="space-y-2 text-sm text-slate-400">
                 <li><Link to="/blog" className="hover:text-white transition-colors">Blog</Link></li>
                 <li><Link to="/articles" className="hover:text-white transition-colors">Articles</Link></li>
-                <li><Link to="/programming" className="hover:text-white transition-colors">Programming</Link></li>
                 <li><Link to="/roadmaps" className="hover:text-white transition-colors">Roadmaps</Link></li>
                 <li><Link to="/news" className="hover:text-white transition-colors">Tech News</Link></li>
               </ul>
@@ -474,10 +418,10 @@ export default function MainLayout() {
 
             {/* Column 2: Technology */}
             <div className="space-y-3">
-              <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-[#3B82F6]">
+              <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-[#16805E]">
                 Technology
               </h4>
-              <ul className="space-y-2 text-sm text-[#94A3B8]">
+              <ul className="space-y-2 text-sm text-slate-400">
                 <li><Link to="/blog?category=Web%20Development" className="hover:text-white transition-colors">Web Development</Link></li>
                 <li><Link to="/blog?category=Backend" className="hover:text-white transition-colors">Backend</Link></li>
                 <li><Link to="/blog?category=AI" className="hover:text-white transition-colors">AI & ML</Link></li>
@@ -488,25 +432,23 @@ export default function MainLayout() {
 
             {/* Column 3: Resources */}
             <div className="space-y-3">
-              <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-[#8B5CF6]">
+              <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-[#F4A62A]">
                 Resources
               </h4>
-              <ul className="space-y-2 text-sm text-[#94A3B8]">
-                <li><Link to="/blog/nodejs-interview-questions" className="hover:text-white transition-colors">Interview Questions</Link></li>
-                <li><Link to="/programming" className="hover:text-white transition-colors">Tutorials</Link></li>
+              <ul className="space-y-2 text-sm text-slate-400">
+                <li><Link to="/interview-questions" className="hover:text-white transition-colors">Interview Questions</Link></li>
                 <li><Link to="/roadmaps" className="hover:text-white transition-colors">Roadmaps</Link></li>
-                <li><Link to="/programming" className="hover:text-white transition-colors">Code Examples</Link></li>
               </ul>
             </div>
 
             {/* Column 4: Company */}
             <div className="space-y-3">
-              <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-[#22C55E]">
+              <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-[#4FD1A5]">
                 Company
               </h4>
-              <ul className="space-y-2 text-sm text-[#94A3B8]">
-                <li><a href="#about" className="hover:text-white transition-colors">About</a></li>
-                <li><a href="#contact" className="hover:text-white transition-colors">Contact</a></li>
+              <ul className="space-y-2 text-sm text-slate-400">
+                <li><Link to="/about" className="hover:text-white transition-colors">About</Link></li>
+                <li><Link to="/contact" className="hover:text-white transition-colors">Contact</Link></li>
                 <li><a href="#privacy" className="hover:text-white transition-colors">Privacy Policy</a></li>
                 <li><a href="#terms" className="hover:text-white transition-colors">Terms & Conditions</a></li>
               </ul>
@@ -514,12 +456,12 @@ export default function MainLayout() {
           </div>
 
           {/* Bottom Bar Copyright */}
-          <div className="pt-8 border-t border-[#334155] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#94A3B8]">
+          <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted">
             <p>© 2026 TechJourney. All rights reserved.</p>
             <div className="flex items-center gap-6">
-              <span>Dark Futuristic Developer Platform</span>
+              <span>Developer Knowledge Platform</span>
               <span className="hidden sm:inline">•</span>
-              <span className="text-[#06B6D4]">Engineered for Developers</span>
+              <span className="text-[#4FD1A5]">Engineered for Developers</span>
             </div>
           </div>
         </div>

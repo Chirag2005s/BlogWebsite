@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   ArrowRight, CheckCircle2, Circle, Sparkles, ChevronRight, 
@@ -26,8 +26,8 @@ export default function RoadmapInteractiveFlow() {
             }}
             className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap border ${
               selectedRoadmapIndex === index
-                ? 'bg-gradient-to-r from-blue-600 via-cyan-600 to-purple-600 text-white border-transparent shadow-lg shadow-cyan-500/20'
-                : 'bg-[#1E293B] text-[#94A3B8] border-[#334155] hover:text-[#F8FAFC] hover:border-blue-500/40'
+                ? 'bg-gradient-to-r from-[#0F6B4F] to-[#16805E] text-white border-transparent shadow-lg shadow-[#0F6B4F]/15'
+                : 'bg-[#1E293B] text-muted border-line hover:text-[#F8FAFC] hover:border-[#0F6B4F]/35'
             }`}
           >
             {roadmap.title}
@@ -36,12 +36,12 @@ export default function RoadmapInteractiveFlow() {
       </div>
 
       {/* Main Interactive Flow Box */}
-      <div className="rounded-2xl bg-[#111827] border border-[#334155] p-6 sm:p-8 shadow-2xl shadow-black/50 overflow-hidden relative">
+      <div className="rounded-2xl bg-[#111827] border border-line p-6 sm:p-8 shadow-2xl shadow-black/50 overflow-hidden relative">
         {/* Background glow orb */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-tr from-blue-500/10 via-cyan-500/10 to-purple-500/10 rounded-full blur-3xl pointer-events-none" />
 
         {/* Header summary */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#334155] mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-line mb-8">
           <div>
             <div className="flex items-center gap-2.5 mb-1.5">
               <span className="text-xs font-mono uppercase tracking-wider text-[#06B6D4] font-semibold">
@@ -54,7 +54,7 @@ export default function RoadmapInteractiveFlow() {
             <h3 className="text-2xl font-bold text-[#F8FAFC]">
               {activeRoadmap.title} Journey
             </h3>
-            <p className="text-sm text-[#94A3B8] max-w-xl mt-1">
+            <p className="text-sm text-muted max-w-xl mt-1">
               {activeRoadmap.description}
             </p>
           </div>
@@ -82,10 +82,10 @@ export default function RoadmapInteractiveFlow() {
                     onClick={() => setSelectedNode(node)}
                     className={`relative flex flex-col items-center min-w-[110px] sm:min-w-[130px] p-3 sm:p-4 rounded-xl transition-all duration-300 text-center border group ${
                       isSelected
-                        ? 'bg-[#1E293B] border-[#06B6D4] shadow-lg shadow-cyan-500/20 scale-105 z-10'
+                        ? 'bg-[#1E293B] border-[#06B6D4] shadow-lg shadow-[#0F6B4F]/15 scale-105 z-10'
                         : node.status === 'completed'
                         ? 'bg-[#1E293B]/60 border-blue-500/30 hover:border-blue-400'
-                        : 'bg-[#1E293B]/40 border-[#334155] hover:border-purple-500/40'
+                        : 'bg-[#1E293B]/40 border-line hover:border-purple-500/40'
                     }`}
                   >
                     {/* Status indicator pin */}
@@ -99,7 +99,7 @@ export default function RoadmapInteractiveFlow() {
                           <CheckCircle2 size={16} className="text-blue-400" />
                         </div>
                       ) : (
-                        <div className="w-7 h-7 rounded-full bg-[#0B1120] border border-[#334155] flex items-center justify-center text-[#94A3B8] text-xs font-mono">
+                        <div className="w-7 h-7 rounded-full bg-[#0B1120] border border-line flex items-center justify-center text-muted text-xs font-mono">
                           {i + 1}
                         </div>
                       )}
@@ -109,7 +109,7 @@ export default function RoadmapInteractiveFlow() {
                       {node.name}
                     </span>
 
-                    <span className="text-[10px] font-mono text-[#94A3B8] mt-1">
+                    <span className="text-[10px] font-mono text-muted mt-1">
                       {node.category}
                     </span>
                   </button>
@@ -129,20 +129,20 @@ export default function RoadmapInteractiveFlow() {
 
         {/* Selected Node Details Drawer / Card */}
         {currentNode && (
-          <div className="mt-6 p-5 sm:p-6 rounded-xl bg-[#1E293B] border border-[#334155] flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-fade-in">
+          <div className="mt-6 p-5 sm:p-6 rounded-xl bg-[#1E293B] border border-line flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-fade-in">
             <div className="space-y-1.5">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-mono text-[#06B6D4] px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20 font-semibold">
                   Stage {currentNode.id} of {activeRoadmap.nodes.length}
                 </span>
-                <span className="text-xs text-[#94A3B8]">
+                <span className="text-xs text-muted">
                   Domain: <strong className="text-[#F8FAFC]">{currentNode.category}</strong>
                 </span>
               </div>
               <h4 className="text-lg font-bold text-[#F8FAFC]">
                 {currentNode.name}
               </h4>
-              <p className="text-sm text-[#94A3B8] leading-relaxed max-w-2xl">
+              <p className="text-sm text-muted leading-relaxed max-w-2xl">
                 {currentNode.desc}
               </p>
             </div>

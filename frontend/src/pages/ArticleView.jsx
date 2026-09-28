@@ -26,9 +26,9 @@ const ReadingProgress = () => {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-[60] h-1 bg-[#0B1120]">
+    <div className="fixed top-0 left-0 right-0 z-[60] h-1 bg-page">
       <div
-        className="h-full bg-gradient-to-r from-blue-500 via-cyan-400 to-purple-500 transition-all duration-150 ease-out"
+        className="h-full bg-gradient-to-r from-[#0F6B4F] via-[#16805E] to-[#22C55E] transition-all duration-150 ease-out"
         style={{ width: `${progress}%` }}
       />
     </div>
@@ -54,7 +54,7 @@ const CodeBlock = ({ children, className }) => {
   return (
     <div className="relative group my-6">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-[#0B1120] border border-[#334155] border-b-0 rounded-t-xl">
+      <div className="flex items-center justify-between px-4 py-2.5 surface-card border border-line border-b-0 rounded-t-xl">
         <div className="flex items-center gap-2">
           <div className="flex gap-1.5">
             <div className="w-3 h-3 rounded-full bg-[#EF4444]" />
@@ -62,14 +62,14 @@ const CodeBlock = ({ children, className }) => {
             <div className="w-3 h-3 rounded-full bg-[#22C55E]" />
           </div>
           {language && (
-            <span className="text-xs text-[#94A3B8] font-mono font-medium ml-2 uppercase">
+            <span className="text-xs text-muted font-mono font-medium ml-2 uppercase">
               {language}
             </span>
           )}
         </div>
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1.5 text-xs text-[#94A3B8] hover:text-white transition-colors px-2 py-1 rounded-md hover:bg-[#1E293B]"
+          className="flex items-center gap-1.5 text-xs text-muted hover:text-heading transition-colors px-2 py-1 rounded-md hover:bg-[#0F6B4F]/20 text-[#0F6B4F]"
         >
           {copied ? (
             <>
@@ -85,7 +85,7 @@ const CodeBlock = ({ children, className }) => {
         </button>
       </div>
       {/* Code */}
-      <pre className="!mt-0 !rounded-t-none !border-t-0 !bg-[#020617] border border-[#334155] rounded-b-xl overflow-x-auto p-4 font-mono text-sm leading-relaxed">
+      <pre className="!mt-0 !rounded-t-none !border-t-0 !surface-card/50 border border-line rounded-b-xl overflow-x-auto p-4 font-mono text-sm leading-relaxed">
         <code className={className}>{children}</code>
       </pre>
     </div>
@@ -107,7 +107,7 @@ const ScrollToTop = () => {
   return (
     <button
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      className="fixed bottom-8 right-8 z-50 w-11 h-11 rounded-xl bg-[#1E293B] border border-[#334155] flex items-center justify-center text-[#94A3B8] hover:text-white hover:bg-[#334155] transition-all shadow-xl shadow-black/60"
+      className="fixed bottom-8 right-8 z-50 w-11 h-11 rounded-xl surface-card border border-line flex items-center justify-center text-muted hover:text-heading hover:bg-soft hover:text-[#0F6B4F] transition-all shadow-xl shadow-black/60"
       aria-label="Scroll to top"
     >
       <ChevronUp size={20} />
@@ -290,14 +290,14 @@ export default function ArticleView() {
   if (!article) {
     return (
       <div className="max-w-3xl mx-auto py-20 text-center px-4">
-        <div className="p-12 rounded-2xl bg-[#1E293B] border border-[#334155] space-y-4">
-          <h2 className="text-2xl font-bold text-white">Article Not Found</h2>
-          <p className="text-sm text-[#94A3B8]">
+        <div className="p-12 rounded-2xl surface-card border border-line space-y-4">
+          <h2 className="text-2xl font-bold text-heading">Article Not Found</h2>
+          <p className="text-sm text-muted">
             The requested technical document or slug could not be located.
           </p>
           <Link
             to="/blog"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0F6B4F] hover:bg-[#0C5A42] text-heading font-semibold text-sm transition-colors"
           >
             <ArrowLeft size={16} />
             <span>Back to Technical Blogs</span>
@@ -316,34 +316,34 @@ export default function ArticleView() {
         {/* Back Link */}
         <Link
           to="/blog"
-          className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-[#94A3B8] hover:text-[#06B6D4] transition-colors mb-8 group"
+          className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-muted hover:text-[#0F6B4F] transition-colors mb-8 group"
         >
           <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
           <span>Back to All Articles</span>
         </Link>
 
         {/* ═══ ARTICLE HERO HEADER ═══ */}
-        <header className="max-w-4xl space-y-6 pb-8 border-b border-[#334155]">
+        <header className="max-w-4xl space-y-6 pb-8 border-b border-line">
           <div className="flex flex-wrap items-center gap-2.5">
-            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[#0F6B4F]/10 text-[#0F6B4F] border border-[#0F6B4F]/20 shadow-sm">
               {article.category?.name || 'Technical Deep Dive'}
             </span>
             {article.difficulty && (
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#1E293B] text-blue-300 border border-blue-500/20">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-soft text-heading border border-line shadow-sm">
                 {article.difficulty} Level
               </span>
             )}
-            <span className="text-xs font-mono text-[#94A3B8] flex items-center gap-1">
+            <span className="text-xs font-mono text-muted flex items-center gap-1">
               <Clock size={12} /> {article.readingTime || 8} min read
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight leading-tight">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-heading tracking-tight leading-tight">
             {article.title}
           </h1>
 
           {article.excerpt && (
-            <p className="text-base sm:text-xl text-[#94A3B8] leading-relaxed">
+            <p className="text-base sm:text-xl text-muted leading-relaxed">
               {article.excerpt}
             </p>
           )}
@@ -355,18 +355,18 @@ export default function ArticleView() {
                 <img
                   src={article.author.avatar}
                   alt={article.author.name}
-                  className="w-10 h-10 rounded-full object-cover border border-[#334155]"
+                  className="w-10 h-10 rounded-full object-cover border border-line"
                 />
               ) : (
-                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-500 to-cyan-400 flex items-center justify-center text-sm font-bold text-white">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#0F6B4F] to-[#16805E] flex items-center justify-center text-sm font-bold text-heading">
                   {article.author?.name?.charAt(0) || 'E'}
                 </div>
               )}
               <div>
-                <div className="text-sm font-bold text-[#F8FAFC]">
+                <div className="text-sm font-bold text-heading">
                   {article.author?.name || 'Dr. Elena Rostova'}
                 </div>
-                <div className="text-xs text-[#94A3B8]">
+                <div className="text-xs text-muted">
                   {article.author?.role || 'Staff Engineer'} • {new Date(article.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                 </div>
               </div>
@@ -377,7 +377,7 @@ export default function ArticleView() {
               {isAuthor && article._id && (
                 <Link
                   to={article.type === 'article' ? `/admin/edit-article/${article._id}` : `/admin/edit-blog/${article._id}`}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 text-xs font-semibold hover:bg-cyan-500/20 transition-all shadow-sm"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-soft text-heading border border-line text-xs font-semibold hover:border-[#0F6B4F]/40 hover:text-[#0F6B4F] transition-all shadow-sm"
                   title="Edit your publication"
                 >
                   <Edit3 size={14} />
@@ -390,7 +390,7 @@ export default function ArticleView() {
                 className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all ${
                   isLiked
                     ? 'bg-red-500/20 text-red-400 border-red-500/40 shadow-sm'
-                    : 'bg-[#1E293B] text-[#94A3B8] border-[#334155] hover:text-white hover:border-red-500/30'
+                    : 'surface-card text-muted border-line hover:text-red-400 hover:border-red-400/30 hover:bg-red-400/5'
                 }`}
                 title="Like article"
               >
@@ -402,8 +402,8 @@ export default function ArticleView() {
                 onClick={handleBookmark}
                 className={`p-2 rounded-xl border transition-all ${
                   isBookmarked
-                    ? 'bg-blue-500/20 text-blue-400 border-blue-500/40'
-                    : 'bg-[#1E293B] text-[#94A3B8] border-[#334155] hover:text-white hover:border-blue-500/30'
+                    ? 'bg-[#0F6B4F]/10 text-[#0F6B4F] border-[#0F6B4F]/40'
+                    : 'surface-card text-muted border-line hover:text-[#0F6B4F] hover:border-[#0F6B4F]/30 hover:bg-[#0F6B4F]/5'
                 }`}
                 title={isBookmarked ? 'Bookmarked' : 'Save bookmark'}
               >
@@ -412,7 +412,7 @@ export default function ArticleView() {
 
               <button
                 onClick={handleShare}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#1E293B] border border-[#334155] text-xs font-semibold text-[#94A3B8] hover:text-white hover:border-cyan-500/30 transition-all"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl surface-card border border-line text-xs font-semibold text-muted hover:text-heading hover:border-[#0F6B4F]/30 hover:text-[#0F6B4F] hover:bg-[#0F6B4F]/5 transition-all"
                 title="Share article"
               >
                 {copiedShare ? (
@@ -437,7 +437,7 @@ export default function ArticleView() {
           <main className="lg:col-span-8 space-y-8">
             {/* Cover Image */}
             {article.coverImage && (
-              <div className="rounded-2xl overflow-hidden border border-[#334155] shadow-2xl shadow-black/50 aspect-[16/9]">
+              <div className="rounded-2xl overflow-hidden border border-line shadow-2xl shadow-black/50 aspect-[16/9]">
                 <img
                   src={article.coverImage}
                   alt={article.title}
@@ -447,7 +447,7 @@ export default function ArticleView() {
             )}
 
             {/* Markdown Content */}
-            <div className="article-content font-sans text-[#F8FAFC]">
+            <div className="article-content font-sans text-heading">
               <ReactMarkdown
                 rehypePlugins={[rehypeHighlight]}
                 components={{
@@ -456,39 +456,39 @@ export default function ArticleView() {
                       return <CodeBlock className={className}>{children}</CodeBlock>;
                     }
                     return (
-                      <code className="px-1.5 py-0.5 rounded bg-[#111827] text-cyan-300 font-mono text-xs border border-[#334155]" {...props}>
+                      <code className="px-1.5 py-0.5 rounded bg-soft text-[#0F6B4F] font-mono text-xs border border-line" {...props}>
                         {children}
                       </code>
                     );
                   },
-                  h1: ({ children }) => <h1 className="text-3xl sm:text-4xl font-extrabold text-white mt-8 mb-4">{children}</h1>,
+                  h1: ({ children }) => <h1 className="text-3xl sm:text-4xl font-extrabold text-heading mt-8 mb-4">{children}</h1>,
                   h2: ({ children }) => {
                     const text = String(children);
                     const id = text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
                     return (
-                      <h2 id={id} className="text-2xl font-bold text-white mt-10 mb-4 pb-2 border-b border-[#334155] flex items-center gap-2 scroll-mt-28">
-                        <span className="text-[#06B6D4]">#</span> {children}
+                      <h2 id={id} className="text-2xl font-bold text-heading mt-10 mb-4 pb-2 border-b border-line flex items-center gap-2 scroll-mt-28">
+                        <span className="text-[#0F6B4F]">#</span> {children}
                       </h2>
                     );
                   },
-                  h3: ({ children }) => <h3 className="text-xl font-bold text-white mt-6 mb-3">{children}</h3>,
-                  p: ({ children }) => <p className="text-base text-[#94A3B8] leading-relaxed mb-5">{children}</p>,
-                  ul: ({ children }) => <ul className="list-disc pl-6 space-y-2 mb-5 text-[#94A3B8]">{children}</ul>,
-                  ol: ({ children }) => <ol className="list-decimal pl-6 space-y-2 mb-5 text-[#94A3B8]">{children}</ol>,
+                  h3: ({ children }) => <h3 className="text-xl font-bold text-heading mt-6 mb-3">{children}</h3>,
+                  p: ({ children }) => <p className="text-base text-muted leading-relaxed mb-5">{children}</p>,
+                  ul: ({ children }) => <ul className="list-disc pl-6 space-y-2 mb-5 text-muted">{children}</ul>,
+                  ol: ({ children }) => <ol className="list-decimal pl-6 space-y-2 mb-5 text-muted">{children}</ol>,
                   li: ({ children }) => <li className="leading-relaxed">{children}</li>,
                   blockquote: ({ children }) => (
-                    <blockquote className="border-l-4 border-cyan-500 bg-[#111827] px-5 py-4 rounded-r-xl my-6 text-[#F8FAFC]">
+                    <blockquote className="border-l-4 border-[#0F6B4F] bg-soft px-5 py-4 rounded-r-xl my-6 text-heading">
                       {children}
                     </blockquote>
                   ),
                   table: ({ children }) => (
-                    <div className="overflow-x-auto my-6 rounded-xl border border-[#334155]">
-                      <table className="w-full text-left text-sm text-[#94A3B8]">{children}</table>
+                    <div className="overflow-x-auto my-6 rounded-xl border border-line">
+                      <table className="w-full text-left text-sm text-muted">{children}</table>
                     </div>
                   ),
-                  thead: ({ children }) => <thead className="bg-[#1E293B] text-[#F8FAFC] border-b border-[#334155] font-mono">{children}</thead>,
+                  thead: ({ children }) => <thead className="bg-soft text-heading border-b border-line font-mono">{children}</thead>,
                   th: ({ children }) => <th className="p-3 font-semibold">{children}</th>,
-                  td: ({ children }) => <td className="p-3 border-t border-[#334155]/40">{children}</td>,
+                  td: ({ children }) => <td className="p-3 border-t border-line/40">{children}</td>,
                 }}
               >
                 {article.content}
@@ -496,34 +496,34 @@ export default function ArticleView() {
             </div>
 
             {/* ═══ COMMENTS SECTION ═══ */}
-            <section className="pt-12 border-t border-[#334155] space-y-6">
+            <section className="pt-12 border-t border-line space-y-6">
               <div className="flex items-center gap-2">
-                <MessageSquare size={20} className="text-[#06B6D4]" />
-                <h3 className="text-2xl font-bold text-[#F8FAFC]">
+                <MessageSquare size={20} className="text-[#0F6B4F]" />
+                <h3 className="text-2xl font-bold text-heading">
                   Discussion &amp; Insights ({comments.length})
                 </h3>
               </div>
 
               {/* Add Comment Form */}
-              <form onSubmit={handleAddComment} className="p-5 rounded-2xl bg-[#111827] border border-[#334155] space-y-3">
+              <form onSubmit={handleAddComment} className="p-5 rounded-2xl bg-page border border-line space-y-3">
                 <input
                   type="text"
                   placeholder="Your Name (or alias)..."
                   value={commentAuthor}
                   onChange={(e) => setCommentAuthor(e.target.value)}
-                  className="w-full px-4 py-2 rounded-xl bg-[#0B1120] border border-[#334155] text-sm text-[#F8FAFC] placeholder-[#94A3B8] focus:outline-none focus:border-[#06B6D4]"
+                  className="w-full px-4 py-2 rounded-xl surface-card border border-line text-sm text-heading placeholder-[#94A3B8] focus:outline-none focus:border-[#0F6B4F]"
                 />
                 <textarea
                   rows={3}
                   placeholder="Join the discussion or ask a technical question..."
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl bg-[#0B1120] border border-[#334155] text-sm text-[#F8FAFC] placeholder-[#94A3B8] focus:outline-none focus:border-[#06B6D4] resize-none"
+                  className="w-full px-4 py-2.5 rounded-xl surface-card border border-line text-sm text-heading placeholder-[#94A3B8] focus:outline-none focus:border-[#0F6B4F] resize-none"
                 />
                 <div className="flex justify-end">
                   <button
                     type="submit"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold text-xs hover:opacity-95 transition-all shadow-md shadow-cyan-500/20"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#0F6B4F] to-[#16805E] text-heading font-bold text-xs hover:opacity-95 transition-all shadow-md shadow-[#0F6B4F]/15"
                   >
                     <Send size={13} />
                     <span>Post Comment</span>
@@ -534,7 +534,7 @@ export default function ArticleView() {
               {/* Comments List */}
               <div className="space-y-4">
                 {comments.map((c) => (
-                  <div key={c.id} className="p-4 rounded-xl bg-[#1E293B] border border-[#334155] space-y-2">
+                  <div key={c.id} className="p-4 rounded-xl surface-card border border-line space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2.5">
                         {c.avatar ? (
@@ -544,11 +544,11 @@ export default function ArticleView() {
                             {c.author.charAt(0)}
                           </div>
                         )}
-                        <span className="font-semibold text-xs text-[#F8FAFC]">{c.author}</span>
+                        <span className="font-semibold text-xs text-heading">{c.author}</span>
                       </div>
-                      <span className="text-[11px] font-mono text-[#64748B]">{c.date}</span>
+                      <span className="text-[11px] font-mono text-muted">{c.date}</span>
                     </div>
-                    <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed pl-9">
+                    <p className="text-xs sm:text-sm text-muted leading-relaxed pl-9">
                       {c.content}
                     </p>
                   </div>
@@ -561,31 +561,31 @@ export default function ArticleView() {
           <aside className="lg:col-span-4 space-y-8">
             {/* Table of Contents */}
             {tableOfContents.length > 0 && (
-              <div className="sticky top-28 p-6 rounded-2xl bg-[#111827] border border-[#334155] space-y-4 shadow-xl">
-                <div className="flex items-center gap-2 text-xs font-mono font-semibold uppercase text-[#06B6D4]">
+              <div className="sticky top-28 p-6 rounded-2xl bg-page border border-line space-y-4 shadow-xl">
+                <div className="flex items-center gap-2 text-xs font-mono font-semibold uppercase text-[#0F6B4F]">
                   <List size={14} />
                   <span>Table of Contents</span>
                 </div>
-                <nav className="space-y-1.5 text-xs text-[#94A3B8]">
+                <nav className="space-y-1.5 text-xs text-muted">
                   {tableOfContents.map((item, idx) => (
                     <a
                       key={idx}
                       href={`#${item.id}`}
-                      className="block py-1 hover:text-white hover:underline transition-colors pl-2 border-l border-[#334155] hover:border-cyan-400"
+                      className="block py-1 hover:text-heading hover:underline transition-colors hover:text-[#16805E] transition-colors pl-2 border-l border-line hover:border-[#0F6B4F]"
                     >
                       {item.text}
                     </a>
                   ))}
                 </nav>
 
-                <div className="pt-4 border-t border-[#334155] text-xs text-[#94A3B8] space-y-2">
+                <div className="pt-4 border-t border-line text-xs text-muted space-y-2">
                   <div className="flex items-center justify-between">
                     <span>Reading Time:</span>
-                    <strong className="text-white font-mono">{article.readingTime || 8} min</strong>
+                    <strong className="text-heading font-mono">{article.readingTime || 8} min</strong>
                   </div>
                   <div className="flex items-center justify-between">
                     <span>Difficulty:</span>
-                    <strong className="text-cyan-400">{article.difficulty || 'Intermediate'}</strong>
+                    <strong className="text-[#0F6B4F]">{article.difficulty || 'Intermediate'}</strong>
                   </div>
                 </div>
               </div>
@@ -594,19 +594,19 @@ export default function ArticleView() {
         </div>
 
         {/* ═══ RELATED ARTICLES ═══ */}
-        <section className="pt-16 mt-16 border-t border-[#334155] space-y-8">
+        <section className="pt-16 mt-16 border-t border-line space-y-8">
           <div className="flex items-center justify-between">
             <div>
-              <span className="text-xs font-mono uppercase tracking-wider text-[#06B6D4] font-semibold">
+              <span className="text-xs font-mono uppercase tracking-wider text-[#0F6B4F] font-semibold">
                 Explore More
               </span>
-              <h3 className="text-2xl sm:text-3xl font-bold text-[#F8FAFC]">
+              <h3 className="text-2xl sm:text-3xl font-bold text-heading">
                 Related Engineering Guides
               </h3>
             </div>
             <Link
               to="/blog"
-              className="text-xs font-semibold text-[#06B6D4] hover:underline flex items-center gap-1"
+              className="text-xs font-semibold text-[#0F6B4F] hover:underline flex items-center gap-1"
             >
               Browse All <ArrowRight size={13} />
             </Link>
@@ -617,22 +617,22 @@ export default function ArticleView() {
               <Link
                 key={rel.slug}
                 to={`/blog/${rel.slug}`}
-                className="p-5 rounded-2xl bg-[#1E293B] border border-[#334155] hover:border-blue-500/40 transition-all duration-300 group flex flex-col justify-between"
+                className="p-5 rounded-2xl surface-card border border-line hover:border-[#0F6B4F]/35 transition-all duration-300 group flex flex-col justify-between"
               >
                 <div className="space-y-2">
-                  <span className="text-[10px] font-semibold text-cyan-400 px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20 inline-block">
+                  <span className="text-[10px] font-semibold text-[#0F6B4F] px-2 py-0.5 rounded bg-cyan-500/10 border border-[#0F6B4F]/20 inline-block">
                     {rel.category.name}
                   </span>
-                  <h4 className="text-base font-bold text-[#F8FAFC] group-hover:text-blue-300 transition-colors line-clamp-2">
+                  <h4 className="text-base font-bold text-heading group-hover:text-[#0F6B4F] transition-colors line-clamp-2">
                     {rel.title}
                   </h4>
-                  <p className="text-xs text-[#94A3B8] line-clamp-2">
+                  <p className="text-xs text-muted line-clamp-2">
                     {rel.excerpt}
                   </p>
                 </div>
-                <div className="pt-4 border-t border-[#334155] flex items-center justify-between text-xs text-[#94A3B8] mt-4">
+                <div className="pt-4 border-t border-line flex items-center justify-between text-xs text-muted mt-4">
                   <span>{rel.readingTime} min read</span>
-                  <span className="text-[#3B82F6] font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                  <span className="text-[#0F6B4F] font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
                     Read <ArrowRight size={12} />
                   </span>
                 </div>

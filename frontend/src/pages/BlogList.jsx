@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { ARTICLES } from '../data/mockData';
 import api from '../services/api';
+import PageHeader from '../components/PageHeader';
 
 const CATEGORIES_LIST = [
   'All',
@@ -112,27 +113,17 @@ export default function BlogList() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-      {/* ═══ HEADER ═══ */}
-      <div className="relative py-8 sm:py-12 border-b border-[#334155]/60 overflow-hidden">
-        <div className="relative max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1E293B] border border-[#334155] text-xs font-mono text-[#06B6D4]">
-            <BookOpen size={14} />
-            <span>Developer Knowledge Hub</span>
-          </div>
-
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#F8FAFC] tracking-tight">
-            Technical Articles &amp; <span className="tech-gradient-text">Blogs</span>
-          </h1>
-
-          <p className="text-[#94A3B8] text-base sm:text-lg leading-relaxed">
-            In-depth guides, distributed systems architectures, programming language deep dives, and operating system internals.
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        icon={BookOpen}
+        eyebrow="Developer Knowledge Hub"
+        title="Technical Articles &"
+        titleAccent="Blogs"
+        description="In-depth guides, distributed systems architectures, programming language deep dives, and operating system internals."
+      />
 
       {/* ═══ FEATURED ARTICLE BANNER ═══ */}
       {featuredArticle && (
-        <div className="relative rounded-3xl overflow-hidden bg-[#1E293B] border border-[#334155] shadow-2xl shadow-black/60 group hover:border-blue-500/40 transition-all duration-300">
+        <div className="relative rounded-3xl overflow-hidden surface-card border border-line shadow-2xl shadow-black/60 group hover:border-[#0F6B4F]/35 transition-all duration-300">
           <div className="grid grid-cols-1 lg:grid-cols-12 items-center">
             {/* Image (7 cols) */}
             <div className="lg:col-span-7 h-64 sm:h-80 lg:h-full relative overflow-hidden">
@@ -150,7 +141,7 @@ export default function BlogList() {
                 <span className="px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
                   {featuredArticle.category?.name || 'Featured'}
                 </span>
-                <span className="text-xs font-mono text-[#94A3B8] flex items-center gap-1">
+                <span className="text-xs font-mono text-muted flex items-center gap-1">
                   <Clock size={12} /> {featuredArticle.readingTime} min read
                 </span>
                 <span className="text-xs px-2 py-0.5 rounded bg-blue-500/10 text-blue-300 font-medium border border-blue-500/20">
@@ -158,13 +149,13 @@ export default function BlogList() {
                 </span>
               </div>
 
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#F8FAFC] group-hover:text-blue-300 transition-colors leading-snug">
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-heading group-hover:text-[#0F6B4F] transition-colors leading-snug">
                 <Link to={`/blog/${featuredArticle.slug}`}>
                   {featuredArticle.title}
                 </Link>
               </h2>
 
-              <p className="text-sm text-[#94A3B8] line-clamp-3 leading-relaxed">
+              <p className="text-sm text-muted line-clamp-3 leading-relaxed">
                 {featuredArticle.excerpt}
               </p>
 
@@ -174,7 +165,7 @@ export default function BlogList() {
                     <img
                       src={featuredArticle.author.avatar}
                       alt={featuredArticle.author.name}
-                      className="w-8 h-8 rounded-full object-cover border border-[#334155]"
+                      className="w-8 h-8 rounded-full object-cover border border-line"
                     />
                   ) : (
                     <div className="w-8 h-8 rounded-full bg-blue-600/30 flex items-center justify-center text-xs font-bold text-blue-300">
@@ -183,13 +174,13 @@ export default function BlogList() {
                   )}
                   <div className="text-xs">
                     <div className="font-semibold text-white">{featuredArticle.author?.name || 'Staff Engineer'}</div>
-                    <div className="text-[#64748B]">{new Date(featuredArticle.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
+                    <div className="text-muted">{new Date(featuredArticle.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
                   </div>
                 </div>
 
                 <Link
                   to={`/blog/${featuredArticle.slug}`}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 via-cyan-600 to-purple-600 text-white font-bold text-xs shadow-md shadow-cyan-500/20 hover:opacity-95 transition-all"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-[#0F6B4F] to-[#16805E] text-white font-bold text-xs shadow-md shadow-[#0F6B4F]/15 hover:opacity-95 transition-all"
                 >
                   <span>Read Article</span>
                   <ArrowRight size={14} />
@@ -201,11 +192,11 @@ export default function BlogList() {
       )}
 
       {/* ═══ FILTER & CONTROLS TOOLBAR ═══ */}
-      <div className="space-y-4">
-        {/* Search Bar & Sorting Row */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="relative w-full md:w-96">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#94A3B8]" size={18} />
+      <div className="space-y-6">
+        {/* Search & Sort Container */}
+        <div className="p-4 sm:p-5 rounded-2xl surface-card border border-line shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="relative w-full md:w-[28rem] group">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-[#0F6B4F] transition-colors" size={18} />
             <input
               type="text"
               value={searchQuery}
@@ -213,49 +204,54 @@ export default function BlogList() {
                 setSearchQuery(e.target.value);
                 setCurrentPage(1);
               }}
-              placeholder="Search articles by title or keyword..."
-              className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#111827] border border-[#334155] text-[#F8FAFC] placeholder-[#94A3B8] text-sm focus:outline-none focus:border-[#06B6D4] transition-all"
+              placeholder="Search articles, tutorials, or keywords..."
+              className="w-full pl-12 pr-4 py-3 rounded-xl bg-page border border-line hover:border-[#0F6B4F]/40 focus:border-[#0F6B4F] focus:ring-4 focus:ring-[#0F6B4F]/10 outline-none text-heading placeholder:text-muted/70 transition-all text-sm shadow-inner"
             />
           </div>
 
           <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
-            {/* Difficulty Filter */}
-            <div className="flex items-center gap-1 text-xs">
-              <span className="text-[#94A3B8] hidden sm:inline font-mono">Level:</span>
-              <select
-                value={selectedDifficulty}
-                onChange={(e) => {
-                  setSelectedDifficulty(e.target.value);
-                  setCurrentPage(1);
-                }}
-                className="px-3 py-2 rounded-xl bg-[#111827] border border-[#334155] text-xs font-semibold text-[#F8FAFC] focus:outline-none focus:border-[#06B6D4]"
-              >
-                {DIFFICULTIES.map((d) => (
-                  <option key={d} value={d} className="bg-[#111827] text-white">
-                    {d} Level
-                  </option>
-                ))}
-              </select>
+            <div className="flex items-center gap-2">
+              <SlidersHorizontal size={14} className="text-muted hidden sm:block" />
+              <div className="relative">
+                <select
+                  value={selectedDifficulty}
+                  onChange={(e) => {
+                    setSelectedDifficulty(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  className="appearance-none pl-4 pr-10 py-3 rounded-xl bg-page border border-line hover:border-[#0F6B4F]/50 focus:border-[#0F6B4F] focus:ring-4 focus:ring-[#0F6B4F]/10 outline-none text-xs font-bold text-heading transition-all cursor-pointer shadow-sm"
+                >
+                  {DIFFICULTIES.map((d) => (
+                    <option key={d} value={d} className="bg-page text-heading">
+                      {d} Level
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-muted">
+                  <ChevronRight size={14} className="rotate-90" />
+                </div>
+              </div>
             </div>
 
-            {/* Sort Dropdown */}
-            <div className="flex items-center gap-1 text-xs">
-              <span className="text-[#94A3B8] hidden sm:inline font-mono">Sort:</span>
+            <div className="relative">
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-3 py-2 rounded-xl bg-[#111827] border border-[#334155] text-xs font-semibold text-[#F8FAFC] focus:outline-none focus:border-[#06B6D4]"
+                className="appearance-none pl-4 pr-10 py-3 rounded-xl bg-page border border-line hover:border-[#0F6B4F]/50 focus:border-[#0F6B4F] focus:ring-4 focus:ring-[#0F6B4F]/10 outline-none text-xs font-bold text-heading transition-all cursor-pointer shadow-sm"
               >
-                <option value="newest" className="bg-[#111827] text-white">Newest First</option>
-                <option value="popular" className="bg-[#111827] text-white">Most Popular</option>
-                <option value="readingTime" className="bg-[#111827] text-white">Reading Time</option>
+                <option value="newest" className="bg-page text-heading">Newest First</option>
+                <option value="popular" className="bg-page text-heading">Most Popular</option>
+                <option value="readingTime" className="bg-page text-heading">Reading Time</option>
               </select>
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-muted">
+                <ChevronRight size={14} className="rotate-90" />
+              </div>
             </div>
           </div>
         </div>
 
         {/* Category Filter Pills (Horizontal Scroll) */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+        <div className="flex items-center gap-2.5 overflow-x-auto pb-4 scrollbar-none px-1">
           {CATEGORIES_LIST.map((cat) => (
             <button
               key={cat}
@@ -263,10 +259,10 @@ export default function BlogList() {
                 setSelectedCategory(cat);
                 setCurrentPage(1);
               }}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap border ${
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap shadow-sm shrink-0 ${
                 selectedCategory === cat
-                  ? 'bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-500/20'
-                  : 'bg-[#111827] text-[#94A3B8] border-[#334155] hover:text-[#F8FAFC] hover:border-blue-500/40'
+                  ? 'bg-gradient-to-r from-[#0F6B4F] to-[#16805E] text-white shadow-md shadow-[#0F6B4F]/30 scale-105 border border-transparent'
+                  : 'bg-page text-muted border border-line hover:text-heading hover:border-[#0F6B4F]/50 hover:bg-[#0F6B4F]/5'
               }`}
             >
               {cat}
@@ -277,12 +273,12 @@ export default function BlogList() {
 
       {/* ═══ ARTICLES GRID ═══ */}
       {gridArticles.length === 0 ? (
-        <div className="py-20 text-center rounded-2xl bg-[#111827] border border-[#334155]">
-          <div className="w-16 h-16 rounded-2xl bg-[#1E293B] flex items-center justify-center mx-auto mb-4 text-[#94A3B8]">
+        <div className="py-20 text-center rounded-2xl bg-page border border-line">
+          <div className="w-16 h-16 rounded-2xl bg-[#1E293B] flex items-center justify-center mx-auto mb-4 text-muted">
             <Search size={28} />
           </div>
-          <h3 className="text-xl font-bold text-[#F8FAFC] mb-2">No Articles Found</h3>
-          <p className="text-sm text-[#94A3B8] max-w-md mx-auto mb-6">
+          <h3 className="text-xl font-bold text-heading mb-2">No Articles Found</h3>
+          <p className="text-sm text-muted max-w-md mx-auto mb-6">
             No technical articles matched your filter criteria. Try resetting your search query or selecting a different category.
           </p>
           <button
@@ -291,7 +287,7 @@ export default function BlogList() {
               setSelectedCategory('All');
               setSelectedDifficulty('All');
             }}
-            className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-all"
+            className="px-5 py-2.5 rounded-xl bg-[#0F6B4F] hover:bg-[#0C5A42] text-white text-xs font-semibold transition-all"
           >
             Reset All Filters
           </button>
@@ -302,7 +298,7 @@ export default function BlogList() {
             <Link
               key={article._id || article.slug}
               to={`/blog/${article.slug}`}
-              className="blog-card rounded-2xl overflow-hidden group flex flex-col hover:border-blue-500/40 transition-all duration-300"
+              className="blog-card rounded-2xl overflow-hidden group flex flex-col hover:border-[#0F6B4F]/35 transition-all duration-300"
             >
               {/* Cover Image Container */}
               <div className="aspect-[16/9] w-full overflow-hidden bg-[#111827] relative">
@@ -320,7 +316,7 @@ export default function BlogList() {
                   </span>
 
                   {article.difficulty && (
-                    <span className="px-2.5 py-1 rounded-full text-[10px] font-medium bg-[#0B1120]/80 text-[#F8FAFC] border border-[#334155] backdrop-blur-md">
+                    <span className="px-2.5 py-1 rounded-full text-[10px] font-medium bg-[#0B1120]/80 text-heading border border-line backdrop-blur-md">
                       {article.difficulty}
                     </span>
                   )}
@@ -329,7 +325,7 @@ export default function BlogList() {
 
               {/* Content Body */}
               <div className="p-6 flex flex-col flex-grow space-y-3">
-                <div className="flex items-center gap-3 text-xs text-[#94A3B8]">
+                <div className="flex items-center gap-3 text-xs text-muted">
                   <span className="flex items-center gap-1">
                     <Clock size={12} /> {article.readingTime} min read
                   </span>
@@ -337,34 +333,34 @@ export default function BlogList() {
                   <span>{new Date(article.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                 </div>
 
-                <h3 className="text-lg font-bold text-[#F8FAFC] group-hover:text-blue-300 transition-colors line-clamp-2 leading-snug">
+                <h3 className="text-lg font-bold text-heading group-hover:text-[#0F6B4F] transition-colors line-clamp-2 leading-snug">
                   {article.title}
                 </h3>
 
-                <p className="text-xs sm:text-sm text-[#94A3B8] line-clamp-2 flex-grow leading-relaxed">
+                <p className="text-xs sm:text-sm text-muted line-clamp-2 flex-grow leading-relaxed">
                   {article.excerpt}
                 </p>
 
                 {/* Author & Read More Footer */}
-                <div className="pt-4 border-t border-[#334155] flex items-center justify-between text-xs mt-auto">
+                <div className="pt-4 border-t border-line flex items-center justify-between text-xs mt-auto">
                   <div className="flex items-center gap-2">
                     {article.author?.avatar ? (
                       <img
                         src={article.author.avatar}
                         alt={article.author.name}
-                        className="w-6 h-6 rounded-full object-cover border border-[#334155]"
+                        className="w-6 h-6 rounded-full object-cover border border-line"
                       />
                     ) : (
                       <div className="w-6 h-6 rounded-full bg-blue-600/30 flex items-center justify-center text-[10px] font-bold text-blue-300">
                         {article.author?.name?.charAt(0) || 'A'}
                       </div>
                     )}
-                    <span className="text-[#F8FAFC] font-medium text-xs">
+                    <span className="text-heading font-medium text-xs">
                       {article.author?.name || 'TechJourney Contributor'}
                     </span>
                   </div>
 
-                  <span className="font-semibold text-[#3B82F6] group-hover:text-cyan-400 transition-colors flex items-center gap-1">
+                  <span className="font-semibold text-[#0F6B4F] group-hover:text-[#16805E] transition-colors flex items-center gap-1">
                     Read More <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
                   </span>
                 </div>
@@ -376,38 +372,42 @@ export default function BlogList() {
 
       {/* ═══ PAGINATION ═══ */}
       {totalPages > 1 && (
-        <div className="pt-8 border-t border-[#334155]/60 flex items-center justify-center gap-2">
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="p-2 rounded-xl bg-[#111827] border border-[#334155] text-[#94A3B8] hover:text-white disabled:opacity-40 disabled:pointer-events-none transition-colors"
-            title="Previous Page"
-          >
-            <ChevronLeft size={18} />
-          </button>
-
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+        <div className="pt-12 flex items-center justify-center">
+          <div className="inline-flex items-center gap-1 sm:gap-2 p-1.5 rounded-2xl sm:rounded-full bg-page border border-line shadow-lg shadow-black/10">
             <button
-              key={page}
-              onClick={() => handlePageChange(page)}
-              className={`w-10 h-10 rounded-xl text-xs font-semibold transition-all border ${
-                currentPage === page
-                  ? 'bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-500/20 font-bold'
-                  : 'bg-[#111827] text-[#94A3B8] border-[#334155] hover:text-white hover:border-blue-500/40'
-              }`}
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="flex items-center justify-center w-10 h-10 rounded-full text-muted hover:text-[#0F6B4F] hover:bg-[#0F6B4F]/10 disabled:opacity-40 disabled:hover:bg-transparent disabled:pointer-events-none transition-all"
+              title="Previous Page"
             >
-              {page}
+              <ChevronLeft size={20} />
             </button>
-          ))}
 
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="p-2 rounded-xl bg-[#111827] border border-[#334155] text-[#94A3B8] hover:text-white disabled:opacity-40 disabled:pointer-events-none transition-colors"
-            title="Next Page"
-          >
-            <ChevronRight size={18} />
-          </button>
+            <div className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 border-x border-line/50">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => handlePageChange(page)}
+                  className={`w-10 h-10 rounded-full text-sm font-bold transition-all duration-300 flex items-center justify-center ${
+                    currentPage === page
+                      ? 'bg-gradient-to-r from-[#0F6B4F] to-[#16805E] text-white shadow-md shadow-[#0F6B4F]/30 scale-105'
+                      : 'text-muted hover:text-heading hover:bg-soft'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="flex items-center justify-center w-10 h-10 rounded-full text-muted hover:text-[#0F6B4F] hover:bg-[#0F6B4F]/10 disabled:opacity-40 disabled:hover:bg-transparent disabled:pointer-events-none transition-all"
+              title="Next Page"
+            >
+              <ChevronRight size={20} />
+            </button>
+          </div>
         </div>
       )}
     </div>

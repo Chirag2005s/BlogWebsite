@@ -2,6 +2,19 @@
 <html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('techjourney-theme') || 'dark';
+          if (t !== 'light' && t !== 'dark') t = 'dark';
+          document.documentElement.classList.remove('light', 'dark');
+          document.documentElement.classList.add(t);
+          document.documentElement.style.colorScheme = t;
+        } catch (e) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TechJourney — Explore Technology. Build Skills. Shape Your Journey.</title>
@@ -16,7 +29,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
   </head>
-  <body class="bg-[#0B1120] text-[#F8FAFC] antialiased selection:bg-blue-500 selection:text-white">
+  <body class="bg-page text-heading antialiased selection:bg-[#0F6B4F] selection:text-white">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

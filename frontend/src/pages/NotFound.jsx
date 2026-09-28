@@ -10,7 +10,7 @@ export default function NotFound() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-tr from-blue-500/20 via-cyan-500/20 to-purple-500/20 rounded-full blur-3xl pointer-events-none" />
 
         {/* 404 Cyber Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1E293B] border border-[#334155] text-xs font-mono font-semibold text-[#EF4444]">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full surface-card border border-line text-xs font-mono font-semibold text-[#EF4444]">
           <span className="w-2 h-2 rounded-full bg-[#EF4444] animate-ping" />
           <span>HTTP 404: ROUTE_NOT_FOUND</span>
         </div>
@@ -21,10 +21,10 @@ export default function NotFound() {
         </div>
 
         <div className="space-y-3">
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#F8FAFC]">
+          <h1 className="text-2xl sm:text-3xl font-bold text-heading">
             Looks like you've taken a wrong turn on your TechJourney.
           </h1>
-          <p className="text-sm sm:text-base text-[#94A3B8] max-w-md mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base text-muted max-w-md mx-auto leading-relaxed">
             The coordinates or technical document you were searching for have moved, evolved, or vanished into the digital void.
           </p>
         </div>
@@ -33,7 +33,7 @@ export default function NotFound() {
         <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 via-cyan-600 to-purple-600 text-white font-bold text-sm shadow-lg shadow-cyan-500/20 hover:opacity-95 transition-all active:scale-95"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#0F6B4F] to-[#16805E] text-white font-bold text-sm shadow-lg shadow-[#0F6B4F]/15 hover:opacity-95 transition-all active:scale-95"
           >
             <Home size={16} />
             <span>Back to Home</span>
@@ -41,7 +41,7 @@ export default function NotFound() {
 
           <Link
             to="/blog"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#1E293B] border border-[#334155] text-[#F8FAFC] font-semibold text-sm hover:bg-[#334155] transition-all"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl surface-card border border-line text-heading font-semibold text-sm hover:bg-[#334155] transition-all"
           >
             <Compass size={16} className="text-[#06B6D4]" />
             <span>Explore Articles</span>

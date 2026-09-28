@@ -184,10 +184,10 @@ export default function Roadmaps() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 pb-16">
       {/* ═══ Header ═══ */}
-      <div className="relative py-8 sm:py-12 border-b border-[#334155]/60 overflow-hidden">
+      <div className="relative py-8 sm:py-12 border-b border-line overflow-hidden">
         <div className="relative max-w-3xl space-y-4">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1E293B] border border-[#334155] text-xs font-mono text-[#06B6D4]">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full surface-card border border-line text-xs font-mono text-[#06B6D4]">
               <Compass size={14} />
               <span>Developer Career Paths</span>
             </span>
@@ -197,29 +197,29 @@ export default function Roadmaps() {
             </span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#F8FAFC] tracking-tight">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-heading tracking-tight">
             Developer <span className="tech-gradient-text">Roadmaps</span>
           </h1>
 
-          <p className="text-[#94A3B8] text-base sm:text-lg leading-relaxed">
+          <p className="text-muted text-base sm:text-lg leading-relaxed">
             Step-by-step technical blueprints for modern software engineers. Filter by domain (Web, Backend, Frontend, Full Stack, AI, DevOps), track progress, and master core engineering competencies.
           </p>
 
           <div className="pt-2 flex flex-wrap items-center gap-4">
             <div className="relative flex-1 max-w-md">
-              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#94A3B8]" />
+              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search topics, frameworks, or skills..."
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#111827] border border-[#334155] text-white placeholder-text-muted text-xs focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/20 transition-all"
+                className="w-full pl-10 pr-4 py-2.5 input-field text-white placeholder-text-muted text-xs focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/20 transition-all"
               />
             </div>
 
             <button
               onClick={handleShare}
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#1E293B] hover:bg-[#1E293B]/80 text-[#94A3B8] hover:text-white text-xs font-medium border border-[#334155] transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#1E293B] hover:bg-[#1E293B]/80 text-muted hover:text-white text-xs font-medium border border-line transition-all cursor-pointer"
             >
               {copiedShare ? <Check size={14} className="text-green-400" /> : <Share2 size={14} />}
               <span>{copiedShare ? 'Link Copied!' : 'Share Roadmap'}</span>
