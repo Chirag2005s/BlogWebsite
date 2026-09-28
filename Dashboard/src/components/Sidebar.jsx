@@ -33,6 +33,7 @@ const Sidebar = ({ collapsed, onToggle }) => {
 
   const adminLinks = [
     { to: '/users', icon: HiOutlineUsers, label: 'Users' },
+    { to: '/contact-messages', icon: HiOutlineDocumentText, label: 'Contact Messages' },
   ];
 
   const accountLinks = [

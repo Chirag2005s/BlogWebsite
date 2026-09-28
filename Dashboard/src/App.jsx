@@ -17,6 +17,7 @@ import EditContent from './pages/EditContent';
 import Categories from './pages/Categories';
 import ManageInterviewQuestions from './pages/ManageInterviewQuestions';
 import Users from './pages/Users';
+import ContactMessages from './pages/ContactMessages';
 import Profile from './pages/Profile';
 
 function App() {
@@ -75,6 +76,14 @@ function App() {
               element={
                 <ProtectedRoute adminOnly>
                   <Users />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/contact-messages"
+              element={
+                <ProtectedRoute adminOnly>
+                  <ContactMessages />
                 </ProtectedRoute>
               }
             />
