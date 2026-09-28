@@ -36,11 +36,11 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Auto-handle 401 responses (session expired)
+// Auto-handle 401 (session expired) and 403 (forbidden) responses
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
+    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
       localStorage.removeItem('dashboardUser');
       // Only redirect if not already on login page
       if (!window.location.pathname.includes('/login')) {

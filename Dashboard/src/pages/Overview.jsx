@@ -643,8 +643,78 @@ const Overview = () => {
             )}
           </div>
         </div>
+        {/* Right: Additional Information for Users */}
+        <div
+          className="card"
+          style={{
+            padding: '24px',
+            borderRadius: '20px',
+            background: 'var(--bg-card)',
+            border: '1px solid var(--border-color)',
+            display: 'flex',
+            flexDirection: 'column',
+            boxShadow: 'var(--shadow-md)',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+            <HiOutlineCheckCircle style={{ color: 'var(--accent-purple)', fontSize: '20px' }} />
+            <div style={{ fontWeight: 700, fontSize: '16px', color: '#fff' }}>User Insights & Information</div>
+          </div>
+          
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {/* Quick Stats Banner */}
+            <div style={{
+              background: 'linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(124, 58, 237, 0.05) 100%)',
+              border: '1px solid rgba(124, 58, 237, 0.2)',
+              borderRadius: '12px',
+              padding: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}>
+              <div>
+                <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-muted)' }}>Total Members</p>
+                <h4 style={{ margin: '4px 0 0 0', fontSize: '24px', color: '#fff', fontWeight: 800 }}>{stats?.totalUsers || 0}</h4>
+              </div>
+              <div style={{ background: 'rgba(124, 58, 237, 0.2)', color: '#a78bfa', padding: '8px', borderRadius: '8px' }}>
+                <HiOutlineUsers size={24} />
+              </div>
+            </div>
 
+            {/* Role Explanations */}
+            <div style={{ padding: '16px', borderRadius: '12px', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
+              <h5 style={{ margin: '0 0 12px 0', fontSize: '13px', color: '#fff', fontWeight: 600 }}>Role Capabilities</h5>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <span className="badge badge-admin" style={{ fontSize: '10px', height: 'fit-content' }}>ADMIN</span>
+                  <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-muted)', lineHeight: '1.4' }}>
+                    Full access to manage platform settings, users, and all content.
+                  </p>
+                </div>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <span className="badge badge-author" style={{ fontSize: '10px', height: 'fit-content' }}>AUTHOR</span>
+                  <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-muted)', lineHeight: '1.4' }}>
+                    Access to write and publish articles, blogs, and view telemetry data.
+                  </p>
+                </div>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <span className="badge badge-user" style={{ fontSize: '10px', height: 'fit-content' }}>USER</span>
+                  <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-muted)', lineHeight: '1.4' }}>
+                    Standard readers. Can comment, like, and read premium content.
+                  </p>
+                </div>
+              </div>
+            </div>
 
+            {/* Management Tip */}
+            <div style={{ marginTop: 'auto', padding: '12px', borderRadius: '10px', background: 'rgba(16, 185, 129, 0.05)', border: '1px dashed rgba(16, 185, 129, 0.2)' }}>
+              <p style={{ margin: 0, fontSize: '11px', color: '#34d399', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <HiOutlineSparkles /> <strong>Pro Tip:</strong> Regularly review user roles to maintain platform security.
+              </p>
+            </div>
+          </div>
+        </div>
 
       </div>
 
