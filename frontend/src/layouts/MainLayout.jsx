@@ -107,8 +107,8 @@ export default function MainLayout() {
     { to: '/articles', label: 'Articles' },
     { to: '/news', label: 'Tech News' },
     { to: '/roadmaps', label: 'Roadmaps' },
-    // { to: '/interview-questions', label: 'Interviews' },
-    { to: '/about', label: 'About' },
+    { to: '/interview-questions', label: 'Interviews' },
+    // { to: '/about', label: 'About' },
     // { to: '/contact', label: 'Contact' },
   ];
 
