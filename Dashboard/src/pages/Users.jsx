@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { HiOutlineTrash, HiOutlineSearch, HiOutlineShieldCheck } from 'react-icons/hi';
+import { HiOutlineTrash, HiOutlineSearch, HiOutlineShieldCheck, HiOutlineRefresh } from 'react-icons/hi';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import toast from 'react-hot-toast';
@@ -99,6 +99,28 @@ const Users = () => {
               <option value="AUTHOR">Author</option>
               <option value="USER">User</option>
             </select>
+            <button 
+              onClick={fetchUsers} 
+              disabled={loading}
+              title="Refresh Users"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '8px 16px',
+                backgroundColor: 'var(--surface-color, #1e293b)',
+                border: '1px solid var(--border-color, #334155)',
+                borderRadius: '8px',
+                color: 'var(--text-primary, #f8fafc)',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                opacity: loading ? 0.7 : 1,
+                fontSize: '14px',
+                transition: 'all 0.2s'
+              }}
+            >
+              <HiOutlineRefresh size={16} className={loading ? 'animate-spin' : ''} />
+              <span>Refresh</span>
+            </button>
           </div>
         </div>
 

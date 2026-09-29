@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LogIn, Mail, Lock, AlertCircle, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode';
 import api from '../services/api';
 
 const Login = () => {
@@ -41,6 +43,23 @@ const Login = () => {
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleGoogleSuccess = (credentialResponse) => {
+    try {
+      const decoded = jwtDecode(credentialResponse.credential);
+      const userInfo = {
+        name: decoded.name,
+        email: decoded.email,
+        picture: decoded.picture,
+        role: 'member' // Default role
+      };
+      
+      localStorage.setItem('userInfo', JSON.stringify(userInfo));
+      navigate('/');
+    } catch (err) {
+      setError('Failed to process Google authentication.');
     }
   };
 
@@ -117,6 +136,24 @@ const Login = () => {
               )}
             </button>
           </form>
+
+          <div className="flex items-center gap-4">
+            <div className="h-px bg-white/10 flex-1"></div>
+            <span className="text-xs text-muted font-medium uppercase tracking-wider">or sign in with</span>
+            <div className="h-px bg-white/10 flex-1"></div>
+          </div>
+
+          <div className="flex justify-center">
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={() => {
+                setError('Google Login Failed');
+              }}
+              useOneTap
+              theme="outline"
+              shape="pill"
+            />
+          </div>
 
           <p className="text-center text-sm text-[#94A3B8]">
             Don&apos;t have an account?{' '}
