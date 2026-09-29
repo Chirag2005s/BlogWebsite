@@ -13,6 +13,7 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import NotFound from './pages/NotFound';
 import AdminLayout from './layouts/AdminLayout';
+import ProtectedRoute from './components/ProtectedRoute';
 import AddBlog from './pages/admin/AddBlog';
 import ManageArticles from './pages/admin/ManageArticles';
 import ArticleEditor from './pages/admin/ArticleEditor';
@@ -28,12 +29,12 @@ function App() {
           <Route path="blog/:slug" element={<ArticleView />} />
           <Route path="articles" element={<ArticlesList />} />
           <Route path="article/:slug" element={<ArticleView />} />
-          <Route path="roadmaps" element={<Roadmaps />} />
-          <Route path="roadmap" element={<Roadmaps />} />
-          <Route path="roadmap/:slug" element={<Roadmaps />} />
+          <Route path="roadmaps" element={<ProtectedRoute><Roadmaps /></ProtectedRoute>} />
+          <Route path="roadmap" element={<ProtectedRoute><Roadmaps /></ProtectedRoute>} />
+          <Route path="roadmap/:slug" element={<ProtectedRoute><Roadmaps /></ProtectedRoute>} />
           <Route path="news" element={<TechNews />} />
-          <Route path="interview-questions" element={<InterviewQuestions />} />
-          <Route path="interviews" element={<InterviewQuestions />} />
+          <Route path="interview-questions" element={<ProtectedRoute><InterviewQuestions /></ProtectedRoute>} />
+          <Route path="interviews" element={<ProtectedRoute><InterviewQuestions /></ProtectedRoute>} />
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
           <Route path="login" element={<Login />} />

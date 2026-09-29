@@ -36,6 +36,7 @@ const YoutubeIcon = ({ size = 16, className = '' }) => (
 );
 import TechJourneyLogo from '../components/TechJourneyLogo';
 import SearchModal from '../components/SearchModal';
+import LoginModal from '../components/LoginModal';
 import api from '../services/api';
 
 export default function MainLayout() {
@@ -44,6 +45,7 @@ export default function MainLayout() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [writeMenuOpen, setWriteMenuOpen] = useState(false);
   const writeMenuRef = useRef(null);
 
@@ -106,11 +108,19 @@ export default function MainLayout() {
     { to: '/blog', label: 'Blog' },
     { to: '/articles', label: 'Articles' },
     { to: '/news', label: 'Tech News' },
-    { to: '/roadmaps', label: 'Roadmaps' },
-    { to: '/interview-questions', label: 'Interviews' },
+    { to: '/roadmaps', label: 'Roadmaps', requiresLogin: true },
+    { to: '/interview-questions', label: 'Interviews', requiresLogin: true },
     // { to: '/about', label: 'About' },
     // { to: '/contact', label: 'Contact' },
   ];
+
+  const handleNavClick = (e, link) => {
+    if (link.requiresLogin && !userInfo) {
+      e.preventDefault();
+      setLoginModalOpen(true);
+      setMobileMenuOpen(false);
+    }
+  };
 
   const isActive = (path) => {
     if (path === '/') return location.pathname === '/';
@@ -140,6 +150,7 @@ export default function MainLayout() {
                 <Link
                   key={link.to}
                   to={link.to}
+                  onClick={(e) => handleNavClick(e, link)}
                   className={`px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 ${active
                     ? 'text-white bg-gradient-to-r from-[#0F6B4F] to-[#16805E] shadow-sm font-semibold'
                     : 'text-muted hover:text-heading hover:bg-soft'
@@ -305,6 +316,7 @@ export default function MainLayout() {
                 <Link
                   key={link.to}
                   to={link.to}
+                  onClick={(e) => handleNavClick(e, link)}
                   className={`flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${isActive(link.to)
                     ? 'text-white bg-gradient-to-r from-[#0F6B4F] to-[#16805E] font-semibold'
                     : 'text-muted hover:text-heading hover:bg-soft'
@@ -414,7 +426,7 @@ export default function MainLayout() {
               <ul className="space-y-2 text-sm text-slate-400">
                 <li><Link to="/blog" className="hover:text-white transition-colors">Blog</Link></li>
                 <li><Link to="/articles" className="hover:text-white transition-colors">Articles</Link></li>
-                <li><Link to="/roadmaps" className="hover:text-white transition-colors">Roadmaps</Link></li>
+                <li><Link to="/roadmaps" onClick={(e) => { if (!userInfo) { e.preventDefault(); setLoginModalOpen(true); } }} className="hover:text-white transition-colors">Roadmaps</Link></li>
                 <li><Link to="/news" className="hover:text-white transition-colors">Tech News</Link></li>
               </ul>
             </div>
@@ -439,8 +451,8 @@ export default function MainLayout() {
                 Resources
               </h4>
               <ul className="space-y-2 text-sm text-slate-400">
-                <li><Link to="/interview-questions" className="hover:text-white transition-colors">Interview Questions</Link></li>
-                <li><Link to="/roadmaps" className="hover:text-white transition-colors">Roadmaps</Link></li>
+                <li><Link to="/interview-questions" onClick={(e) => { if (!userInfo) { e.preventDefault(); setLoginModalOpen(true); } }} className="hover:text-white transition-colors">Interview Questions</Link></li>
+                <li><Link to="/roadmaps" onClick={(e) => { if (!userInfo) { e.preventDefault(); setLoginModalOpen(true); } }} className="hover:text-white transition-colors">Roadmaps</Link></li>
               </ul>
             </div>
 
@@ -474,6 +486,12 @@ export default function MainLayout() {
       <SearchModal
         isOpen={searchModalOpen}
         onClose={() => setSearchModalOpen(false)}
+      />
+
+      {/* Login Popup Modal */}
+      <LoginModal
+        isOpen={loginModalOpen}
+        onClose={() => setLoginModalOpen(false)}
       />
     </div>
   );

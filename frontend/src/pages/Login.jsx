@@ -29,12 +29,15 @@ const Login = () => {
     } catch (err) {
       console.error('Login error:', err);
       const serverMsg = err.response?.data?.message;
-      if (serverMsg) {
+      
+      if (err.response?.status === 401) {
+        setError(serverMsg || 'Invalid email or password. Please try again.');
+      } else if (serverMsg) {
         setError(serverMsg);
       } else if (err.message === 'Network Error') {
         setError('Network Error: Cannot connect to the backend server. Please check your backend URL and network connection.');
       } else {
-        setError(err.message || 'Login failed. Please try again.');
+        setError('Login failed. Please try again later.');
       }
     } finally {
       setLoading(false);
