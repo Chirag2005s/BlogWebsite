@@ -18,6 +18,7 @@ import AddBlog from './pages/admin/AddBlog';
 import ManageArticles from './pages/admin/ManageArticles';
 import ArticleEditor from './pages/admin/ArticleEditor';
 import AddRoadmap from './pages/admin/AddRoadmap';
+import ManageAdvertisement from './pages/admin/ManageAdvertisement';
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
           <Route path="edit-article/:id" element={<ArticleEditor />} />
           <Route path="add-roadmap" element={<AddRoadmap />} />
           <Route path="articles" element={<ManageArticles />} />
+          <Route path="advertisement" element={<ManageAdvertisement />} />
         </Route>
       </Routes>
     </Router>

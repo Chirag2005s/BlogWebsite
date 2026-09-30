@@ -19,6 +19,7 @@ import ManageInterviewQuestions from './pages/ManageInterviewQuestions';
 import Users from './pages/Users';
 import ContactMessages from './pages/ContactMessages';
 import Profile from './pages/Profile';
+import ManageAdvertisement from './pages/ManageAdvertisement';
 
 function App() {
   return (
@@ -70,6 +71,7 @@ function App() {
             <Route path="/content" element={<ManageContent />} />
             <Route path="/edit/:id" element={<EditContent />} />
             <Route path="/categories" element={<Categories />} />
+            <Route path="/advertisement" element={<ManageAdvertisement />} />
             <Route path="/interview-questions" element={<ManageInterviewQuestions />} />
             <Route
               path="/users"

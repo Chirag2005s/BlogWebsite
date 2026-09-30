@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { PenSquare, PlusCircle, FileText, LogOut, ArrowLeft, Compass } from 'lucide-react';
+import { PenSquare, PlusCircle, FileText, LogOut, ArrowLeft, Compass, Megaphone } from 'lucide-react';
 import api from '../services/api';
 
 const AdminLayout = () => {
@@ -35,6 +35,7 @@ const AdminLayout = () => {
     { to: '/admin', label: 'Add Blog', icon: PenSquare, exact: true },
     { to: '/admin/add-article', label: 'Add Article', icon: PlusCircle },
     { to: '/admin/articles', label: 'Manage Content', icon: FileText },
+    { to: '/admin/advertisement', label: 'Advertisement', icon: Megaphone },
   ];
 
   const isActive = (path, exact = false) => {

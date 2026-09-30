@@ -1,4 +1,5 @@
 import express from 'express';
+import path from 'path';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -15,6 +16,8 @@ import adminRoutes from './src/routes/admin.routes.js';
 import roadmapRoutes from './src/routes/roadmap.routes.js';
 import interviewRoutes from './src/routes/interview.routes.js';
 import contactRoutes from './src/routes/contact.routes.js';
+import advertisementRoutes from './src/routes/advertisementRoutes.js';
+import uploadRoutes from './src/routes/upload.routes.js';
 import { syncCategories } from './src/controllers/category.controller.js';
 
 dotenv.config();
@@ -115,6 +118,11 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/roadmaps', roadmapRoutes);
 app.use('/api/interviews', interviewRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/advertisement', advertisementRoutes);
+app.use('/api/upload', uploadRoutes);
+
+const __dirname = path.resolve();
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 // Error Handling
 app.use(notFound);

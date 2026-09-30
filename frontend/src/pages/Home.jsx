@@ -15,6 +15,7 @@ import StatsCounter from '../components/StatsCounter';
 import RoadmapInteractiveFlow from '../components/RoadmapInteractiveFlow';
 import Roadmap3DSection from '../components/Roadmap3DSection';
 import NewsletterBanner from '../components/NewsletterBanner';
+import AdvertisementSection from '../components/AdvertisementSection';
 import api from '../services/api';
 
 // Map icon name string to Lucide component
@@ -411,6 +412,11 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* ═══════════════════════════════════════════
+          4.5 ADVERTISEMENT SECTION
+          ═══════════════════════════════════════════ */}
+      <AdvertisementSection />
 
       {/* ═══════════════════════════════════════════
           5. DEVELOPER ROADMAPS (INTERACTIVE JOURNEY)

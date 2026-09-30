@@ -13,6 +13,7 @@ import {
   HiOutlineCode,
   HiOutlineMap,
   HiOutlineAcademicCap,
+  HiOutlineSpeakerphone,
 } from 'react-icons/hi';
 
 const Sidebar = ({ collapsed, onToggle }) => {
@@ -32,6 +33,7 @@ const Sidebar = ({ collapsed, onToggle }) => {
   ];
 
   const adminLinks = [
+    { to: '/advertisement', icon: HiOutlineSpeakerphone, label: 'Advertisement' },
     { to: '/users', icon: HiOutlineUsers, label: 'Users' },
     { to: '/contact-messages', icon: HiOutlineDocumentText, label: 'Contact Messages' },
   ];
