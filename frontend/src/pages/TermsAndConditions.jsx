@@ -89,7 +89,7 @@ const SECTIONS = [
 
 export default function TermsAndConditions() {
   useEffect(() => {
-    document.title = 'Terms & Conditions – TechJourney';
+    document.title = 'Terms & Conditions – Tech Journey';
   }, []);
 
   return (

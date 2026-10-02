@@ -111,7 +111,7 @@ const SECTIONS = [
 
 export default function PrivacyPolicy() {
   useEffect(() => {
-    document.title = 'Privacy Policy – TechJourney';
+    document.title = 'Privacy Policy – Tech Journey';
   }, []);
 
   return (
