@@ -35,9 +35,9 @@ const AdminLayout = () => {
     { to: '/admin', label: 'Add Blog', icon: PenSquare, exact: true },
     { to: '/admin/add-article', label: 'Add Article', icon: PlusCircle },
     { to: '/admin/articles', label: 'Manage Content', icon: FileText },
-    { to: '/admin/interviews', label: 'Interview Q&A', icon: HelpCircle },
-    { to: '/admin/advertisement', label: 'Advertisement', icon: Megaphone },
-    { to: '/admin/settings', label: 'Settings', icon: Settings },
+    // { to: '/admin/interviews', label: 'Interview Q&A', icon: HelpCircle },
+    // { to: '/admin/advertisement', label: 'Advertisement', icon: Megaphone },
+    // { to: '/admin/settings', label: 'Settings', icon: Settings },
   ];
 
   const isActive = (path, exact = false) => {
