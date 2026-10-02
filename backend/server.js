@@ -18,6 +18,8 @@ import interviewRoutes from './src/routes/interview.routes.js';
 import contactRoutes from './src/routes/contact.routes.js';
 import advertisementRoutes from './src/routes/advertisementRoutes.js';
 import uploadRoutes from './src/routes/upload.routes.js';
+import problemRoutes from './src/routes/problemRoutes.js';
+import settingRoutes from './src/routes/settingRoutes.js';
 import { syncCategories } from './src/controllers/category.controller.js';
 
 dotenv.config();
@@ -119,6 +121,8 @@ app.use('/api/roadmaps', roadmapRoutes);
 app.use('/api/interviews', interviewRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/advertisement', advertisementRoutes);
+app.use('/api/problems', problemRoutes);
+app.use('/api/settings', settingRoutes);
 app.use('/api/upload', uploadRoutes);
 
 const __dirname = path.resolve();

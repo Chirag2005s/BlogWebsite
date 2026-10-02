@@ -6,7 +6,6 @@ import {
   Flame, CheckCircle2 
 } from 'lucide-react';
 import { ARTICLES } from '../data/mockData';
-import api from '../services/api';
 import PageHeader from '../components/PageHeader';
 
 const CATEGORIES_LIST = [
@@ -47,23 +46,6 @@ export default function BlogList() {
     const q = searchParams.get('search');
     if (q) setSearchQuery(q);
   }, [searchParams]);
-
-  useEffect(() => {
-    const fetchArticles = async () => {
-      try {
-        const { data } = await api.get('/articles');
-        const list = Array.isArray(data?.data) ? data.data : (Array.isArray(data) ? data : []);
-        if (list.length > 0) {
-          const existingSlugs = new Set(list.map((a) => a.slug));
-          const missing = ARTICLES.filter((a) => !existingSlugs.has(a.slug));
-          setArticles([...list, ...missing]);
-        }
-      } catch (err) {
-        // Mock fallback
-      }
-    };
-    fetchArticles();
-  }, []);
 
   // Filter & Sort Logic
   const filteredArticles = useMemo(() => {

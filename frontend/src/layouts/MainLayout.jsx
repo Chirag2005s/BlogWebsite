@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
+import { Outlet, Link, useNavigate, useLocation, useOutlet } from 'react-router-dom';
 import {
   Menu, X, Search, ChevronRight,
   PenTool, LogOut, ChevronDown, FileText, PlusCircle
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const GithubIcon = ({ size = 16, className = '' }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -42,6 +43,7 @@ import api from '../services/api';
 export default function MainLayout() {
   const navigate = useNavigate();
   const location = useLocation();
+  const currentOutlet = useOutlet();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
@@ -107,11 +109,11 @@ export default function MainLayout() {
     { to: '/', label: 'Home' },
     { to: '/blog', label: 'Blog' },
     { to: '/articles', label: 'Articles' },
-    { to: '/news', label: 'Tech News' },
+    // { to: '/programming', label: 'Programming' },
+    { to: '/problemhub', label: 'Problem' },
     { to: '/roadmaps', label: 'Roadmaps', requiresLogin: true },
-    { to: '/interview-questions', label: 'Interviews', requiresLogin: true },
-    // { to: '/about', label: 'About' },
-    // { to: '/contact', label: 'Contact' },
+    { to: '/interview-questions', label: 'Interview', requiresLogin: true },
+    { to: '/news', label: 'Tech' },
   ];
 
   const handleNavClick = (e, link) => {
@@ -132,18 +134,18 @@ export default function MainLayout() {
       {/* ═══ STICKY RESPONSIVE NAVBAR ═══ */}
       <header
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${scrolled
-          ? 'bg-nav backdrop-blur-xl border-b border-line py-3.5 shadow-lg shadow-black/10'
-          : 'bg-transparent py-5'
+          ? 'bg-nav backdrop-blur-xl border-b border-line py-3 shadow-lg shadow-black/10'
+          : 'bg-transparent py-4'
           }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 flex items-center justify-between gap-4">
           {/* TechJourney Logo */}
           <Link to="/" className="group focus:outline-none">
             <TechJourneyLogo size={36} />
           </Link>
 
           {/* Desktop Nav Links */}
-          <nav className="hidden lg:flex items-center gap-1 bg-card/80 p-1 rounded-2xl border border-line backdrop-blur-md">
+          <nav className="hidden lg:flex items-center gap-0.5 bg-card/80 px-1.5 py-1.5 rounded-2xl border border-line backdrop-blur-md">
             {navLinks.map((link) => {
               const active = isActive(link.to);
               return (
@@ -151,7 +153,7 @@ export default function MainLayout() {
                   key={link.to}
                   to={link.to}
                   onClick={(e) => handleNavClick(e, link)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 ${active
+                  className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 ${active
                     ? 'text-white bg-gradient-to-r from-[#0F6B4F] to-[#16805E] shadow-sm font-semibold'
                     : 'text-muted hover:text-heading hover:bg-soft'
                     }`}
@@ -163,7 +165,7 @@ export default function MainLayout() {
           </nav>
 
           {/* Right Actions */}
-          <div className="hidden md:flex items-center gap-2.5">
+          <div className="hidden md:flex items-center gap-3">
             {/* Search Trigger Button (Ctrl + K) */}
             <button
               onClick={() => setSearchModalOpen(true)}
@@ -178,7 +180,7 @@ export default function MainLayout() {
             </button>
 
             {/* Write Button & Session / Sign In */}
-            <div className="flex items-center gap-2 pl-2 border-l border-line">
+            <div className="flex items-center gap-2.5 pl-3 border-l border-line">
               {/* Write & Manage Dropdown - Always visible in Navbar */}
               <div className="relative" ref={writeMenuRef}>
                 <button
@@ -290,7 +292,7 @@ export default function MainLayout() {
           </div>
 
           {/* Mobile Actions & Menu Toggle */}
-          <div className="flex md:hidden items-center gap-2">
+          <div className="flex md:hidden items-center gap-2.5">
             <button
               onClick={() => setSearchModalOpen(true)}
               className="p-2 rounded-xl bg-card border border-line text-muted hover:text-heading"
@@ -397,7 +399,18 @@ export default function MainLayout() {
 
       {/* ═══ MAIN CONTENT OUTLET ═══ */}
       <main className="flex-grow pt-24 pb-16">
-        <Outlet />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={location.pathname}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+            className="w-full h-full"
+          >
+            {currentOutlet}
+          </motion.div>
+        </AnimatePresence>
       </main>
 
       {/* ═══ MULTI-COLUMN FOOTER ═══ */}
@@ -426,6 +439,8 @@ export default function MainLayout() {
               <ul className="space-y-2 text-sm text-slate-400">
                 <li><Link to="/blog" className="hover:text-white transition-colors">Blog</Link></li>
                 <li><Link to="/articles" className="hover:text-white transition-colors">Articles</Link></li>
+                <li><Link to="/programming" className="hover:text-white transition-colors">Programming</Link></li>
+                <li><Link to="/problemhub" className="hover:text-white transition-colors">ProblemHub</Link></li>
                 <li><Link to="/roadmaps" onClick={(e) => { if (!userInfo) { e.preventDefault(); setLoginModalOpen(true); } }} className="hover:text-white transition-colors">Roadmaps</Link></li>
                 <li><Link to="/news" className="hover:text-white transition-colors">Tech News</Link></li>
               </ul>
@@ -451,6 +466,7 @@ export default function MainLayout() {
                 Resources
               </h4>
               <ul className="space-y-2 text-sm text-slate-400">
+                <li><Link to="/problemhub" className="hover:text-white transition-colors">ProblemHub</Link></li>
                 <li><Link to="/interview-questions" onClick={(e) => { if (!userInfo) { e.preventDefault(); setLoginModalOpen(true); } }} className="hover:text-white transition-colors">Interview Questions</Link></li>
                 <li><Link to="/roadmaps" onClick={(e) => { if (!userInfo) { e.preventDefault(); setLoginModalOpen(true); } }} className="hover:text-white transition-colors">Roadmaps</Link></li>
               </ul>
@@ -464,8 +480,8 @@ export default function MainLayout() {
               <ul className="space-y-2 text-sm text-slate-400">
                 <li><Link to="/about" className="hover:text-white transition-colors">About</Link></li>
                 <li><Link to="/contact" className="hover:text-white transition-colors">Contact</Link></li>
-                <li><a href="#privacy" className="hover:text-white transition-colors">Privacy Policy</a></li>
-                <li><a href="#terms" className="hover:text-white transition-colors">Terms & Conditions</a></li>
+                <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+                <li><Link to="/terms" className="hover:text-white transition-colors">Terms & Conditions</Link></li>
               </ul>
             </div>
           </div>

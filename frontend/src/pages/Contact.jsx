@@ -9,13 +9,13 @@ const CONTACT_CHANNELS = [
   {
     icon: Mail,
     title: 'Email',
-    value: 'hello@techjourney.dev',
+    value: 'techjourney822@gmail.com',
     hint: 'We reply within 24 hours',
   },
   {
     icon: Phone,
     title: 'Phone',
-    value: '+91 98765 43210',
+    value: 'None | Send Message',
     hint: 'Mon–Fri, 10:00–18:00 IST',
   },
   {
@@ -27,7 +27,7 @@ const CONTACT_CHANNELS = [
   {
     icon: Clock,
     title: 'Support hours',
-    value: 'Weekdays 10am–6pm',
+    value: 'All Time',
     hint: 'Closed on public holidays',
   },
 ];
