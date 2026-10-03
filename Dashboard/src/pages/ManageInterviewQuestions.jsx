@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { FaGithub } from 'react-icons/fa';
 import {
   HiOutlineAcademicCap,
   HiOutlinePlus,
@@ -207,6 +209,13 @@ const ManageInterviewQuestions = () => {
           <button className="btn btn-secondary" onClick={fetchQuestions} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <HiOutlineRefresh /> Refresh
           </button>
+          <Link
+            to="/interview-repos"
+            className="btn btn-secondary"
+            style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+          >
+            <FaGithub /> GitHub Repos
+          </Link>
           <button className="btn btn-primary" onClick={() => handleOpenModal()} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <HiOutlinePlus /> Add New Question
           </button>

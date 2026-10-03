@@ -58,11 +58,11 @@ function App() {
           <Route path="register" element={<Register />} />
           <Route path="programming" element={<Programming />} />
           
-          {/* ProblemHub Routes */}
-          <Route path="problemhub" element={<ProblemHub />} />
+          {/* ProblemHub Routes - Protected for Logged In Users Only */}
+          <Route path="problemhub" element={<ProtectedRoute><ProblemHub /></ProtectedRoute>} />
           <Route path="problemhub/create" element={<ProtectedRoute><CreateProblem /></ProtectedRoute>} />
-          <Route path="problemhub/problem/:id" element={<ProblemDetail />} />
-          <Route path="problemhub/leaderboard" element={<Leaderboard />} />
+          <Route path="problemhub/problem/:id" element={<ProtectedRoute><ProblemDetail /></ProtectedRoute>} />
+          <Route path="problemhub/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
           <Route path="problemhub/my-problems" element={<ProtectedRoute><MyProblemHub activeTab="problems" /></ProtectedRoute>} />
           <Route path="problemhub/my-solutions" element={<ProtectedRoute><MyProblemHub activeTab="solutions" /></ProtectedRoute>} />
           

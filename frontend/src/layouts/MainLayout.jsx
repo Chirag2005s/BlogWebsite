@@ -110,7 +110,7 @@ export default function MainLayout() {
     { to: '/blog', label: 'Blog' },
     { to: '/articles', label: 'Articles' },
     // { to: '/programming', label: 'Programming' },
-    { to: '/problemhub', label: 'Problem' },
+    { to: '/problemhub', label: 'Problem', requiresLogin: true },
     { to: '/roadmaps', label: 'Roadmaps', requiresLogin: true },
     { to: '/interview-questions', label: 'Interview', requiresLogin: true },
     { to: '/news', label: 'Tech' },
@@ -440,7 +440,7 @@ export default function MainLayout() {
                 <li><Link to="/blog" className="hover:text-white transition-colors">Blog</Link></li>
                 <li><Link to="/articles" className="hover:text-white transition-colors">Articles</Link></li>
                 <li><Link to="/programming" className="hover:text-white transition-colors">Programming</Link></li>
-                <li><Link to="/problemhub" className="hover:text-white transition-colors">ProblemHub</Link></li>
+                <li><Link to="/problemhub" onClick={(e) => { if (!userInfo) { e.preventDefault(); setLoginModalOpen(true); } }} className="hover:text-white transition-colors">ProblemHub</Link></li>
                 <li><Link to="/roadmaps" onClick={(e) => { if (!userInfo) { e.preventDefault(); setLoginModalOpen(true); } }} className="hover:text-white transition-colors">Roadmaps</Link></li>
                 <li><Link to="/news" className="hover:text-white transition-colors">Tech News</Link></li>
               </ul>
@@ -466,7 +466,7 @@ export default function MainLayout() {
                 Resources
               </h4>
               <ul className="space-y-2 text-sm text-slate-400">
-                <li><Link to="/problemhub" className="hover:text-white transition-colors">ProblemHub</Link></li>
+                <li><Link to="/problemhub" onClick={(e) => { if (!userInfo) { e.preventDefault(); setLoginModalOpen(true); } }} className="hover:text-white transition-colors">ProblemHub</Link></li>
                 <li><Link to="/interview-questions" onClick={(e) => { if (!userInfo) { e.preventDefault(); setLoginModalOpen(true); } }} className="hover:text-white transition-colors">Interview Questions</Link></li>
                 <li><Link to="/roadmaps" onClick={(e) => { if (!userInfo) { e.preventDefault(); setLoginModalOpen(true); } }} className="hover:text-white transition-colors">Roadmaps</Link></li>
               </ul>

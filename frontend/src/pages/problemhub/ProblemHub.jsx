@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Search, Plus, Dices, MessageSquare, ThumbsUp, Code2, Bug, Zap, CheckCircle2 } from 'lucide-react';
+import { Search, Plus, Dices, MessageSquare, ThumbsUp, Code2, Bug, Zap, CheckCircle2, User } from 'lucide-react';
 
 import api from '../../services/api';
 
@@ -10,6 +10,14 @@ const DIFFICULTIES = ['All', 'Easy', 'Medium', 'Hard'];
 
 export default function ProblemHub() {
   const navigate = useNavigate();
+  const userInfo = (() => {
+    try {
+      const raw = localStorage.getItem('userInfo');
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  })();
   const [problems, setProblems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -52,6 +60,16 @@ export default function ProblemHub() {
         </div>
         
         <div className="relative z-10 max-w-3xl">
+          {userInfo && (
+            <motion.div 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0F6B4F]/25 border border-[#0F6B4F]/40 text-[#4FD1A5] text-xs font-semibold mb-4 backdrop-blur-sm"
+            >
+              <span className="w-2 h-2 rounded-full bg-[#4FD1A5] animate-pulse"></span>
+              <span>Logged in as @{userInfo.name || 'Developer'}</span>
+            </motion.div>
+          )}
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -102,6 +120,13 @@ export default function ProblemHub() {
             >
               <Zap size={20} className="text-yellow-500" />
               Leaderboard
+            </Link>
+            <Link 
+              to="/problemhub/my-problems"
+              className="flex items-center gap-2 px-6 py-3 bg-card hover:bg-soft border border-line text-heading rounded-xl font-semibold transition-all shadow-lg hover:-translate-y-0.5"
+            >
+              <User size={20} className="text-[#4FD1A5]" />
+              My Hub
             </Link>
           </motion.div>
         </div>
