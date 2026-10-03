@@ -25,6 +25,8 @@ const problemSchema = new mongoose.Schema({
   likes: { type: Number, default: 0 },
   solutionsCount: { type: Number, default: 0 },
   commentsCount: { type: Number, default: 0 },
+  isSolved: { type: Boolean, default: false },
+  acceptedSolution: { type: mongoose.Schema.Types.ObjectId, ref: 'Solution' },
 }, { timestamps: true });
 
 const Problem = mongoose.model('Problem', problemSchema);

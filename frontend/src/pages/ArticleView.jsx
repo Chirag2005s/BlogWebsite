@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLocation } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 import 'highlight.js/styles/atom-one-dark.css';
@@ -117,8 +117,14 @@ const ScrollToTop = () => {
 
 export default function ArticleView() {
   const { slug } = useParams();
+  const location = useLocation();
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const isArticleRoute = Boolean(
+    location.pathname.startsWith('/article') || 
+    article?.type === 'article'
+  );
   const [likesCount, setLikesCount] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -296,11 +302,11 @@ export default function ArticleView() {
             The requested technical document or slug could not be located.
           </p>
           <Link
-            to="/blog"
+            to={isArticleRoute ? "/articles" : "/blog"}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0F6B4F] hover:bg-[#0C5A42] text-heading font-semibold text-sm transition-colors"
           >
             <ArrowLeft size={16} />
-            <span>Back to Technical Blogs</span>
+            <span>{isArticleRoute ? "Back to All Articles" : "Back to Technical Blogs"}</span>
           </Link>
         </div>
       </div>
@@ -315,11 +321,11 @@ export default function ArticleView() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Back Link */}
         <Link
-          to="/blog"
+          to={isArticleRoute ? "/articles" : "/blog"}
           className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-muted hover:text-[#0F6B4F] transition-colors mb-8 group"
         >
           <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-          <span>Back to All Articles</span>
+          <span>{isArticleRoute ? "Back to All Articles" : "Back to All Blogs"}</span>
         </Link>
 
         {/* ═══ ARTICLE HERO HEADER ═══ */}
@@ -605,7 +611,7 @@ export default function ArticleView() {
               </h3>
             </div>
             <Link
-              to="/blog"
+              to={isArticleRoute ? "/articles" : "/blog"}
               className="text-xs font-semibold text-[#0F6B4F] hover:underline flex items-center gap-1"
             >
               Browse All <ArrowRight size={13} />
@@ -616,7 +622,7 @@ export default function ArticleView() {
             {relatedArticles.map((rel) => (
               <Link
                 key={rel.slug}
-                to={`/blog/${rel.slug}`}
+                to={rel.type === 'article' || isArticleRoute ? `/article/${rel.slug}` : `/blog/${rel.slug}`}
                 className="p-5 rounded-2xl surface-card border border-line hover:border-[#0F6B4F]/35 transition-all duration-300 group flex flex-col justify-between"
               >
                 <div className="space-y-2">

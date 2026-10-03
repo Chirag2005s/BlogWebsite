@@ -44,6 +44,7 @@ function App() {
           <Route path="blog/:slug" element={<ArticleView />} />
           <Route path="articles" element={<ArticlesList />} />
           <Route path="article/:slug" element={<ArticleView />} />
+          <Route path="articles/:slug" element={<ArticleView />} />
           <Route path="roadmaps" element={<ProtectedRoute><Roadmaps /></ProtectedRoute>} />
           <Route path="roadmap" element={<ProtectedRoute><Roadmaps /></ProtectedRoute>} />
           <Route path="roadmap/:slug" element={<ProtectedRoute><Roadmaps /></ProtectedRoute>} />

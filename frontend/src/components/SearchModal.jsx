@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, X, BookOpen, Compass, Code2, ArrowRight, Clock, Sparkles } from 'lucide-react';
 import { ARTICLES, ROADMAPS, PROGRAMMING_LANGUAGES } from '../data/mockData';
@@ -181,7 +181,7 @@ export default function SearchModal({ isOpen, onClose }) {
                     {matchedArticles.map((art) => (
                       <div
                         key={art._id}
-                        onClick={() => handleSelect(`/blog/${art.slug}`)}
+                        onClick={() => handleSelect(art.type === 'article' ? `/article/${art.slug}` : `/blog/${art.slug}`)}
                         className="p-3.5 rounded-xl bg-page/70 hover:bg-page border border-line hover:border-[#0F6B4F]/35 transition-all cursor-pointer group"
                       >
                         <div className="flex items-center justify-between gap-2 mb-1.5">

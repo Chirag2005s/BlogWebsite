@@ -181,8 +181,8 @@ const ArticlesList = () => {
             {filteredArticles.map((article) => (
               <Link
                 key={article._id}
-                to={`/blog/${article.slug}`}
-                className="blog-card glass-card rounded-2xl overflow-hidden group flex flex-col hover:border-primary-500/30 transition-all"
+                to={`/article/${article.slug}`}
+                className="article-card glass-card rounded-2xl overflow-hidden group flex flex-col hover:border-primary-500/30 transition-all"
               >
                 {/* Image */}
                 <div className="aspect-video overflow-hidden bg-surface-700 relative">

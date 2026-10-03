@@ -21,7 +21,18 @@ export default function ProblemDetail() {
   const [solutionLanguage, setSolutionLanguage] = useState('');
   const [isSubmittingCode, setIsSubmittingCode] = useState(false);
   const [isPostingComment, setIsPostingComment] = useState(false);
+  const [acceptingSolId, setAcceptingSolId] = useState(null);
   const editorRef = useRef(null);
+
+  const userInfo = (() => {
+    try {
+      const raw = localStorage.getItem('userInfo');
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  })();
+  const isAuthor = Boolean(userInfo && problem && (String(problem.creator?._id || problem.creator) === String(userInfo._id)));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,30 +71,49 @@ export default function ProblemDetail() {
     }
   };
 
-  const handleSolutionVote = (id, type) => {
+  const handleSolutionVote = (solId, type) => {
     setSolutions(solutions.map(sol => {
-      if (sol.id === id) {
+      if (sol._id === solId || sol.id === solId) {
         return {
           ...sol,
-          likes: type === 'like' ? sol.likes + 1 : sol.likes,
-          dislikes: type === 'dislike' ? sol.dislikes + 1 : sol.dislikes
+          likes: type === 'like' ? (sol.likes || 0) + 1 : sol.likes,
+          dislikes: type === 'dislike' ? (sol.dislikes || 0) + 1 : sol.dislikes
         };
       }
       return sol;
     }));
   };
 
-  const handleCommentVote = (id, type) => {
+  const handleCommentVote = (commentId, type) => {
     setComments(comments.map(c => {
-      if (c.id === id) {
+      if (c._id === commentId || c.id === commentId) {
         return {
           ...c,
-          likes: type === 'like' ? c.likes + 1 : c.likes,
-          dislikes: type === 'dislike' ? c.dislikes + 1 : c.dislikes
+          likes: type === 'like' ? (c.likes || 0) + 1 : c.likes,
+          dislikes: type === 'dislike' ? (c.dislikes || 0) + 1 : c.dislikes
         };
       }
       return c;
     }));
+  };
+
+  const handleToggleAcceptSolution = async (solutionId) => {
+    try {
+      setAcceptingSolId(solutionId);
+      const { data } = await api.patch(`/problems/${id}/solutions/${solutionId}/accept`);
+      setSolutions(solutions.map(s => {
+        if (s._id === solutionId) {
+          return { ...s, isAccepted: data.solution.isAccepted };
+        }
+        return { ...s, isAccepted: false };
+      }));
+      setProblem(prev => ({ ...prev, isSolved: data.problem.isSolved }));
+    } catch (error) {
+      console.error('Failed to toggle accept solution', error);
+      alert(error.response?.data?.message || 'Failed to update accepted status');
+    } finally {
+      setAcceptingSolId(null);
+    }
   };
 
   const openEditor = () => {
@@ -271,10 +301,30 @@ export default function ProblemDetail() {
                               <div className="text-xs text-muted">{sol.language} Solution</div>
                             </div>
                           </div>
-                          {sol.isAccepted && (
-                            <div className="flex items-center gap-1.5 px-3 py-1 bg-[#0F6B4F]/10 text-[#0F6B4F] rounded-full text-xs font-bold border border-[#0F6B4F]/20">
-                              <CheckCircle2 size={14} /> Accepted Solution
-                            </div>
+                          {isAuthor ? (
+                            <button
+                              onClick={() => handleToggleAcceptSolution(sol._id)}
+                              disabled={acceptingSolId === sol._id}
+                              className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border transition-all ${
+                                sol.isAccepted
+                                  ? 'bg-[#0F6B4F] text-white border-[#0F6B4F] shadow-sm shadow-[#0F6B4F]/40 hover:bg-[#16805E]'
+                                  : 'bg-card hover:bg-[#0F6B4F]/10 text-muted hover:text-[#0F6B4F] border-line'
+                              }`}
+                              title={sol.isAccepted ? 'Click to unaccept this solution' : 'Click to accept this solution as the correct answer'}
+                            >
+                              {acceptingSolId === sol._id ? (
+                                <Loader2 size={13} className="animate-spin" />
+                              ) : (
+                                <CheckCircle2 size={13} />
+                              )}
+                              <span>{sol.isAccepted ? 'Accepted Solution' : 'Accept Solution'}</span>
+                            </button>
+                          ) : (
+                            sol.isAccepted && (
+                              <div className="flex items-center gap-1.5 px-3 py-1 bg-[#0F6B4F]/10 text-[#0F6B4F] rounded-full text-xs font-bold border border-[#0F6B4F]/20">
+                                <CheckCircle2 size={14} /> Accepted Solution
+                              </div>
+                            )
                           )}
                         </div>
                         <p className="text-sm text-slate-300 mb-4">{sol.explanation}</p>
@@ -285,7 +335,7 @@ export default function ProblemDetail() {
                         </div>
                         <div className="flex items-center gap-4 mt-4 pt-4 border-t border-line text-xs font-medium text-muted">
                           <button 
-                            onClick={() => handleSolutionVote(sol.id, 'like')}
+                            onClick={() => handleSolutionVote(sol._id, 'like')}
                             className="flex items-center gap-1.5 hover:text-[#0F6B4F] transition-colors"
                           >
                             <ThumbsUp size={16} /> <span className="font-semibold">{sol.likes || 0}</span>

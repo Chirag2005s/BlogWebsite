@@ -126,6 +126,16 @@ export default function MainLayout() {
 
   const isActive = (path) => {
     if (path === '/') return location.pathname === '/';
+    if (path === '/blog') {
+      return location.pathname === '/blog' || location.pathname.startsWith('/blog/');
+    }
+    if (path === '/articles') {
+      return (
+        location.pathname === '/articles' ||
+        location.pathname.startsWith('/articles/') ||
+        location.pathname.startsWith('/article/')
+      );
+    }
     return location.pathname.startsWith(path);
   };
 

@@ -340,7 +340,7 @@ export default function Home() {
           {blogs.slice(0, 6).map((article) => (
             <Link
               key={article._id || article.slug}
-              to={`/blog/${article.slug}`}
+              to={article.type === 'article' ? `/article/${article.slug}` : `/blog/${article.slug}`}
               className="blog-card rounded-2xl overflow-hidden group flex flex-col hover:border-[#0F6B4F]/35 transition-all duration-300"
             >
               {/* Cover Image Container */}

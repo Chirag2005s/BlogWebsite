@@ -845,7 +845,7 @@ const Programming = () => {
             {relatedArticles.map((art) => (
               <Link
                 key={art._id}
-                to={`/blog/${art.slug}`}
+                to={art.type === 'article' ? `/article/${art.slug}` : `/blog/${art.slug}`}
                 className="glass-card rounded-xl p-4 hover:border-primary-500/30 transition-all flex flex-col justify-between group"
               >
                 <div className="space-y-2">
