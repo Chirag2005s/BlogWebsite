@@ -535,7 +535,9 @@ export default function CreateProblem() {
         constraints: formData.constraints?.trim() || '',
         exampleInput: formData.exampleInput?.trim() || '',
         exampleOutput: formData.exampleOutput?.trim() || '',
-        starterCode: formData.starterCode || ''
+        starterCode: formData.starterCode || '',
+        creator: userInfo?._id,
+        creatorId: userInfo?._id
       };
 
       const { data } = await api.post('/problems', payload);

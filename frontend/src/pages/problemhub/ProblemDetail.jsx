@@ -38,6 +38,7 @@ export default function ProblemDetail() {
     }
   })();
   const isAuthor = Boolean(userInfo && problem && (String(problem.creator?._id || problem.creator) === String(userInfo._id)));
+  const creatorName = problem?.creator?.name || (isAuthor ? userInfo.name : 'Developer');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -278,9 +279,9 @@ export default function ProblemDetail() {
             <div className="flex items-center gap-4 text-xs text-muted mb-6 pb-6 border-b border-line flex-wrap">
               <div className="flex items-center gap-2">
                 <span className="w-6 h-6 rounded-full bg-gradient-to-br from-[#0F6B4F] to-[#4FD1A5] flex items-center justify-center text-white font-bold text-[11px] shadow-sm">
-                  {problem.creator?.name ? problem.creator.name.charAt(0).toUpperCase() : 'D'}
+                  {creatorName.charAt(0).toUpperCase()}
                 </span>
-                <span className="font-semibold text-heading">@{problem.creator?.name || 'Developer'}</span>
+                <span className="font-semibold text-heading">@{creatorName}</span>
               </div>
 
               {createdDate && (
@@ -887,10 +888,10 @@ export default function ProblemDetail() {
               <h4 className="text-xs font-bold uppercase tracking-wider text-muted mb-3">Created By</h4>
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#0F6B4F] to-[#4FD1A5] flex items-center justify-center text-white font-bold text-sm shadow-sm">
-                  {problem.creator?.name ? problem.creator.name.charAt(0).toUpperCase() : 'D'}
+                  {creatorName.charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <div className="font-bold text-heading text-sm">@{problem.creator?.name || 'Developer'}</div>
+                  <div className="font-bold text-heading text-sm">@{creatorName}</div>
                   <div className="text-xs text-muted">TechJourney Solver</div>
                 </div>
               </div>

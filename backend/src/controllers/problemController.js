@@ -32,17 +32,27 @@ export const getProblemById = async (req, res) => {
 // Create a new problem
 export const createProblem = async (req, res) => {
   try {
-    const { title, description, category, difficulty, language, type, tags, expectedBehavior, currentBehavior, inputFormat, outputFormat, constraints, exampleInput, exampleOutput, starterCode } = req.body;
+    const { 
+      title, description, category, difficulty, language, type, tags, 
+      expectedBehavior, currentBehavior, inputFormat, outputFormat, constraints, 
+      exampleInput, exampleOutput, starterCode, creator, creatorId 
+    } = req.body;
+    
+    const authorId = req.user?._id || creator || creatorId;
+    if (!authorId) {
+      return res.status(401).json({ message: 'User must be authenticated to create a problem' });
+    }
     
     const problem = new Problem({
       title, description, category, difficulty, language, type, tags,
       expectedBehavior, currentBehavior, inputFormat, outputFormat, constraints,
       exampleInput, exampleOutput, starterCode,
-      creator: req.user._id
+      creator: authorId
     });
     
     const createdProblem = await problem.save();
-    res.status(201).json(createdProblem);
+    const populated = await Problem.findById(createdProblem._id).populate('creator', 'name email');
+    res.status(201).json(populated || createdProblem);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

@@ -3,11 +3,13 @@ import User from '../models/User.js';
 
 // Protect routes
 const protect = async (req, res, next) => {
-  let token = req.cookies?.jwt;
+  let token;
 
-  // Support Authorization: Bearer <token>
-  if (!token && req.headers?.authorization?.startsWith('Bearer')) {
+  // Prioritize active Authorization: Bearer <token> from client, fallback to ambient cookie
+  if (req.headers?.authorization?.startsWith('Bearer')) {
     token = req.headers.authorization.split(' ')[1];
+  } else if (req.cookies?.jwt) {
+    token = req.cookies.jwt;
   }
 
   if (token) {
@@ -52,10 +54,12 @@ const author = (req, res, next) => {
 
 // Optional protect - attaches user if token exists, but doesn't block if not
 const optionalProtect = async (req, res, next) => {
-  let token = req.cookies?.jwt;
+  let token;
 
-  if (!token && req.headers?.authorization?.startsWith('Bearer')) {
+  if (req.headers?.authorization?.startsWith('Bearer')) {
     token = req.headers.authorization.split(' ')[1];
+  } else if (req.cookies?.jwt) {
+    token = req.cookies.jwt;
   }
 
   if (token) {

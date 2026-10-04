@@ -149,13 +149,13 @@ export default function ProblemHub() {
               <Zap size={18} className="text-yellow-500" />
               Leaderboard
             </Link>
-            <Link
+            {/* <Link
               to="/problemhub/my-problems"
               className="flex items-center gap-2 px-5 py-3.5 bg-card hover:bg-soft border border-line text-heading rounded-xl font-semibold transition-all shadow-md hover:-translate-y-0.5 text-sm"
             >
               <User size={18} className="text-[#4FD1A5]" />
               My Hub
-            </Link>
+            </Link> */}
           </motion.div>
         </div>
       </div>
@@ -186,18 +186,16 @@ export default function ProblemHub() {
             {userInfo && (
               <button
                 onClick={() => setShowOnlyMyProblems(!showOnlyMyProblems)}
-                className={`px-3.5 py-2 rounded-xl text-sm font-semibold transition-all border flex items-center gap-2 shrink-0 ${
-                  showOnlyMyProblems
-                    ? 'bg-[#0F6B4F] text-white border-[#0F6B4F] shadow-sm shadow-[#0F6B4F]/30'
-                    : 'bg-card border-line text-muted hover:text-heading hover:border-slate-500'
-                }`}
+                className={`px-3.5 py-2 rounded-xl text-sm font-semibold transition-all border flex items-center gap-2 shrink-0 ${showOnlyMyProblems
+                  ? 'bg-[#0F6B4F] text-white border-[#0F6B4F] shadow-sm shadow-[#0F6B4F]/30'
+                  : 'bg-card border-line text-muted hover:text-heading hover:border-slate-500'
+                  }`}
                 title="Filter to show only problems you posted"
               >
                 <User size={14} className={showOnlyMyProblems ? 'text-white' : 'text-[#0F6B4F] dark:text-[#4FD1A5]'} />
                 <span>My Problems</span>
-                <span className={`text-xs px-2 py-0.5 rounded-full font-mono font-bold ${
-                  showOnlyMyProblems ? 'bg-black/25 text-white' : 'bg-soft text-heading'
-                }`}>
+                <span className={`text-xs px-2 py-0.5 rounded-full font-mono font-bold ${showOnlyMyProblems ? 'bg-black/25 text-white' : 'bg-soft text-heading'
+                  }`}>
                   {realStats.problemsPosted}
                 </span>
               </button>
@@ -208,11 +206,10 @@ export default function ProblemHub() {
                 <button
                   key={diff}
                   onClick={() => setSelectedDifficulty(diff)}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-colors whitespace-nowrap ${
-                    selectedDifficulty === diff
-                      ? 'bg-soft text-heading shadow-sm'
-                      : 'text-muted hover:text-heading'
-                  }`}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-colors whitespace-nowrap ${selectedDifficulty === diff
+                    ? 'bg-soft text-heading shadow-sm'
+                    : 'text-muted hover:text-heading'
+                    }`}
                 >
                   {diff}
                 </button>
@@ -227,11 +224,10 @@ export default function ProblemHub() {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all border ${
-                selectedCategory === cat
-                  ? 'bg-[#0F6B4F]/15 border-[#0F6B4F] text-[#0F6B4F] dark:text-[#4FD1A5] shadow-sm'
-                  : 'bg-card border-line text-muted hover:border-slate-500 hover:text-heading'
-              }`}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all border ${selectedCategory === cat
+                ? 'bg-[#0F6B4F]/15 border-[#0F6B4F] text-[#0F6B4F] dark:text-[#4FD1A5] shadow-sm'
+                : 'bg-card border-line text-muted hover:border-slate-500 hover:text-heading'
+                }`}
             >
               {cat === 'Debugging' && <Bug size={13} className="inline mr-1 -mt-0.5" />}
               {cat}
@@ -254,10 +250,12 @@ export default function ProblemHub() {
                 problem.difficulty === 'Easy'
                   ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/25'
                   : problem.difficulty === 'Medium'
-                  ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/25'
-                  : 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/25';
+                    ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/25'
+                    : 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/25';
 
               const tags = Array.isArray(problem.tags) ? problem.tags : [];
+              const isCreator = Boolean(userInfo && String(problem.creator?._id || problem.creator) === String(userInfo._id));
+              const cardCreatorName = problem.creator?.name || (isCreator ? userInfo.name : 'Developer');
 
               return (
                 <motion.div
@@ -327,12 +325,12 @@ export default function ProblemHub() {
                   {/* Footer Meta & Action */}
                   <div className="flex items-center justify-between pt-4 mt-auto border-t border-line">
                     <div className="flex items-center gap-3.5 text-xs text-muted flex-wrap">
-                      <div className="flex items-center gap-1.5" title={`Created by @${problem.creator?.name || 'Developer'}`}>
+                      <div className="flex items-center gap-1.5" title={`Created by @${cardCreatorName}`}>
                         <span className="w-5 h-5 rounded-full bg-gradient-to-br from-[#0F6B4F] to-[#4FD1A5] flex items-center justify-center text-white font-bold text-[10px] shadow-sm">
-                          {problem.creator?.name ? problem.creator.name.charAt(0).toUpperCase() : 'D'}
+                          {cardCreatorName.charAt(0).toUpperCase()}
                         </span>
                         <span className="font-semibold text-heading max-w-[100px] truncate">
-                          @{problem.creator?.name || 'Developer'}
+                          @{cardCreatorName}
                         </span>
                       </div>
                       <div className="flex items-center gap-1" title="Solutions">
