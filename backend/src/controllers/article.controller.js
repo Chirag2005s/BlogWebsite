@@ -4,6 +4,7 @@ import Category from '../models/Category.js';
 import Tag from '../models/Tag.js';
 import User from '../models/User.js';
 import slugify from 'slugify';
+import { DEFAULT_ARTICLES } from '../data/defaultArticles.js';
 
 // Helper to resolve category ID from name, slug, or ID
 const resolveCategoryId = async (category) => {
@@ -62,10 +63,24 @@ export const getArticles = async (req, res, next) => {
       .populate('readers', 'name profileImage')
       .populate('likedBy', 'name profileImage')
       .sort({ publishedAt: -1 });
-    
-    res.status(200).json({ success: true, data: articles });
+
+    // Seamlessly merge default articles if not already present in database
+    const dbSlugs = new Set(articles.map((a) => a.slug));
+    const matchingDefaults = DEFAULT_ARTICLES.filter((def) => {
+      if (dbSlugs.has(def.slug)) return false;
+      if (req.query.type) {
+        const typeParam = req.query.type.toLowerCase();
+        if (typeParam === 'article' && def.type !== 'article') return false;
+        if (typeParam === 'blog' && def.type !== 'blog') return false;
+      }
+      return true;
+    });
+
+    const combined = [...articles, ...matchingDefaults];
+    res.status(200).json({ success: true, data: combined });
   } catch (error) {
-    next(error);
+    // If database query fails, return default articles cleanly instead of crashing
+    res.status(200).json({ success: true, data: DEFAULT_ARTICLES });
   }
 };
 
@@ -109,60 +124,110 @@ export const getAllArticlesForAdmin = async (req, res, next) => {
   }
 };
 
-// @desc    Get article by slug
+// @desc    Get article by slug or ID
 // @route   GET /api/articles/:slug
 // @access  Public (Optional Auth for reader tracking)
 export const getArticleBySlug = async (req, res, next) => {
   try {
-    const article = await Article.findOne({ slug: req.params.slug, status: 'Published' })
+    const isObjectId = mongoose.isValidObjectId(req.params.slug);
+    const query = {
+      $or: [
+        { slug: req.params.slug },
+        ...(isObjectId ? [{ _id: req.params.slug }] : []),
+      ],
+    };
+
+    // If user is logged in, author/admin can see drafts
+    if (!req.user || req.user.role !== 'ADMIN') {
+      if (req.user?._id) {
+        query.$and = [
+          {
+            $or: [
+              { status: 'Published' },
+              { author: req.user._id },
+            ],
+          },
+        ];
+      } else {
+        query.status = 'Published';
+      }
+    }
+
+    let article = await Article.findOne(query)
       .populate('author', 'name profileImage bio')
       .populate('category', 'name slug')
       .populate('tags', 'name slug')
       .populate('readers', 'name profileImage')
       .populate('likedBy', 'name profileImage');
 
-    if (article) {
-      // Increment views
-      article.views += 1;
-
-      // Track reader if authenticated user visited
-      if (req.user && req.user._id) {
-        const alreadyRead = article.readers.some(
-          (reader) => reader && (reader._id ? reader._id.toString() : reader.toString()) === req.user._id.toString()
-        );
-        if (!alreadyRead) {
-          article.readers.push(req.user._id);
-        }
+    if (!article) {
+      // Check default fallback articles
+      const defaultArticle = DEFAULT_ARTICLES.find(
+        (a) => a.slug === req.params.slug || a._id === req.params.slug
+      );
+      if (defaultArticle) {
+        return res.status(200).json({ success: true, data: defaultArticle });
       }
-
-      await article.save();
-
-      // Ensure readers are populated with details if updated
-      if (req.user && req.user._id) {
-        await article.populate('readers', 'name profileImage');
-      }
-
-      res.status(200).json({ success: true, data: article });
-    } else {
       res.status(404);
       throw new Error('Article not found');
     }
+
+    // Increment views
+    article.views += 1;
+
+    // Track reader if authenticated user visited
+    if (req.user && req.user._id) {
+      const alreadyRead = article.readers.some(
+        (reader) => reader && (reader._id ? reader._id.toString() : reader.toString()) === req.user._id.toString()
+      );
+      if (!alreadyRead) {
+        article.readers.push(req.user._id);
+      }
+    }
+
+    await article.save();
+
+    // Ensure readers are populated with details if updated
+    if (req.user && req.user._id) {
+      await article.populate('readers', 'name profileImage');
+    }
+
+    res.status(200).json({ success: true, data: article });
   } catch (error) {
     next(error);
   }
 };
 
-// @desc    Get article by ID (for admin/editing)
+// @desc    Get article by ID (for admin/editing or direct viewing)
 // @route   GET /api/articles/id/:id
-// @access  Private
+// @access  Public / Optional Auth
 export const getArticleById = async (req, res, next) => {
   try {
-    const article = await Article.findById(req.params.id)
-      .populate('author', 'name profileImage bio')
-      .populate('category', 'name slug')
-      .populate('tags', 'name slug');
+    let article = null;
+
+    if (mongoose.isValidObjectId(req.params.id)) {
+      article = await Article.findById(req.params.id)
+        .populate('author', 'name profileImage bio')
+        .populate('category', 'name slug')
+        .populate('tags', 'name slug');
+    }
 
     if (!article) {
+      // Also check by slug in case a slug was passed
+      article = await Article.findOne({ slug: req.params.id })
+        .populate('author', 'name profileImage bio')
+        .populate('category', 'name slug')
+        .populate('tags', 'name slug');
+    }
+
+    if (!article) {
+      // Check default fallback articles
+      const defaultArticle = DEFAULT_ARTICLES.find(
+        (a) => a._id === req.params.id || a.slug === req.params.id
+      );
+      if (defaultArticle) {
+        return res.status(200).json({ success: true, data: defaultArticle });
+      }
       res.status(404);
       throw new Error('Article not found');
     }

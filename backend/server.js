@@ -115,6 +115,8 @@ app.use(async (req, res, next) => {
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/articles', articleRoutes);
+app.use('/api/blogs', articleRoutes);
+app.use('/api/blog', articleRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/roadmaps', roadmapRoutes);

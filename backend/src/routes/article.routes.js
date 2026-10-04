@@ -20,8 +20,8 @@ router.route('/')
 // Admin route must come BEFORE /:slug to avoid matching 'admin' as a slug
 router.get('/admin/all', protect, getAllArticlesForAdmin);
 
-// Get article by ID for editing
-router.get('/id/:id', protect, getArticleById);
+// Get article by ID for editing or viewing
+router.get('/id/:id', optionalProtect, getArticleById);
 
 // Like route
 router.post('/:id/like', protect, likeArticle);
@@ -30,6 +30,7 @@ router.route('/:slug')
   .get(optionalProtect, getArticleBySlug);
 
 router.route('/:id')
+  .get(optionalProtect, getArticleById)
   .put(protect, updateArticle)
   .delete(protect, deleteArticle);
 

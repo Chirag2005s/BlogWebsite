@@ -176,33 +176,53 @@ export default function ArticleView() {
   }, [slug]);
 
   useEffect(() => {
+    let isMounted = true;
     const fetchArticle = async () => {
+      // 1. Check if slug matches local built-in articles first
+      const localArticle = ARTICLES.find((a) => a.slug === slug || a._id === slug);
+      if (localArticle) {
+        if (isMounted) {
+          setArticle(localArticle);
+          setLikesCount(localArticle.likesCount || 85);
+          setLoading(false);
+        }
+        return;
+      }
+
+      // 2. Fetch from backend API for database-stored articles
       try {
+        setLoading(true);
         const { data } = await api.get(`/articles/${slug}`);
-        if (data && data.data) {
+        if (isMounted && data && data.data) {
           setArticle(data.data);
-          setLikesCount(data.data.likes || 120);
-        } else {
-          // Fallback to local mock data
-          const found = ARTICLES.find((a) => a.slug === slug);
-          if (found) {
-            setArticle(found);
-            setLikesCount(found.likesCount || 85);
-          }
+          setLikesCount(data.data.likes ?? (data.data.likesCount || 120));
+        } else if (isMounted) {
+          setArticle(null);
         }
       } catch (error) {
-        // Fallback to mockData
-        const found = ARTICLES.find((a) => a.slug === slug);
-        if (found) {
-          setArticle(found);
-          setLikesCount(found.likesCount || 85);
+        if (isMounted) {
+          // Double-check fallback
+          const fallback = ARTICLES.find((a) => a.slug === slug || a._id === slug);
+          if (fallback) {
+            setArticle(fallback);
+            setLikesCount(fallback.likesCount || 85);
+          } else {
+            setArticle(null);
+          }
         }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
+
     fetchArticle();
     window.scrollTo(0, 0);
+
+    return () => {
+      isMounted = false;
+    };
   }, [slug]);
 
   // Generate Table of Contents from markdown headings
@@ -277,10 +297,16 @@ export default function ArticleView() {
     setNewComment('');
   };
 
-  // Related articles
+  // Related content — strictly match type (articles for article page, blogs for blog page)
   const relatedArticles = useMemo(() => {
-    return ARTICLES.filter((a) => a.slug !== slug).slice(0, 3);
-  }, [slug]);
+    return ARTICLES.filter((a) => {
+      if (a.slug === slug) return false;
+      if (isArticleRoute) {
+        return a.type === 'article';
+      }
+      return !a.type || a.type === 'blog';
+    }).slice(0, 3);
+  }, [slug, isArticleRoute]);
 
   if (loading) {
     return (

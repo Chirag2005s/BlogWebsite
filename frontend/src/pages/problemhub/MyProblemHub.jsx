@@ -300,79 +300,88 @@ export default function MyProblemHub({ activeTab = 'problems' }) {
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {hubData.problems.map((prob) => (
-                        <div 
-                          key={prob._id} 
-                          className="bg-card border border-line rounded-2xl p-5 hover:border-[#0F6B4F]/40 transition-all flex flex-col justify-between group shadow-sm hover:shadow-md"
-                        >
-                          <div>
-                            <div className="flex items-center justify-between gap-2 mb-3">
-                              <div className="flex items-center gap-2 flex-wrap">
-                                <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
-                                  prob.difficulty === 'Easy' ? 'bg-green-500/10 text-green-500' :
-                                  prob.difficulty === 'Medium' ? 'bg-yellow-500/10 text-yellow-500' :
-                                  'bg-red-500/10 text-red-500'
-                                }`}>
-                                  {prob.difficulty}
-                                </span>
-                                <span className="text-xs text-muted font-medium px-2 py-0.5 rounded-full bg-soft">
-                                  {prob.language}
-                                </span>
-                                <span className="text-xs text-muted font-medium px-2 py-0.5 rounded-full bg-soft">
-                                  {prob.category}
-                                </span>
-                              </div>
-                              {prob.isSolved && (
-                                <span className="bg-green-500/10 text-green-500 border border-green-500/20 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 uppercase tracking-wider">
-                                  <CheckCircle2 size={12} /> Solved
-                                </span>
-                              )}
-                            </div>
+                        {hubData.problems.map((prob) => {
+                          const diffClass =
+                            prob.difficulty === 'Easy'
+                              ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/25'
+                              : prob.difficulty === 'Medium'
+                              ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/25'
+                              : 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/25';
 
-                            <Link 
-                              to={`/problemhub/problem/${prob._id}`}
-                              className="text-lg font-bold text-heading group-hover:text-[#0F6B4F] transition-colors line-clamp-1 mb-2 block"
+                          return (
+                            <div 
+                              key={prob._id} 
+                              className="bg-card border border-line rounded-2xl p-5 hover:border-[#0F6B4F] dark:hover:border-[#2BAF85] transition-all flex flex-col justify-between group shadow-sm hover:shadow-md"
                             >
-                              {prob.title}
-                            </Link>
+                              <div>
+                                <div className="flex items-center justify-between gap-2 mb-3 flex-wrap">
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <span className={`text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${diffClass}`}>
+                                      {prob.difficulty || 'Medium'}
+                                    </span>
+                                    {prob.language && (
+                                      <span className="text-xs text-heading font-semibold px-2 py-0.5 rounded-lg bg-soft border border-line">
+                                        {prob.language}
+                                      </span>
+                                    )}
+                                    {prob.category && (
+                                      <span className="text-xs text-muted font-medium px-2 py-0.5 rounded-lg bg-soft border border-line">
+                                        {prob.category}
+                                      </span>
+                                    )}
+                                  </div>
+                                  {prob.isSolved && (
+                                    <span className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1 uppercase tracking-wider">
+                                      <CheckCircle2 size={12} /> Solved
+                                    </span>
+                                  )}
+                                </div>
 
-                            <p className="text-xs text-slate-400 line-clamp-2 mb-4">
-                              {prob.description}
-                            </p>
-                          </div>
+                                <Link 
+                                  to={`/problemhub/problem/${prob._id}`}
+                                  className="text-lg font-bold text-heading group-hover:text-[#0F6B4F] dark:group-hover:text-[#4FD1A5] transition-colors line-clamp-2 mb-2 block leading-snug"
+                                >
+                                  {prob.title}
+                                </Link>
 
-                          <div className="pt-4 border-t border-line flex items-center justify-between text-xs text-muted">
-                            <div className="flex items-center gap-3">
-                              <span className="flex items-center gap-1" title="Solutions">
-                                <Code2 size={14} /> {prob.solutionsCount || 0}
-                              </span>
-                              <span className="flex items-center gap-1" title="Views">
-                                <Eye size={14} /> {prob.views || 0}
-                              </span>
-                              <span className="flex items-center gap-1" title="Likes">
-                                <ThumbsUp size={14} /> {prob.likes || 0}
-                              </span>
+                                <p className="text-xs md:text-sm text-slate-600 dark:text-slate-300 line-clamp-2 mb-4 leading-relaxed">
+                                  {prob.description}
+                                </p>
+                              </div>
+
+                              <div className="pt-4 border-t border-line flex items-center justify-between text-xs text-muted">
+                                <div className="flex items-center gap-3">
+                                  <span className="flex items-center gap-1" title="Solutions">
+                                    <Code2 size={14} className="text-[#0F6B4F] dark:text-[#4FD1A5]" /> {prob.solutionsCount || 0}
+                                  </span>
+                                  <span className="flex items-center gap-1" title="Views">
+                                    <Eye size={14} /> {prob.views || 0}
+                                  </span>
+                                  <span className="flex items-center gap-1" title="Likes">
+                                    <ThumbsUp size={14} className="text-blue-500" /> {prob.likes || 0}
+                                  </span>
+                                </div>
+
+                                <div className="flex items-center gap-2">
+                                  <button
+                                    onClick={() => handleDeleteProblem(prob._id, prob.title)}
+                                    disabled={deletingId === prob._id}
+                                    className="p-1.5 rounded-lg text-muted hover:text-red-500 hover:bg-red-500/10 transition-colors"
+                                    title="Delete problem"
+                                  >
+                                    {deletingId === prob._id ? <Loader2 size={15} className="animate-spin text-red-500" /> : <Trash2 size={15} />}
+                                  </button>
+                                  <Link
+                                    to={`/problemhub/problem/${prob._id}`}
+                                    className="px-3 py-1.5 bg-[#0F6B4F]/10 hover:bg-[#0F6B4F] text-[#0F6B4F] hover:text-white border border-[#0F6B4F]/25 rounded-xl font-bold transition-all flex items-center gap-1 shadow-sm text-xs"
+                                  >
+                                    View <ChevronRight size={14} />
+                                  </Link>
+                                </div>
+                              </div>
                             </div>
-
-                            <div className="flex items-center gap-2">
-                              <button
-                                onClick={() => handleDeleteProblem(prob._id, prob.title)}
-                                disabled={deletingId === prob._id}
-                                className="p-1.5 rounded-lg text-muted hover:text-red-500 hover:bg-red-500/10 transition-colors"
-                                title="Delete problem"
-                              >
-                                {deletingId === prob._id ? <Loader2 size={15} className="animate-spin text-red-500" /> : <Trash2 size={15} />}
-                              </button>
-                              <Link
-                                to={`/problemhub/problem/${prob._id}`}
-                                className="px-3 py-1 bg-[#0F6B4F]/10 hover:bg-[#0F6B4F]/20 text-[#0F6B4F] rounded-lg font-semibold transition-colors flex items-center gap-1"
-                              >
-                                View <ChevronRight size={14} />
-                              </Link>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
+                          );
+                        })}
                     </div>
                   )}
                 </motion.div>

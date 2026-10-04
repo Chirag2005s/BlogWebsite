@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, Clock, Eye, ArrowRight, Search, FileText, Sparkles, Filter } from 'lucide-react';
 import api from '../services/api';
+import { CURATED_ARTICLES } from '../data/mockData';
 
 /* ─── Skeleton ─── */
 const SkeletonCard = () => (
@@ -22,8 +23,8 @@ const SkeletonCard = () => (
 );
 
 const ArticlesList = () => {
-  const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [articles, setArticles] = useState(CURATED_ARTICLES);
+  const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState('All');
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -40,22 +41,36 @@ const ArticlesList = () => {
   ];
 
   useEffect(() => {
+    let isMounted = true;
     const fetchArticles = async () => {
       try {
+        setLoading(true);
         const { data } = await api.get('/articles?type=article');
         const list = Array.isArray(data?.data) ? data.data : (Array.isArray(data) ? data : []);
-        setArticles(list);
+        // Strictly filter to ensure only articles are included
+        const onlyArticles = list.filter((a) => a.type === 'article');
+        if (isMounted) {
+          if (onlyArticles.length > 0) {
+            const dbSlugs = new Set(onlyArticles.map((a) => a.slug));
+            const missingDefaults = CURATED_ARTICLES.filter((a) => !dbSlugs.has(a.slug));
+            setArticles([...onlyArticles, ...missingDefaults]);
+          } else {
+            setArticles(CURATED_ARTICLES);
+          }
+        }
       } catch (error) {
-        console.error('Failed to fetch articles', error);
-        setArticles([]);
+        console.warn('Failed to fetch articles from backend, using curated fallback:', error.message);
+        if (isMounted) setArticles(CURATED_ARTICLES);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
     fetchArticles();
+    return () => { isMounted = false; };
   }, []);
 
-  const safeArticles = Array.isArray(articles) ? articles : [];
+  // Strictly enforce articles only
+  const safeArticles = (Array.isArray(articles) ? articles : []).filter((a) => a.type === 'article');
 
   const filteredArticles = safeArticles.filter((a) => {
     const matchesSearch =

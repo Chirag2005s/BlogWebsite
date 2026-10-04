@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { 
-  BookOpen, Clock, ArrowRight, Search, Filter, Sparkles, 
-  ChevronLeft, ChevronRight, SlidersHorizontal, Calendar, Eye, 
-  Flame, CheckCircle2 
+import {
+  BookOpen, Clock, ArrowRight, Search, Filter, Sparkles,
+  ChevronLeft, ChevronRight, SlidersHorizontal, Calendar, Eye,
+  Flame, CheckCircle2
 } from 'lucide-react';
-import { ARTICLES } from '../data/mockData';
+import { ARTICLES, BLOGS } from '../data/mockData';
 import PageHeader from '../components/PageHeader';
+import api from '../services/api';
 
 const CATEGORIES_LIST = [
   'All',
@@ -30,7 +31,7 @@ export default function BlogList() {
   const initialCategory = searchParams.get('category') || 'All';
   const initialSearch = searchParams.get('search') || '';
 
-  const [articles, setArticles] = useState(ARTICLES);
+  const [articles, setArticles] = useState(BLOGS);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
@@ -38,6 +39,31 @@ export default function BlogList() {
   const [sortBy, setSortBy] = useState('newest'); // 'newest' | 'popular' | 'readingTime'
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 6;
+
+  // Fetch only blogs (type=blog) from backend and combine with built-in blogs
+  useEffect(() => {
+    let isMounted = true;
+    const fetchBlogs = async () => {
+      try {
+        setLoading(true);
+        const { data } = await api.get('/articles?type=blog');
+        const list = Array.isArray(data?.data) ? data.data : (Array.isArray(data) ? data : []);
+        // Strictly filter to ensure only blogs are added
+        const onlyBlogs = list.filter((a) => !a.type || a.type === 'blog');
+        if (isMounted && onlyBlogs.length > 0) {
+          const dbSlugs = new Set(onlyBlogs.map((a) => a.slug));
+          const missingDefaults = BLOGS.filter((a) => !dbSlugs.has(a.slug));
+          setArticles([...onlyBlogs, ...missingDefaults]);
+        }
+      } catch (err) {
+        console.warn('Backend blogs fetch notice, using built-in blogs fallback:', err.message);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+    fetchBlogs();
+    return () => { isMounted = false; };
+  }, []);
 
   // Sync category param
   useEffect(() => {
@@ -47,19 +73,22 @@ export default function BlogList() {
     if (q) setSearchQuery(q);
   }, [searchParams]);
 
-  // Filter & Sort Logic
+  // Filter & Sort Logic — Strictly show blogs only
   const filteredArticles = useMemo(() => {
     let result = articles.filter((a) => {
+      // Exclude any non-blog items
+      if (a.type && a.type !== 'blog') return false;
+
       const q = searchQuery.toLowerCase().trim();
-      const matchesSearch = !q || 
-        a.title.toLowerCase().includes(q) || 
+      const matchesSearch = !q ||
+        a.title.toLowerCase().includes(q) ||
         (a.excerpt && a.excerpt.toLowerCase().includes(q));
 
       const artCat = (a.category?.name || a.category || '').toLowerCase();
       const targetCat = selectedCategory.toLowerCase();
-      
-      const matchesCategory = selectedCategory === 'All' || 
-        artCat.includes(targetCat) || 
+
+      const matchesCategory = selectedCategory === 'All' ||
+        artCat.includes(targetCat) ||
         targetCat.includes(artCat) ||
         (selectedCategory === 'Networking' && artCat.includes('network')) ||
         (selectedCategory === 'AI' && (artCat.includes('ai') || artCat.includes('machine learning'))) ||
@@ -98,7 +127,7 @@ export default function BlogList() {
       <PageHeader
         icon={BookOpen}
         eyebrow="Developer Knowledge Hub"
-        title="Technical Articles &"
+        title="Technical "
         titleAccent="Blogs"
         description="In-depth guides, distributed systems architectures, programming language deep dives, and operating system internals."
       />
@@ -241,11 +270,10 @@ export default function BlogList() {
                 setSelectedCategory(cat);
                 setCurrentPage(1);
               }}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap shadow-sm shrink-0 ${
-                selectedCategory === cat
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap shadow-sm shrink-0 ${selectedCategory === cat
                   ? 'bg-gradient-to-r from-[#0F6B4F] to-[#16805E] text-white shadow-md shadow-[#0F6B4F]/30 scale-105 border border-transparent'
                   : 'bg-page text-muted border border-line hover:text-heading hover:border-[#0F6B4F]/50 hover:bg-[#0F6B4F]/5'
-              }`}
+                }`}
             >
               {cat}
             </button>
@@ -254,7 +282,17 @@ export default function BlogList() {
       </div>
 
       {/* ═══ ARTICLES GRID ═══ */}
-      {gridArticles.length === 0 ? (
+      {loading && articles.length === 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-8">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="rounded-2xl surface-card border border-line p-4 space-y-4 animate-pulse">
+              <div className="aspect-[16/9] w-full bg-soft rounded-xl" />
+              <div className="h-4 bg-soft rounded w-3/4" />
+              <div className="h-3 bg-soft rounded w-1/2" />
+            </div>
+          ))}
+        </div>
+      ) : gridArticles.length === 0 ? (
         <div className="py-20 text-center rounded-2xl bg-page border border-line">
           <div className="w-16 h-16 rounded-2xl bg-[#1E293B] flex items-center justify-center mx-auto mb-4 text-muted">
             <Search size={28} />
@@ -370,11 +408,10 @@ export default function BlogList() {
                 <button
                   key={page}
                   onClick={() => handlePageChange(page)}
-                  className={`w-10 h-10 rounded-full text-sm font-bold transition-all duration-300 flex items-center justify-center ${
-                    currentPage === page
+                  className={`w-10 h-10 rounded-full text-sm font-bold transition-all duration-300 flex items-center justify-center ${currentPage === page
                       ? 'bg-gradient-to-r from-[#0F6B4F] to-[#16805E] text-white shadow-md shadow-[#0F6B4F]/30 scale-105'
                       : 'text-muted hover:text-heading hover:bg-soft'
-                  }`}
+                    }`}
                 >
                   {page}
                 </button>

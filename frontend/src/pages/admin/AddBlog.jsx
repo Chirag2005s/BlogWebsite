@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { Save, Send, CheckCircle, AlertCircle, Image, Type, AlignLeft, FileText, BarChart3, Tag, ArrowLeft } from 'lucide-react';
 import api from '../../services/api';
+import { ARTICLES } from '../../data/mockData';
 
 const AddBlog = () => {
   const navigate = useNavigate();
@@ -37,8 +38,30 @@ const AddBlog = () => {
       const fetchBlogForEdit = async () => {
         try {
           setFetching(true);
+          setError('');
+
+          // 1. Check if ID matches a built-in mock blog first to avoid 404 network errors
+          const mockBlog = ARTICLES.find((a) => a._id === id || a.slug === id);
+          if (mockBlog) {
+            setFormData({
+              title: mockBlog.title || '',
+              excerpt: mockBlog.excerpt || '',
+              content: mockBlog.content || '',
+              coverImage: mockBlog.coverImage || '',
+              category: mockBlog.category?.name || mockBlog.category || 'Web Technology',
+              difficulty: mockBlog.difficulty || 'Beginner',
+            });
+            setFetching(false);
+            return;
+          }
+
+          // 2. Fetch from backend API
           const { data } = await api.get(`/articles/id/${id}`);
           const blog = data?.data || data;
+
+          if (!blog) {
+            throw new Error('Blog data not found');
+          }
 
           // Check author ownership
           const authorId = blog?.author?._id ? blog.author._id : blog?.author;
@@ -57,7 +80,19 @@ const AddBlog = () => {
             difficulty: blog.difficulty || 'Beginner',
           });
         } catch (err) {
-          setError(err.response?.data?.message || 'Failed to fetch blog for editing');
+          const fallback = ARTICLES.find((a) => a._id === id || a.slug === id);
+          if (fallback) {
+            setFormData({
+              title: fallback.title || '',
+              excerpt: fallback.excerpt || '',
+              content: fallback.content || '',
+              coverImage: fallback.coverImage || '',
+              category: fallback.category?.name || fallback.category || 'Web Technology',
+              difficulty: fallback.difficulty || 'Beginner',
+            });
+          } else {
+            setError(err.response?.data?.message || 'Failed to fetch blog for editing');
+          }
         } finally {
           setFetching(false);
         }

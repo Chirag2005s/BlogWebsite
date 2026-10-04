@@ -443,6 +443,7 @@ export const ARTICLES = [
     _id: 'art-1-internet',
     slug: 'how-does-the-internet-actually-work',
     title: 'How Does the Internet Actually Work?',
+    type: 'blog',
     category: { name: 'Internet & Networking', slug: 'internet-networking' },
     excerpt: 'From undersea fiber-optic cables and BGP routing to DNS resolution, TCP/IP handshakes, and TLS 1.3 encryption — demystifying the planetary network.',
     coverImage: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=1200&auto=format&fit=crop&q=80',
@@ -525,6 +526,7 @@ BGP (Border Gateway Protocol) is the postal routing system of the internet. Auto
     _id: 'art-2-os',
     slug: 'understanding-operating-systems',
     title: 'Understanding Operating Systems: From Kernels to Processes',
+    type: 'blog',
     category: { name: 'Operating Systems', slug: 'operating-systems' },
     excerpt: 'Explore how the kernel arbitrates hardware, schedules threads, manages virtual memory paging, and isolates user space applications.',
     coverImage: 'https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1200&auto=format&fit=crop&q=80',
@@ -593,6 +595,7 @@ This architecture ensures process isolation: Process A cannot read or overwrite 
     _id: 'art-3-servers',
     slug: 'how-servers-work',
     title: 'How Servers Work: Architecture, Protocols & Scaling',
+    type: 'blog',
     category: { name: 'Backend Development', slug: 'backend-development' },
     excerpt: 'Deconstructing what makes a server tick: socket lifecycle, non-blocking I/O event loops, reverse proxies, and horizontal load balancing.',
     coverImage: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&auto=format&fit=crop&q=80',
@@ -653,6 +656,7 @@ In modern production, requests rarely hit your application server directly:
     _id: 'art-4-semiconductors',
     slug: 'introduction-to-semiconductor-technology',
     title: 'Introduction to Semiconductor Technology: From Silicon to Transistors',
+    type: 'blog',
     category: { name: 'Hardware', slug: 'hardware' },
     excerpt: 'Uncover the nanometer physics of silicon ingots, EUV photolithography, FinFET structures, and Gate-All-Around (GAA) nanosheets.',
     coverImage: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&auto=format&fit=crop&q=80',
@@ -708,6 +712,7 @@ How do you print features that are just 2 nanometers wide?
     _id: 'art-5-cs-fundamentals',
     slug: 'computer-science-fundamentals-every-developer-should-know',
     title: 'Computer Science Fundamentals Every Developer Should Know',
+    type: 'blog',
     category: { name: 'Computer Science', slug: 'computer-science' },
     excerpt: 'The timeless mental models of software engineering: asymptotic complexity (Big-O), memory hierarchy, trees, graphs, and concurrency.',
     coverImage: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&auto=format&fit=crop&q=80',
@@ -771,6 +776,7 @@ Memory speed is governed by physics. Accessing main RAM takes roughly 200 CPU cy
     _id: 'art-6-nodejs-interview',
     slug: 'nodejs-interview-questions',
     title: 'Node.js Interview Questions & Architecture Deep Dive',
+    type: 'blog',
     category: { name: 'Backend Development', slug: 'backend-development' },
     excerpt: 'Master tricky Node.js interview topics: the libuv event loop phases, microtasks vs macrotasks, streams, clustering, and memory leaks.',
     coverImage: 'https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=1200&auto=format&fit=crop&q=80',
@@ -850,8 +856,76 @@ stream.pipe(res);
 
 **Backpressure** occurs when the readable stream pushes data faster than the writable destination can consume it. The \`.pipe()\` abstraction automatically pauses reading when internal write buffers fill.
 `
+  },
+  {
+    _id: '6abdd917aec03e97beee1e37',
+    slug: 'gemini-4-argon-our-next-era-of-frontier-intelligence',
+    title: 'Gemini 4 Argon: our next era of frontier intelligence',
+    type: 'article',
+    category: { name: 'Artificial Intelligence', slug: 'artificial-intelligence' },
+    excerpt: 'Frontier AI models: exploring multimodal reasoning, long-context latency reduction, and agentic workflows in production.',
+    coverImage: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&auto=format&fit=crop&q=80',
+    difficulty: 'Advanced',
+    readingTime: 12,
+    createdAt: '2026-03-20T10:00:00.000Z',
+    author: {
+      name: 'Google DeepMind Team',
+      role: 'Frontier Research',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80'
+    },
+    likesCount: 890,
+    bookmarksCount: 420,
+    content: `# Gemini 4 Argon: our next era of frontier intelligence
+
+Gemini 4 Argon introduces radical efficiency gains across multimodal inference, recursive reasoning loops, and long-context processing.
+
+---
+
+## 1. Native Multimodal Architecture
+
+Traditional architectures utilize disparate encoders for vision, audio, and language. Gemini 4 Argon utilizes a unified tokenization space where text, video tokens, and audio spectrogram patches coexist in the same sparse mixture-of-experts (MoE) transformer.
+
+## 2. Agentic Tool Execution
+
+With low-latency speculative decoding, Argon can generate and evaluate candidate bash scripts, API payloads, and code refactorings asynchronously.
+`
+  },
+  {
+    _id: '6aa28c40a0217b30ceabf881',
+    slug: 'ai-agents-how-they-are-changing-software-development-in-2026',
+    title: 'AI Agents: How They Are Changing Software Development in 2026',
+    type: 'article',
+    category: { name: 'Artificial Intelligence', slug: 'artificial-intelligence' },
+    excerpt: 'From code completion to autonomous development loops: how LLM agents are reshaping how software is planned, written, and verified.',
+    coverImage: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&auto=format&fit=crop&q=80',
+    difficulty: 'Intermediate',
+    readingTime: 9,
+    createdAt: '2026-03-18T12:00:00.000Z',
+    author: {
+      name: 'Dr. Elena Rostova',
+      role: 'Principal Systems Architect',
+      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&auto=format&fit=crop&q=80'
+    },
+    likesCount: 654,
+    bookmarksCount: 290,
+    content: `# AI Agents: How They Are Changing Software Development in 2026
+
+The shift from passive code generation to autonomous, self-correcting agents represents the largest productivity inflection in computing history.
+
+---
+
+## 1. The Autonomous Execution Loop
+
+Modern agentic assistants do not just suggest code snippets; they possess iterative operational loops:
+1. **Perception**: Reading workspace structure, linter messages, and test outputs.
+2. **Planning**: Decomposing large tasks into verifiable sub-goals.
+3. **Tool Execution**: Editing files, running tests, checking diffs, and self-correcting syntax errors.
+`
   }
 ];
+
+export const BLOGS = ARTICLES.filter((a) => !a.type || a.type === 'blog');
+export const CURATED_ARTICLES = ARTICLES.filter((a) => a.type === 'article');
 
 export const CODE_OF_THE_DAY = {
   title: 'developer_manifesto.js',

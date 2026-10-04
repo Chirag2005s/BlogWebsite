@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Save, Send, CheckCircle, AlertCircle, Image, Type, AlignLeft, FileText, BarChart3, Tag } from 'lucide-react';
 import api from '../../services/api';
+import { ARTICLES } from '../../data/mockData';
 
 const ArticleEditor = () => {
   const navigate = useNavigate();
@@ -37,8 +38,30 @@ const ArticleEditor = () => {
       const fetchArticleForEdit = async () => {
         try {
           setFetching(true);
+          setError('');
+
+          // 1. Check if ID matches a built-in mock article first to avoid 404 network errors
+          const mockArt = ARTICLES.find((a) => a._id === id || a.slug === id);
+          if (mockArt) {
+            setFormData({
+              title: mockArt.title || '',
+              excerpt: mockArt.excerpt || '',
+              content: mockArt.content || '',
+              coverImage: mockArt.coverImage || '',
+              category: mockArt.category?.name || mockArt.category || 'Artificial Intelligence',
+              difficulty: mockArt.difficulty || 'Beginner',
+            });
+            setFetching(false);
+            return;
+          }
+
+          // 2. Fetch from backend API
           const { data } = await api.get(`/articles/id/${id}`);
           const article = data?.data || data;
+
+          if (!article) {
+            throw new Error('Article data not found');
+          }
 
           // Check author ownership
           const authorId = article?.author?._id ? article.author._id : article?.author;
@@ -57,7 +80,19 @@ const ArticleEditor = () => {
             difficulty: article.difficulty || 'Beginner',
           });
         } catch (err) {
-          setError(err.response?.data?.message || 'Failed to fetch article for editing');
+          const fallback = ARTICLES.find((a) => a._id === id || a.slug === id);
+          if (fallback) {
+            setFormData({
+              title: fallback.title || '',
+              excerpt: fallback.excerpt || '',
+              content: fallback.content || '',
+              coverImage: fallback.coverImage || '',
+              category: fallback.category?.name || fallback.category || 'Artificial Intelligence',
+              difficulty: fallback.difficulty || 'Beginner',
+            });
+          } else {
+            setError(err.response?.data?.message || 'Failed to fetch article for editing');
+          }
         } finally {
           setFetching(false);
         }

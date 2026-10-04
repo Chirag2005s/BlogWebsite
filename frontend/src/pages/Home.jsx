@@ -42,11 +42,12 @@ export default function Home() {
     const fetchArticles = async () => {
       try {
         const res = await api.get('/articles');
-        if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+        const list = Array.isArray(res.data?.data) ? res.data.data : (Array.isArray(res.data) ? res.data : []);
+        if (list.length > 0) {
           // Merge API data with mock data so required articles are always present
-          const existingSlugs = new Set(res.data.map((a) => a.slug));
+          const existingSlugs = new Set(list.map((a) => a.slug));
           const missingRequired = ARTICLES.filter((a) => !existingSlugs.has(a.slug));
-          setBlogs([...res.data, ...missingRequired]);
+          setBlogs([...list, ...missingRequired]);
         }
       } catch (err) {
         // Fallback to rich mockData
@@ -326,13 +327,22 @@ export default function Home() {
             </p>
           </div>
 
-          <Link
-            to="/blog"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl surface-card border border-line hover:border-[#0F6B4F]/35 text-sm font-semibold text-heading hover:text-white transition-all group shrink-0"
-          >
-            <span>View All Articles</span>
-            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-          </Link>
+          <div className="flex items-center gap-2 shrink-0">
+            <Link
+              to="/blog"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl surface-card border border-line hover:border-[#0F6B4F]/35 text-xs sm:text-sm font-semibold text-heading hover:text-white transition-all group"
+            >
+              <span>View Blogs</span>
+              <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+            <Link
+              to="/articles"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-primary-600/10 border border-primary-500/25 hover:border-primary-500/50 text-xs sm:text-sm font-semibold text-primary-400 hover:text-primary-300 transition-all group"
+            >
+              <span>View Articles</span>
+              <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
         </div>
 
         {/* Blog Cards Grid */}

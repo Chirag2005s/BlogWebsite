@@ -141,8 +141,8 @@ export default function Leaderboard() {
                       <span className="font-semibold text-heading">@{user.user}</span>
                     </div>
                   </td>
-                  <td className="p-4 text-right font-mono text-slate-300">{user.solved}</td>
-                  <td className="p-4 text-right font-mono text-slate-300">{user.accepted}</td>
+                  <td className="p-4 text-right font-mono text-slate-800 dark:text-slate-200 font-semibold">{user.solved}</td>
+                  <td className="p-4 text-right font-mono text-slate-800 dark:text-slate-200 font-semibold">{user.accepted}</td>
                   <td className="p-4 text-right">
                     <div className="inline-flex items-center justify-end gap-1 font-mono text-orange-400 bg-orange-400/10 px-2 py-0.5 rounded">
                       <Flame size={12} /> {user.streak}
