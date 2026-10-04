@@ -149,13 +149,13 @@ export default function ProblemHub() {
               <Zap size={18} className="text-yellow-500" />
               Leaderboard
             </Link>
-            {/* <Link
+            <Link
               to="/problemhub/my-problems"
               className="flex items-center gap-2 px-5 py-3.5 bg-card hover:bg-soft border border-line text-heading rounded-xl font-semibold transition-all shadow-md hover:-translate-y-0.5 text-sm"
             >
               <User size={18} className="text-[#4FD1A5]" />
               My Hub
-            </Link> */}
+            </Link>
           </motion.div>
         </div>
       </div>

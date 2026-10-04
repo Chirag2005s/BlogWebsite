@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
   ChevronLeft, MessageSquare, Code2, ThumbsUp, ThumbsDown, Terminal, 
   Bug, CheckCircle2, Send, Info, X, Loader2, Copy, Check, Eye, 
-  Calendar, AlertCircle, Share2, Sparkles, FileText, User
+  Calendar, AlertCircle, Share2, Sparkles, FileText, User, Trash2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../../services/api';
@@ -39,6 +39,25 @@ export default function ProblemDetail() {
   })();
   const isAuthor = Boolean(userInfo && problem && (String(problem.creator?._id || problem.creator) === String(userInfo._id)));
   const creatorName = problem?.creator?.name || (isAuthor ? userInfo.name : 'Developer');
+  const navigate = useNavigate();
+  const [isDeletingProblem, setIsDeletingProblem] = useState(false);
+
+  const handleDeleteProblem = async () => {
+    if (!problem?._id || !isAuthor) return;
+    if (!window.confirm(`Are you sure you want to delete "${problem.title}"? This cannot be undone and will permanently remove this problem, its solutions, and comments.`)) {
+      return;
+    }
+    setIsDeletingProblem(true);
+    try {
+      await api.delete(`/problems/${id}`);
+      navigate('/problemhub');
+    } catch (err) {
+      console.error('Failed to delete problem:', err);
+      alert(err.response?.data?.message || 'Failed to delete problem. Only the author has access to delete this problem.');
+    } finally {
+      setIsDeletingProblem(false);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -276,25 +295,44 @@ export default function ProblemDetail() {
             </h1>
             
             {/* Author & Meta bar */}
-            <div className="flex items-center gap-4 text-xs text-muted mb-6 pb-6 border-b border-line flex-wrap">
-              <div className="flex items-center gap-2">
-                <span className="w-6 h-6 rounded-full bg-gradient-to-br from-[#0F6B4F] to-[#4FD1A5] flex items-center justify-center text-white font-bold text-[11px] shadow-sm">
-                  {creatorName.charAt(0).toUpperCase()}
-                </span>
-                <span className="font-semibold text-heading">@{creatorName}</span>
-              </div>
-
-              {createdDate && (
-                <div className="flex items-center gap-1.5">
-                  <Calendar size={13} />
-                  <span>Posted {createdDate}</span>
+            <div className="flex items-center justify-between gap-4 text-xs text-muted mb-6 pb-6 border-b border-line flex-wrap">
+              <div className="flex items-center gap-4 flex-wrap">
+                <div className="flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-full bg-gradient-to-br from-[#0F6B4F] to-[#4FD1A5] flex items-center justify-center text-white font-bold text-[11px] shadow-sm">
+                    {creatorName.charAt(0).toUpperCase()}
+                  </span>
+                  <span className="font-semibold text-heading">@{creatorName}</span>
                 </div>
-              )}
 
-              <div className="flex items-center gap-1.5">
-                <Eye size={13} />
-                <span>{problem.views || 0} views</span>
+                {createdDate && (
+                  <div className="flex items-center gap-1.5">
+                    <Calendar size={13} />
+                    <span>Posted {createdDate}</span>
+                  </div>
+                )}
+
+                <div className="flex items-center gap-1.5">
+                  <Eye size={13} />
+                  <span>{problem.views || 0} views</span>
+                </div>
               </div>
+
+              {/* Author-only Delete Problem Access */}
+              {isAuthor && (
+                <button
+                  onClick={handleDeleteProblem}
+                  disabled={isDeletingProblem}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-red-500 hover:text-red-400 bg-red-500/10 hover:bg-red-500/15 border border-red-500/25 transition-all shadow-sm"
+                  title="Delete this problem (Author only)"
+                >
+                  {isDeletingProblem ? (
+                    <Loader2 size={13} className="animate-spin text-red-500" />
+                  ) : (
+                    <Trash2 size={13} />
+                  )}
+                  <span>Delete Problem</span>
+                </button>
+              )}
             </div>
 
             {/* TABS */}

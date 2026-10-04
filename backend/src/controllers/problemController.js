@@ -135,8 +135,8 @@ export const deleteProblem = async (req, res) => {
   try {
     const problem = await Problem.findById(req.params.id);
     if (!problem) return res.status(404).json({ message: 'Problem not found' });
-    if (String(problem.creator) !== String(req.user._id) && req.user.role !== 'ADMIN') {
-      return res.status(403).json({ message: 'Not authorized to delete this problem' });
+    if (String(problem.creator) !== String(req.user._id)) {
+      return res.status(403).json({ message: 'Only the author of this problem can delete it' });
     }
     await Solution.deleteMany({ problemId: problem._id });
     await ProblemComment.deleteMany({ problemId: problem._id });

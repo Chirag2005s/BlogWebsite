@@ -122,7 +122,7 @@ export default function MyProblemHub({ activeTab = 'problems' }) {
       });
     } catch (error) {
       console.error('Failed to delete problem:', error);
-      alert('Failed to delete problem. Please try again.');
+      alert(error.response?.data?.message || 'Failed to delete problem. Only the author has access to delete this problem.');
     } finally {
       setDeletingId(null);
     }
@@ -367,7 +367,7 @@ export default function MyProblemHub({ activeTab = 'problems' }) {
                                     onClick={() => handleDeleteProblem(prob._id, prob.title)}
                                     disabled={deletingId === prob._id}
                                     className="p-1.5 rounded-lg text-muted hover:text-red-500 hover:bg-red-500/10 transition-colors"
-                                    title="Delete problem"
+                                    title="Delete problem (Author only)"
                                   >
                                     {deletingId === prob._id ? <Loader2 size={15} className="animate-spin text-red-500" /> : <Trash2 size={15} />}
                                   </button>
