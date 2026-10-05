@@ -2,105 +2,155 @@ import React from 'react';
 
 /**
  * TechJourneyLogo
- * Unique brand mark combining:
- * - The letter 'T'
- * - A journey / dynamic curved path
- * - Code brackets { } / < >
- * - Digital tech glowing circuit nodes
+ * Brand Logo & Icon Mark:
+ * - Rounded gradient-border dark squircle
+ * - Neon Cyan left bracket `{` and Amber Yellow right bracket `}`
+ * - S-shaped journey roadmap path with Cyan -> Emerald -> Yellow gradient
+ * - Waypoint nodes (start ring, intermediate node) and upward destination arrow
+ * - Modern typography: "Tech" + gradient "Journey" + tracked "DEV PLATFORM"
  */
-export default function TechJourneyLogo({ size = 36, showText = true, className = '', inverted = false }) {
+export default function TechJourneyLogo({ 
+  size = 36, 
+  showText = true, 
+  className = '', 
+  inverted = false 
+}) {
   return (
-    <div className={`inline-flex items-center gap-2.5 select-none ${className}`}>
+    <div className={`inline-flex items-center gap-3 select-none ${className}`}>
+      {/* ═══ BRAND ICON MARK ═══ */}
       <div 
-        className="relative flex items-center justify-center rounded-xl p-1.5 transition-transform duration-300 group-hover:scale-105"
+        className="relative flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-105"
         style={{ width: size, height: size }}
       >
-        {/* Glow backdrop */}
-        <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-[#0F6B4F] via-[#16805E] to-[#F4A62A] opacity-20 blur-md group-hover:opacity-40 transition-opacity duration-300" />
+        {/* Ambient Glow Backdrop */}
+        <div 
+          className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-[#00E5FF] via-[#10B981] to-[#F59E0B] opacity-25 blur-md group-hover:opacity-45 transition-opacity duration-300 pointer-events-none" 
+        />
         
-        {/* SVG Graphic */}
+        {/* Vector SVG Graphic */}
         <svg 
-          viewBox="0 0 64 64" 
+          viewBox="0 0 100 100" 
           fill="none" 
           xmlns="http://www.w3.org/2000/svg"
-          className="relative w-full h-full drop-shadow-[0_2px_8px_rgba(15,107,79,0.3)]"
+          className="relative w-full h-full drop-shadow-[0_2px_10px_rgba(0,229,255,0.2)]"
         >
           <defs>
-            <linearGradient id="tjGrad" x1="4" y1="4" x2="60" y2="60" gradientUnits="userSpaceOnUse">
-              <stop stopColor="#0F6B4F" />
-              <stop offset="0.5" stopColor="#16805E" />
-              <stop offset="1" stopColor="#F4A62A" />
-            </linearGradient>
-            
-            <linearGradient id="tjPath" x1="10" y1="52" x2="54" y2="12" gradientUnits="userSpaceOnUse">
-              <stop stopColor="#16805E" stopOpacity="0.8" />
-              <stop offset="1" stopColor="#F4A62A" stopOpacity="0.9" />
+            {/* Squircle Border Gradient */}
+            <linearGradient id="tjBorderGrad" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stopColor="#00E5FF" />
+              <stop offset="35%" stopColor="#00DF89" />
+              <stop offset="70%" stopColor="#10B981" />
+              <stop offset="100%" stopColor="#F59E0B" />
             </linearGradient>
 
-            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="3" result="blur" />
+            {/* S-Trajectory Ribbon Gradient */}
+            <linearGradient id="tjPathGrad" x1="25" y1="75" x2="65" y2="25" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stopColor="#00DF89" />
+              <stop offset="30%" stopColor="#00D492" />
+              <stop offset="60%" stopColor="#10B981" />
+              <stop offset="85%" stopColor="#84CC16" />
+              <stop offset="100%" stopColor="#F59E0B" />
+            </linearGradient>
+
+            {/* Subtle glow filter */}
+            <filter id="tjIconGlow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="2" result="blur" />
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
           </defs>
 
-          {/* Background Rounded Shield */}
-          <rect x="2" y="2" width="60" height="60" rx="16" fill="#E8F5EF" stroke="#D9E2DE" strokeWidth="2" />
-
-          {/* Left Code Bracket { */}
-          <path 
-            d="M14 20 C10 20, 9 24, 9 28 C9 31, 7 32, 5 32 C7 32, 9 33, 9 36 C9 40, 10 44, 14 44" 
-            stroke="#16805E" 
-            strokeWidth="2.5" 
-            strokeLinecap="round" 
-            opacity="0.85"
+          {/* 1. Dark Rounded Squircle Shield */}
+          <rect 
+            x="5" 
+            y="5" 
+            width="90" 
+            height="90" 
+            rx="24" 
+            fill="#080D1A" 
+            stroke="url(#tjBorderGrad)" 
+            strokeWidth="3.2" 
           />
 
-          {/* Right Code Bracket } */}
+          {/* 2. Left Code Bracket { in Neon Cyan */}
           <path 
-            d="M50 20 C54 20, 55 24, 55 28 C55 31, 57 32, 59 32 C57 32, 55 33, 55 36 C55 40, 54 44, 50 44" 
-            stroke="#F4A62A" 
-            strokeWidth="2.5" 
+            d="M 23 33 C 17 33 15 37 15 42 C 15 47 12 48 9.5 50 C 12 52 15 53 15 58 C 15 63 17 67 23 67" 
+            stroke="#00E5FF" 
+            strokeWidth="3.6" 
             strokeLinecap="round" 
-            opacity="0.85"
+            strokeLinejoin="round"
           />
 
-          {/* Dynamic Journey Trajectory Path (Curved Ribbon) */}
+          {/* 3. Right Code Bracket } in Amber Gold */}
           <path 
-            d="M18 48 C 24 48, 22 36, 32 32 C 42 28, 44 18, 48 16" 
-            stroke="url(#tjPath)" 
+            d="M 77 33 C 83 33 85 37 85 42 C 85 47 88 48 90.5 50 C 88 52 85 53 85 58 C 85 63 83 67 77 67" 
+            stroke="#FBBF24" 
+            strokeWidth="3.6" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+          />
+
+          {/* 4. S-Curved Journey Trajectory Ribbon */}
+          <path 
+            d="M 27 72 C 38 72 50 67 63 58 C 72 50 62 41 46 41 C 28 41 30 25 50 25 L 64 25" 
+            stroke="url(#tjPathGrad)" 
+            strokeWidth="5.5" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+          />
+
+          {/* 5. Start Waypoint: Crisp White Ring with dark center */}
+          <circle 
+            cx="27" 
+            cy="72" 
+            r="5" 
+            fill="#080D1A" 
+            stroke="#FFFFFF" 
             strokeWidth="3" 
-            strokeLinecap="round"
-            strokeDasharray="1 0"
           />
 
-          {/* Futuristic 'T' Crossbar and Stem */}
-          <path 
-            d="M20 18 H44" 
-            stroke="url(#tjGrad)" 
-            strokeWidth="4" 
-            strokeLinecap="round" 
+          {/* 6. Intermediate Waypoint Node: Amber Circle with dark dot */}
+          <circle 
+            cx="63" 
+            cy="58" 
+            r="6" 
+            fill="#F59E0B" 
+            stroke="#FBBF24" 
+            strokeWidth="0.8" 
           />
-          <path 
-            d="M32 18 V46" 
-            stroke="url(#tjGrad)" 
-            strokeWidth="4" 
-            strokeLinecap="round" 
+          <circle 
+            cx="63" 
+            cy="58" 
+            r="2.2" 
+            fill="#080D1A" 
           />
 
-          {/* Journey Waypoint Pulse Nodes */}
-          <circle cx="32" cy="18" r="3" fill="#FFFFFF" filter="url(#glow)" />
-          <circle cx="32" cy="32" r="3.5" fill="#16805E" />
-          <circle cx="32" cy="46" r="4" fill="#F4A62A" stroke="#FFFFFF" strokeWidth="1.5" />
-          <circle cx="48" cy="16" r="2.5" fill="#0F6B4F" />
+          {/* 7. Destination Terminal: Upward/NE Golden Arrowhead */}
+          <polygon 
+            points="64,12 73,25 55,25" 
+            fill="#F59E0B" 
+          />
         </svg>
       </div>
 
+      {/* ═══ BRAND TYPOGRAPHY ═══ */}
       {showText && (
-        <div className="flex flex-col text-left">
-          <span className={`text-xl font-extrabold tracking-tight leading-none ${inverted ? 'text-white' : 'text-heading'}`}>
-            Tech<span className="tech-gradient-text">Journey</span>
-          </span>
-          <span className={`text-[10px] uppercase font-mono tracking-widest font-semibold mt-0.5 ${inverted ? 'text-slate-400' : 'text-muted'}`}>
+        <div className="flex flex-col text-left justify-center">
+          {/* Main Title: Tech + Gradient Journey */}
+          <div className="flex items-baseline tracking-tight font-extrabold leading-none text-xl sm:text-[22px]">
+            <span className={inverted ? 'text-white' : 'text-heading'}>
+              Tech
+            </span>
+            <span 
+              className="bg-gradient-to-r from-[#00DF89] via-[#10B981] to-[#F59E0B] bg-clip-text text-transparent ml-[1px]"
+            >
+              Journey
+            </span>
+          </div>
+
+          {/* Subtitle: DEV PLATFORM */}
+          <span 
+            className="text-[9.5px] uppercase font-sans font-bold tracking-[0.32em] leading-tight mt-1 text-slate-400"
+          >
             Dev Platform
           </span>
         </div>
@@ -108,3 +158,4 @@ export default function TechJourneyLogo({ size = 36, showText = true, className 
     </div>
   );
 }
+
