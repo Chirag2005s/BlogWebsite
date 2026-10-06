@@ -130,13 +130,53 @@ export const acceptSolution = async (req, res) => {
   }
 };
 
+// Update problem
+export const updateProblem = async (req, res) => {
+  try {
+    const problem = await Problem.findById(req.params.id);
+    if (!problem) return res.status(404).json({ message: 'Problem not found' });
+    if (String(problem.creator) !== String(req.user._id) && req.user.role !== 'ADMIN') {
+      return res.status(403).json({ message: 'Only the author of this problem or an admin can edit it' });
+    }
+
+    const {
+      title, description, category, difficulty, language, type, tags,
+      expectedBehavior, currentBehavior, inputFormat, outputFormat, constraints,
+      exampleInput, exampleOutput, starterCode, isSolved
+    } = req.body;
+
+    if (title !== undefined) problem.title = title;
+    if (description !== undefined) problem.description = description;
+    if (category !== undefined) problem.category = category;
+    if (difficulty !== undefined) problem.difficulty = difficulty;
+    if (language !== undefined) problem.language = language;
+    if (type !== undefined) problem.type = type;
+    if (tags !== undefined) problem.tags = Array.isArray(tags) ? tags : String(tags).split(',').map(t => t.trim()).filter(Boolean);
+    if (expectedBehavior !== undefined) problem.expectedBehavior = expectedBehavior;
+    if (currentBehavior !== undefined) problem.currentBehavior = currentBehavior;
+    if (inputFormat !== undefined) problem.inputFormat = inputFormat;
+    if (outputFormat !== undefined) problem.outputFormat = outputFormat;
+    if (constraints !== undefined) problem.constraints = constraints;
+    if (exampleInput !== undefined) problem.exampleInput = exampleInput;
+    if (exampleOutput !== undefined) problem.exampleOutput = exampleOutput;
+    if (starterCode !== undefined) problem.starterCode = starterCode;
+    if (isSolved !== undefined) problem.isSolved = Boolean(isSolved);
+
+    const updated = await problem.save();
+    const populated = await Problem.findById(updated._id).populate('creator', 'name email');
+    res.json(populated || updated);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Delete problem
 export const deleteProblem = async (req, res) => {
   try {
     const problem = await Problem.findById(req.params.id);
     if (!problem) return res.status(404).json({ message: 'Problem not found' });
-    if (String(problem.creator) !== String(req.user._id)) {
-      return res.status(403).json({ message: 'Only the author of this problem can delete it' });
+    if (String(problem.creator) !== String(req.user._id) && req.user.role !== 'ADMIN') {
+      return res.status(403).json({ message: 'Only the author of this problem or an admin can delete it' });
     }
     await Solution.deleteMany({ problemId: problem._id });
     await ProblemComment.deleteMany({ problemId: problem._id });

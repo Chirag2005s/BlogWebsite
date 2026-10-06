@@ -14,6 +14,7 @@ import {
   HiOutlineMap,
   HiOutlineAcademicCap,
   HiOutlineSpeakerphone,
+  HiOutlineTerminal,
 } from 'react-icons/hi';
 import { FaGithub } from 'react-icons/fa';
 
@@ -28,6 +29,7 @@ const Sidebar = ({ collapsed, onToggle }) => {
     { to: '/add-programming', icon: HiOutlineCode, label: 'Add Programming' },
     { to: '/add-roadmap', icon: HiOutlineMap, label: 'Add Roadmap' },
     { to: '/manage-roadmaps', icon: HiOutlineMap, label: 'Manage Roadmaps' },
+    { to: '/problem-hub', icon: HiOutlineTerminal, label: 'Problem Hub' },
     { to: '/interview-questions', icon: HiOutlineAcademicCap, label: 'Interview Q&A' },
     { to: '/interview-repos', icon: FaGithub, label: 'Interview Repos' },
     { to: '/content', icon: HiOutlineCollection, label: 'Manage Content' },

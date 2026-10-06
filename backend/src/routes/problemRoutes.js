@@ -1,6 +1,6 @@
 import express from 'express';
 import { 
-  getProblems, getProblemById, createProblem, deleteProblem,
+  getProblems, getProblemById, createProblem, updateProblem, deleteProblem,
   getSolutions, submitSolution, acceptSolution,
   getComments, postComment,
   getMyHubData, getUserHubData
@@ -19,6 +19,7 @@ router.route('/')
 
 router.route('/:id')
   .get(getProblemById)
+  .put(protect, updateProblem)
   .delete(protect, deleteProblem);
 
 router.route('/:id/solutions')

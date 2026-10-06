@@ -17,6 +17,7 @@ import EditContent from './pages/EditContent';
 import Categories from './pages/Categories';
 import ManageInterviewQuestions from './pages/ManageInterviewQuestions';
 import ManageInterviewRepos from './pages/ManageInterviewRepos';
+import ManageProblemHub from './pages/ManageProblemHub';
 import Users from './pages/Users';
 import ContactMessages from './pages/ContactMessages';
 import Profile from './pages/Profile';
@@ -69,6 +70,7 @@ function App() {
             <Route path="/add-programming" element={<AddProgramming />} />
             <Route path="/add-roadmap" element={<AddRoadmap />} />
             <Route path="/manage-roadmaps" element={<ManageRoadmaps />} />
+            <Route path="/problem-hub" element={<ManageProblemHub />} />
             <Route path="/content" element={<ManageContent />} />
             <Route path="/edit/:id" element={<EditContent />} />
             <Route path="/categories" element={<Categories />} />
