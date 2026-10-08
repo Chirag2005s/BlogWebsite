@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Outlet, Link, useNavigate, useLocation, useOutlet } from 'react-router-dom';
 import {
   Menu, X, Search, ChevronRight,
-  PenTool, LogOut, ChevronDown, FileText, PlusCircle
+  PenTool, LogOut, ChevronDown, FileText, PlusCircle,
+  User, Code2, Sparkles, Shield
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -48,23 +49,41 @@ export default function MainLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
-  const [writeMenuOpen, setWriteMenuOpen] = useState(false);
-  const writeMenuRef = useRef(null);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef(null);
 
-  const userInfo = (() => {
+  const [userInfo, setUserInfo] = useState(() => {
     try {
       const raw = localStorage.getItem('userInfo');
       return raw ? JSON.parse(raw) : null;
     } catch {
       return null;
     }
-  })();
+  });
 
-  // Close write menu on click outside
+  // Keep userInfo synchronized across tab and profile updates
+  useEffect(() => {
+    const handleAuthChange = () => {
+      try {
+        const raw = localStorage.getItem('userInfo');
+        setUserInfo(raw ? JSON.parse(raw) : null);
+      } catch {
+        setUserInfo(null);
+      }
+    };
+    window.addEventListener('authChange', handleAuthChange);
+    window.addEventListener('storage', handleAuthChange);
+    return () => {
+      window.removeEventListener('authChange', handleAuthChange);
+      window.removeEventListener('storage', handleAuthChange);
+    };
+  }, []);
+
+  // Close menus on click outside
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (writeMenuRef.current && !writeMenuRef.current.contains(e.target)) {
-        setWriteMenuOpen(false);
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
+        setUserMenuOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -89,9 +108,16 @@ export default function MainLayout() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Close mobile menu on route change
+  // Close mobile menu, dropdowns and sync auth state on route change
   useEffect(() => {
+    try {
+      const raw = localStorage.getItem('userInfo');
+      setUserInfo(raw ? JSON.parse(raw) : null);
+    } catch {
+      setUserInfo(null);
+    }
     setMobileMenuOpen(false);
+    setUserMenuOpen(false);
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
@@ -102,6 +128,9 @@ export default function MainLayout() {
       console.error('Logout API error', err);
     }
     localStorage.removeItem('userInfo');
+    setUserInfo(null);
+    setUserMenuOpen(false);
+    window.dispatchEvent(new Event('authChange'));
     navigate('/login');
   };
 
@@ -113,7 +142,7 @@ export default function MainLayout() {
     { to: '/problemhub', label: 'Problem', requiresLogin: true },
     { to: '/roadmaps', label: 'Roadmaps', requiresLogin: true },
     { to: '/interview-questions', label: 'Interview', requiresLogin: true },
-    { to: '/news', label: 'Tech' },
+    { to: '/news', label: 'Tech News' },
   ];
 
   const handleNavClick = (e, link) => {
@@ -189,106 +218,137 @@ export default function MainLayout() {
               </kbd>
             </button>
 
-            {/* Write Button & Session / Sign In */}
+            {/* Session / Sign In */}
             <div className="flex items-center gap-2.5 pl-3 border-l border-line">
-              {/* Write & Manage Dropdown - Always visible in Navbar */}
-              <div className="relative" ref={writeMenuRef}>
-                <button
-                  onClick={() => setWriteMenuOpen((prev) => !prev)}
-                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all border shadow-sm group ${writeMenuOpen
-                    ? 'bg-[#111827] text-white border-[#334155] shadow-black/20'
-                    : 'bg-[#111827]/60 text-muted border-[#1E293B] hover:bg-[#111827] hover:text-white hover:border-[#334155]'
-                    }`}
-                  aria-expanded={writeMenuOpen}
-                  title="Write, Update or Manage Content"
-                >
-                  <PenTool size={13} className="currentColor" />
-                  <span>Write</span>
-                  <ChevronDown
-                    size={12}
-                    className={`transition-transform duration-200 currentColor ${writeMenuOpen ? 'rotate-180' : 'opacity-70'
-                      }`}
-                  />
-                </button>
-
-                {/* Dropdown Menu */}
-                {writeMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-64 rounded-2xl bg-card border border-line shadow-2xl shadow-black/20 py-2 z-50 backdrop-blur-xl animate-fade-in">
-                    <div className="px-3.5 py-2 border-b border-line/60 mb-1">
-                      <p className="text-[11px] font-semibold text-heading uppercase tracking-wider">Content Studio</p>
-                      <p className="text-[11px] text-muted">Write, update & manage your posts</p>
-                    </div>
-
-                    <Link
-                      to="/admin"
-                      onClick={() => setWriteMenuOpen(false)}
-                      className="flex items-center gap-3 px-3.5 py-2 text-xs text-heading hover:bg-soft hover:text-[#0F6B4F] transition-colors group"
-                    >
-                      <div className="w-7 h-7 rounded-lg bg-[#0F6B4F]/10 border border-[#0F6B4F]/20 flex items-center justify-center text-[#0F6B4F] group-hover:bg-[#0F6B4F]/20">
-                        <PenTool size={14} />
-                      </div>
-                      <div>
-                        <div className="font-semibold text-heading">Write Blog</div>
-                        <div className="text-[10px] text-muted">Post daily development blog</div>
-                      </div>
-                    </Link>
-
-                    <Link
-                      to="/admin/add-article"
-                      onClick={() => setWriteMenuOpen(false)}
-                      className="flex items-center gap-3 px-3.5 py-2 text-xs text-heading hover:bg-soft hover:text-[#F4A62A] transition-colors group"
-                    >
-                      <div className="w-7 h-7 rounded-lg bg-[#F4A62A]/10 border border-[#F4A62A]/20 flex items-center justify-center text-[#F4A62A] group-hover:bg-[#F4A62A]/20">
-                        <PlusCircle size={14} />
-                      </div>
-                      <div>
-                        <div className="font-semibold text-heading">Write Article</div>
-                        <div className="text-[10px] text-muted">Technical deep-dive publication</div>
-                      </div>
-                    </Link>
-
-                    <div className="my-1 border-t border-line/60" />
-
-                    <Link
-                      to="/admin/articles"
-                      onClick={() => setWriteMenuOpen(false)}
-                      className="flex items-center gap-3 px-3.5 py-2.5 text-xs text-heading hover:bg-soft hover:text-[#16805E] transition-colors group"
-                    >
-                      <div className="w-7 h-7 rounded-lg bg-[#16805E]/10 border border-[#16805E]/20 flex items-center justify-center text-[#16805E] group-hover:bg-[#16805E]/20">
-                        <FileText size={14} />
-                      </div>
-                      <div>
-                        <div className="font-semibold text-heading flex items-center gap-1.5">
-                          <span>Manage Content</span>
-                          <span className="px-1.5 py-0.5 rounded bg-[#16805E]/15 text-[#16805E] text-[9px] font-mono">
-                            Update / Delete
-                          </span>
-                        </div>
-                        <div className="text-[10px] text-muted">Update or delete your own publications</div>
-                      </div>
-                    </Link>
-                  </div>
-                )}
-              </div>
-
-              {/* User Session or Sign In */}
               {userInfo ? (
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-2 px-2.5 py-1 rounded-xl bg-card border border-line shadow-sm">
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-[#0F6B4F] to-[#16805E] flex items-center justify-center text-[11px] font-bold text-white shadow-sm flex-shrink-0">
-                      {userInfo.name?.charAt(0).toUpperCase()}
-                    </div>
-                    <span className="text-xs font-medium text-heading max-w-[130px] truncate" title={userInfo.name}>
-                      {userInfo.name}
-                    </span>
-                  </div>
+                <div className="relative" ref={userMenuRef}>
                   <button
-                    onClick={handleLogout}
-                    className="p-1.5 rounded-lg text-muted hover:text-[#EF4444] hover:bg-red-500/10 transition-all"
-                    title="Logout"
+                    onClick={() => setUserMenuOpen((prev) => !prev)}
+                    className={`flex items-center gap-2 pl-1.5 pr-2.5 py-1 rounded-2xl border transition-all shadow-sm group ${userMenuOpen
+                        ? 'bg-soft border-[#0F6B4F] ring-2 ring-[#0F6B4F]/20'
+                        : 'bg-card/90 hover:bg-soft border-line hover:border-[#0F6B4F]/50'
+                      }`}
+                    aria-expanded={userMenuOpen}
+                    title="User Profile & Settings"
                   >
-                    <LogOut size={15} />
+                    {/* Avatar with active online indicator */}
+                    <div className="relative flex-shrink-0">
+                      {userInfo.profileImage ? (
+                        <img
+                          src={userInfo.profileImage}
+                          alt={userInfo.name}
+                          className="w-7 h-7 rounded-xl object-cover border border-line"
+                          onError={(e) => { e.target.style.display = 'none'; }}
+                        />
+                      ) : (
+                        <div className="w-7 h-7 rounded-xl bg-gradient-to-tr from-[#0F6B4F] via-[#16805E] to-[#2BAF85] flex items-center justify-center text-xs font-black text-white shadow-sm group-hover:scale-105 transition-transform">
+                          {userInfo.name?.charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                      <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-400 border-2 border-card ring-1 ring-emerald-400/40" />
+                    </div>
+
+                    <div className="flex flex-col text-left">
+                      <span className="text-xs font-bold text-heading group-hover:text-[#4FD1A5] max-w-[110px] truncate leading-tight transition-colors">
+                        {userInfo.name}
+                      </span>
+                      <span className="text-[9px] font-mono text-muted uppercase tracking-wider leading-none mt-0.5">
+                        {userInfo.role || 'USER'}
+                      </span>
+                    </div>
+
+                    <ChevronDown
+                      size={12}
+                      className={`text-muted group-hover:text-heading transition-transform duration-200 ml-0.5 ${userMenuOpen ? 'rotate-180 text-[#4FD1A5]' : ''
+                        }`}
+                    />
                   </button>
+
+                  {/* Upgraded Floating Profile Dropdown */}
+                  {userMenuOpen && (
+                    <div className="absolute right-0 mt-2.5 w-72 rounded-2xl bg-card border border-line shadow-2xl shadow-black/40 py-2.5 z-50 backdrop-blur-2xl animate-fade-in divide-y divide-line/60">
+                      {/* User Header Card */}
+                      <div className="px-4 py-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#0F6B4F] to-[#2BAF85] flex items-center justify-center text-sm font-extrabold text-white shadow-md overflow-hidden shrink-0">
+                            {userInfo.profileImage ? (
+                              <img src={userInfo.profileImage} alt={userInfo.name} className="w-full h-full object-cover" />
+                            ) : (
+                              userInfo.name?.charAt(0).toUpperCase()
+                            )}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-xs font-bold text-heading truncate">{userInfo.name}</p>
+                            <p className="text-[11px] text-muted truncate">{userInfo.email || 'developer@techjourney.dev'}</p>
+                            <span className="inline-block mt-1 px-2 py-0.5 rounded-md text-[9px] font-mono font-bold uppercase tracking-wider bg-[#0F6B4F]/15 text-[#4FD1A5] border border-[#0F6B4F]/30">
+                              {userInfo.role || 'USER'}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Navigation Links */}
+                      <div className="py-1.5 space-y-0.5 px-1.5">
+                        <Link
+                          to="/profile"
+                          onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-heading hover:bg-soft hover:text-[#4FD1A5] transition-colors group"
+                        >
+                          <div className="w-7 h-7 rounded-lg bg-[#0F6B4F]/10 border border-[#0F6B4F]/20 flex items-center justify-center text-[#4FD1A5] group-hover:scale-105 transition-transform">
+                            <User size={14} />
+                          </div>
+                          <div>
+                            <div className="font-semibold text-heading group-hover:text-[#4FD1A5]">My Profile</div>
+                            <div className="text-[10px] text-muted">View & update your profile</div>
+                          </div>
+                        </Link>
+
+                        <Link
+                          to="/problemhub/my-problems"
+                          onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-heading hover:bg-soft hover:text-blue-400 transition-colors group"
+                        >
+                          <div className="w-7 h-7 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-105 transition-transform">
+                            <Code2 size={14} />
+                          </div>
+                          <div>
+                            <div className="font-semibold text-heading group-hover:text-blue-400">My ProblemHub</div>
+                            <div className="text-[10px] text-muted">View posted problems & stats</div>
+                          </div>
+                        </Link>
+
+                        <Link
+                          to="/admin"
+                          onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-heading hover:bg-soft hover:text-[#F4A62A] transition-colors group"
+                        >
+                          <div className="w-7 h-7 rounded-lg bg-[#F4A62A]/10 border border-[#F4A62A]/20 flex items-center justify-center text-[#F4A62A] group-hover:scale-105 transition-transform">
+                            <PenTool size={14} />
+                          </div>
+                          <div>
+                            <div className="font-semibold text-heading group-hover:text-[#F4A62A]">Content Studio</div>
+                            <div className="text-[10px] text-muted">Manage blogs & publications</div>
+                          </div>
+                        </Link>
+                      </div>
+
+                      {/* Sign Out */}
+                      <div className="pt-1.5 px-1.5">
+                        <button
+                          onClick={() => {
+                            setUserMenuOpen(false);
+                            handleLogout();
+                          }}
+                          className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-rose-400 hover:bg-rose-500/10 transition-colors"
+                        >
+                          <div className="w-7 h-7 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
+                            <LogOut size={14} />
+                          </div>
+                          <span>Sign Out</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <Link
@@ -352,32 +412,68 @@ export default function MainLayout() {
               </a>
 
               {userInfo ? (
-                <div className="flex flex-col gap-2 w-full pt-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-heading">{userInfo.name}</span>
-                    <button onClick={handleLogout} className="text-xs text-red-500 hover:underline">
-                      Logout
+                <div className="flex flex-col gap-2.5 w-full pt-2">
+                  <div className="p-3 rounded-2xl bg-soft border border-line flex items-center justify-between gap-3">
+                    <Link
+                      to="/profile"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center gap-2.5 min-w-0"
+                    >
+                      <div className="relative">
+                        {userInfo.profileImage ? (
+                          <img
+                            src={userInfo.profileImage}
+                            alt={userInfo.name}
+                            className="w-8 h-8 rounded-xl object-cover"
+                          />
+                        ) : (
+                          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#0F6B4F] to-[#2BAF85] flex items-center justify-center text-xs font-bold text-white">
+                            {userInfo.name?.charAt(0).toUpperCase()}
+                          </div>
+                        )}
+                        <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-400 border border-card" />
+                      </div>
+                      <div className="min-w-0 text-left">
+                        <div className="text-xs font-bold text-heading truncate">{userInfo.name}</div>
+                        <div className="text-[10px] text-[#4FD1A5] font-mono uppercase tracking-wider">{userInfo.role || 'MEMBER'}</div>
+                      </div>
+                    </Link>
+
+                    <button
+                      onClick={handleLogout}
+                      className="p-2 rounded-xl text-rose-400 hover:bg-rose-500/10 text-xs font-semibold flex items-center gap-1 transition-colors"
+                      title="Sign Out"
+                    >
+                      <LogOut size={15} />
                     </button>
                   </div>
-                  <div className="grid grid-cols-3 gap-2 mt-1">
+
+                  <div className="grid grid-cols-4 gap-1.5">
+                    <Link
+                      to="/profile"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="px-2 py-2 text-center rounded-xl bg-soft text-[11px] text-[#4FD1A5] font-semibold hover:bg-[#0F6B4F]/15 border border-line"
+                    >
+                      Profile
+                    </Link>
+                    <Link
+                      to="/problemhub/my-problems"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="px-2 py-2 text-center rounded-xl bg-soft text-[11px] text-blue-400 font-semibold hover:bg-blue-500/15 border border-line"
+                    >
+                      My Hub
+                    </Link>
                     <Link
                       to="/admin"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="px-2.5 py-2 text-center rounded-xl bg-soft text-[11px] text-[#0F6B4F] font-medium hover:bg-[#0F6B4F]/15 border border-line"
+                      className="px-2 py-2 text-center rounded-xl bg-soft text-[11px] text-[#0F6B4F] font-semibold hover:bg-[#0F6B4F]/15 border border-line"
                     >
-                      Write Blog
-                    </Link>
-                    <Link
-                      to="/admin/add-article"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="px-2.5 py-2 text-center rounded-xl bg-soft text-[11px] text-[#F4A62A] font-medium hover:bg-[#F4A62A]/15 border border-line"
-                    >
-                      Write Article
+                      Write
                     </Link>
                     <Link
                       to="/admin/articles"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="px-2.5 py-2 text-center rounded-xl bg-soft text-[11px] text-[#16805E] font-medium hover:bg-[#16805E]/15 border border-line"
+                      className="px-2 py-2 text-center rounded-xl bg-soft text-[11px] text-[#16805E] font-semibold hover:bg-[#16805E]/15 border border-line"
                     >
                       Manage
                     </Link>

@@ -26,6 +26,7 @@ import ManageInterviewRepos from './pages/admin/ManageInterviewRepos';
 import ManageAdvertisement from './pages/admin/ManageAdvertisement';
 import ManageSettings from './pages/admin/ManageSettings';
 import Programming from './pages/Programming';
+import Profile from './pages/Profile';
 
 // ProblemHub Imports
 import ProblemHub from './pages/problemhub/ProblemHub';
@@ -58,6 +59,8 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="programming" element={<Programming />} />
+          <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="profile/:id" element={<Profile />} />
           
           {/* ProblemHub Routes - Protected for Logged In Users Only */}
           <Route path="problemhub" element={<ProtectedRoute><ProblemHub /></ProtectedRoute>} />
