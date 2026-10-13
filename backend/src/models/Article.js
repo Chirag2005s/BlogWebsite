@@ -93,6 +93,32 @@ const articleSchema = new mongoose.Schema(
     seoTitle: String,
     seoDescription: String,
     publishedAt: Date,
+    linkedSystem: {
+      enabled: {
+        type: Boolean,
+        default: false,
+      },
+      title: {
+        type: String,
+        default: '',
+        trim: true,
+      },
+      url: {
+        type: String,
+        default: '',
+        trim: true,
+      },
+      systemType: {
+        type: String,
+        default: 'Live System',
+        trim: true,
+      },
+      description: {
+        type: String,
+        default: '',
+        trim: true,
+      },
+    },
   },
   { timestamps: true }
 );

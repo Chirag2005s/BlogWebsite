@@ -61,7 +61,7 @@ function App() {
           <Route path="programming" element={<Programming />} />
           <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="profile/:id" element={<Profile />} />
-          
+
           {/* ProblemHub Routes - Protected for Logged In Users Only */}
           <Route path="problemhub" element={<ProtectedRoute><ProblemHub /></ProtectedRoute>} />
           <Route path="problemhub/create" element={<ProtectedRoute><CreateProblem /></ProtectedRoute>} />

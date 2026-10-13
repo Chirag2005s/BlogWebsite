@@ -6,7 +6,8 @@ import 'highlight.js/styles/atom-one-dark.css';
 import {
   ArrowLeft, Clock, Calendar, Eye, Heart, Bookmark,
   Share2, Tag as TagIcon, ChevronUp, Copy, Check, Users, Sparkles,
-  MessageSquare, Send, BookOpen, ArrowRight, List, Edit3
+  MessageSquare, Send, BookOpen, ArrowRight, List, Edit3,
+  Layers, ExternalLink, Server, Activity, Cpu, ArrowUpRight
 } from 'lucide-react';
 import { ARTICLES } from '../data/mockData';
 import api from '../services/api';
@@ -112,6 +113,131 @@ const ScrollToTop = () => {
     >
       <ChevronUp size={20} />
     </button>
+  );
+};
+
+/* ─── Interactive Linked System Button ─── */
+const LinkedSystemButton = ({ linkedSystem }) => {
+  if (!linkedSystem || !linkedSystem.url) return null;
+
+  const isExternal = /^https?:\/\//i.test(linkedSystem.url);
+  const title = linkedSystem.title?.trim() || 'Launch Linked System';
+  const systemType = linkedSystem.systemType?.trim() || 'Live System';
+  const description = linkedSystem.description?.trim();
+
+  const buttonInner = (
+    <div className="relative group overflow-hidden rounded-2xl p-4 bg-gradient-to-br from-[#0c1f17] via-surface-card to-[#091712] border border-[#0F6B4F]/40 hover:border-[#22C55E]/70 transition-all duration-300 shadow-xl shadow-black/40 hover:shadow-[#0F6B4F]/25 hover:scale-[1.01] cursor-pointer">
+      {/* Top subtle decorative gradient bar */}
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#0F6B4F] via-[#22C55E] to-[#16805E]" />
+
+      <div className="relative z-10 space-y-3 pt-1">
+        {/* Status header */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#22C55E] opacity-75" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#22C55E]" />
+            </span>
+            <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-[#22C55E]">
+              {systemType}
+            </span>
+          </div>
+
+          <span className="text-[10px] font-mono text-muted group-hover:text-heading transition-colors flex items-center gap-1">
+            {isExternal ? (
+              <>
+                <span>Live System</span>
+                <ExternalLink size={11} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform text-[#22C55E]" />
+              </>
+            ) : (
+              <>
+                <span>Internal Route</span>
+                <ArrowRight size={11} className="group-hover:translate-x-1 transition-transform text-[#22C55E]" />
+              </>
+            )}
+          </span>
+        </div>
+
+        {/* Title and Icon */}
+        <div className="flex items-start gap-3">
+          <div className="p-2.5 rounded-xl bg-gradient-to-tr from-[#0F6B4F] to-[#16805E] text-white shadow-md shadow-[#0F6B4F]/30 group-hover:scale-105 transition-transform flex-shrink-0">
+            <Server size={18} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h4 className="text-sm font-bold text-heading group-hover:text-[#22C55E] transition-colors leading-snug">
+              {title}
+            </h4>
+            {description && (
+              <p className="text-xs text-muted mt-1 leading-relaxed line-clamp-2">
+                {description}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* CTA Bar */}
+        <div className="pt-2 border-t border-line/60 flex items-center justify-between">
+          <span className="text-[11px] font-mono text-muted truncate max-w-[170px]" title={linkedSystem.url}>
+            {linkedSystem.url.replace(/^https?:\/\//, '')}
+          </span>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-[#0F6B4F] to-[#16805E] group-hover:from-[#16805E] group-hover:to-[#22C55E] text-white font-semibold text-xs shadow-sm transition-all group-hover:translate-x-0.5">
+            <span>Access System</span>
+            {isExternal ? <ExternalLink size={12} /> : <ArrowRight size={12} />}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+
+  if (isExternal) {
+    return (
+      <a
+        href={linkedSystem.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block no-underline"
+        title={`Open linked system: ${title}`}
+      >
+        {buttonInner}
+      </a>
+    );
+  }
+
+  return (
+    <Link
+      to={linkedSystem.url}
+      className="block no-underline"
+      title={`Navigate to linked system: ${title}`}
+    >
+      {buttonInner}
+    </Link>
+  );
+};
+
+/* ─── Header Quick-Action Pill for Linked System ─── */
+const LinkedSystemQuickButton = ({ linkedSystem }) => {
+  if (!linkedSystem || !linkedSystem.url) return null;
+  const isExternal = /^https?:\/\//i.test(linkedSystem.url);
+
+  const btnContent = (
+    <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#0F6B4F] to-[#16805E] hover:from-[#16805E] hover:to-[#22C55E] text-white text-xs font-bold shadow-md shadow-[#0F6B4F]/25 hover:shadow-[#0F6B4F]/40 hover:scale-[1.02] transition-all cursor-pointer">
+      <span className="relative flex h-2 w-2">
+        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#22C55E] opacity-75" />
+        <span className="relative inline-flex rounded-full h-2 w-2 bg-[#22C55E]" />
+      </span>
+      <span>Linked System</span>
+      {isExternal ? <ExternalLink size={13} /> : <ArrowRight size={13} />}
+    </div>
+  );
+
+  return isExternal ? (
+    <a href={linkedSystem.url} target="_blank" rel="noopener noreferrer" title={`Launch linked system: ${linkedSystem.title || 'System'}`}>
+      {btnContent}
+    </a>
+  ) : (
+    <Link to={linkedSystem.url} title={`Launch linked system: ${linkedSystem.title || 'System'}`}>
+      {btnContent}
+    </Link>
   );
 };
 
@@ -241,6 +367,33 @@ export default function ArticleView() {
     });
     return headings;
   }, [article]);
+
+  // Resolve linked system configuration for the article
+  const resolvedLinkedSystem = useMemo(() => {
+    if (!article) return null;
+    if (article.linkedSystem && (article.linkedSystem.url || article.linkedSystem.enabled)) {
+      return {
+        enabled: article.linkedSystem.enabled !== false,
+        title: article.linkedSystem.title || 'Launch Linked System',
+        url: article.linkedSystem.url,
+        systemType: article.linkedSystem.systemType || 'Live System',
+        description: article.linkedSystem.description || '',
+      };
+    }
+    // Check if flat fields were provided
+    if (article.linkedSystemUrl) {
+      return {
+        enabled: article.linkedSystemEnabled !== false,
+        title: article.linkedSystemTitle || 'Launch Linked System',
+        url: article.linkedSystemUrl,
+        systemType: article.linkedSystemType || 'Live System',
+        description: article.linkedSystemDescription || '',
+      };
+    }
+    return null;
+  }, [article]);
+
+  const hasLinkedSystem = Boolean(resolvedLinkedSystem && resolvedLinkedSystem.url);
 
   const handleLike = () => {
     const next = !isLiked;
@@ -404,8 +557,12 @@ export default function ArticleView() {
               </div>
             </div>
 
-            {/* Like, Bookmark, Share Buttons & Author Edit */}
-            <div className="flex items-center gap-2">
+            {/* Like, Bookmark, Share Buttons & Author Edit & Linked System */}
+            <div className="flex flex-wrap items-center gap-2">
+              {hasLinkedSystem && (
+                <LinkedSystemQuickButton linkedSystem={resolvedLinkedSystem} />
+              )}
+
               {isAuthor && article._id && (
                 <Link
                   to={article.type === 'article' ? `/admin/edit-article/${article._id}` : `/admin/edit-blog/${article._id}`}
@@ -589,8 +746,109 @@ export default function ArticleView() {
             </section>
           </main>
 
-          {/* Sticky Sidebar: Table of Contents & Related (4 cols) */}
-          <aside className="lg:col-span-4 space-y-8">
+          {/* Sticky Sidebar: Article Page Details & Table of Contents (4 cols) */}
+          <aside className="lg:col-span-4 space-y-6">
+            {/* ═══ ARTICLE PAGE DETAILS SECTION ═══ */}
+            <div className="p-6 rounded-2xl bg-page border border-line space-y-5 shadow-xl">
+              <div className="flex items-center justify-between pb-3 border-b border-line">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-lg bg-[#0F6B4F]/15 text-[#0F6B4F]">
+                    <Layers size={16} />
+                  </div>
+                  <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-heading">
+                    Article Page Details
+                  </h3>
+                </div>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-soft text-[#0F6B4F] border border-[#0F6B4F]/30 font-semibold">
+                  Technical Specs
+                </span>
+              </div>
+
+              {/* Technical Specifications List */}
+              <div className="space-y-2.5 text-xs">
+                <div className="flex items-center justify-between py-1.5 border-b border-line/40">
+                  <span className="text-muted flex items-center gap-1.5">
+                    <Clock size={13} className="text-muted" />
+                    <span>Reading Duration:</span>
+                  </span>
+                  <strong className="text-heading font-mono">{article.readingTime || 8} min read</strong>
+                </div>
+
+                <div className="flex items-center justify-between py-1.5 border-b border-line/40">
+                  <span className="text-muted flex items-center gap-1.5">
+                    <BookOpen size={13} className="text-muted" />
+                    <span>Technical Level:</span>
+                  </span>
+                  <strong className="text-[#0F6B4F] font-semibold">{article.difficulty || 'Intermediate'}</strong>
+                </div>
+
+                <div className="flex items-center justify-between py-1.5 border-b border-line/40">
+                  <span className="text-muted flex items-center gap-1.5">
+                    <TagIcon size={13} className="text-muted" />
+                    <span>Category:</span>
+                  </span>
+                  <strong className="text-heading font-medium">{article.category?.name || 'Computer Science'}</strong>
+                </div>
+
+                <div className="flex items-center justify-between py-1.5 border-b border-line/40">
+                  <span className="text-muted flex items-center gap-1.5">
+                    <Eye size={13} className="text-muted" />
+                    <span>Total Reads:</span>
+                  </span>
+                  <strong className="text-heading font-mono">{(article.views || 1420).toLocaleString()} views</strong>
+                </div>
+
+                <div className="flex items-center justify-between py-1.5">
+                  <span className="text-muted flex items-center gap-1.5">
+                    <Activity size={13} className="text-[#22C55E]" />
+                    <span>System Status:</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#22C55E]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-pulse" />
+                    {hasLinkedSystem ? 'Linked System Online' : 'Verified Documentation'}
+                  </span>
+                </div>
+              </div>
+
+              {/* ═══ LINKED SYSTEM BUTTON ═══ */}
+              <div className="pt-2">
+                <div className="text-[11px] font-mono uppercase font-semibold text-muted mb-2.5 flex items-center justify-between">
+                  <span>Linked System Button</span>
+                  {hasLinkedSystem && resolvedLinkedSystem?.systemType && (
+                    <span className="text-[10px] text-[#22C55E] font-bold">
+                      {resolvedLinkedSystem.systemType}
+                    </span>
+                  )}
+                </div>
+
+                {hasLinkedSystem ? (
+                  <LinkedSystemButton linkedSystem={resolvedLinkedSystem} />
+                ) : (
+                  <div className="p-4 rounded-xl bg-gradient-to-br from-[#0c1f17]/60 via-surface-card to-[#091712]/60 border border-line text-xs text-muted space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-heading font-bold text-xs">
+                        <Server size={14} className="text-[#0F6B4F]" />
+                        <span>Interactive System Sandbox</span>
+                      </div>
+                      <span className="text-[9px] font-mono text-[#0F6B4F] bg-[#0F6B4F]/10 px-1.5 py-0.5 rounded border border-[#0F6B4F]/20">
+                        Default
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-muted leading-relaxed">
+                      Practice coding problems, test algorithms, and explore system architectures in the ProblemHub platform.
+                    </p>
+                    <Link
+                      to="/problemhub"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0F6B4F] hover:bg-[#16805E] text-white text-xs font-semibold shadow-sm transition-all"
+                    >
+                      <span>Launch ProblemHub</span>
+                      <ArrowRight size={12} />
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </div>
+
             {/* Table of Contents */}
             {tableOfContents.length > 0 && (
               <div className="sticky top-28 p-6 rounded-2xl bg-page border border-line space-y-4 shadow-xl">
@@ -598,28 +856,17 @@ export default function ArticleView() {
                   <List size={14} />
                   <span>Table of Contents</span>
                 </div>
-                <nav className="space-y-1.5 text-xs text-muted">
+                <nav className="space-y-1.5 text-xs text-muted max-h-72 overflow-y-auto pr-1">
                   {tableOfContents.map((item, idx) => (
                     <a
                       key={idx}
                       href={`#${item.id}`}
-                      className="block py-1 hover:text-heading hover:underline transition-colors hover:text-[#16805E] transition-colors pl-2 border-l border-line hover:border-[#0F6B4F]"
+                      className="block py-1 hover:text-heading hover:underline transition-colors hover:text-[#16805E] pl-2 border-l border-line hover:border-[#0F6B4F]"
                     >
                       {item.text}
                     </a>
                   ))}
                 </nav>
-
-                <div className="pt-4 border-t border-line text-xs text-muted space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span>Reading Time:</span>
-                    <strong className="text-heading font-mono">{article.readingTime || 8} min</strong>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span>Difficulty:</span>
-                    <strong className="text-[#0F6B4F]">{article.difficulty || 'Intermediate'}</strong>
-                  </div>
-                </div>
               </div>
             )}
           </aside>

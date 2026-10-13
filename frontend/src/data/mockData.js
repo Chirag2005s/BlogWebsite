@@ -457,6 +457,13 @@ export const ARTICLES = [
     },
     likesCount: 342,
     bookmarksCount: 189,
+    linkedSystem: {
+      enabled: true,
+      title: 'Global Subsea Fiber & BGP Topology Explorer',
+      url: 'https://www.submarinecablemap.com',
+      systemType: 'Interactive System Map',
+      description: 'Explore live optical subsea cable telemetry and planetary routing hops.',
+    },
     content: `
 # How Does the Internet Actually Work?
 
@@ -875,8 +882,15 @@ stream.pipe(res);
     },
     likesCount: 890,
     bookmarksCount: 420,
+    linkedSystem: {
+      enabled: true,
+      title: 'Google DeepMind Frontier Intelligence System Console',
+      url: 'https://deepmind.google/technologies/gemini/',
+      systemType: 'Frontier AI System',
+      description: 'Access the official Gemini multimodal architecture benchmarks and live model console.',
+    },
     content: `# Gemini 4 Argon: our next era of frontier intelligence
-
+ 
 Gemini 4 Argon introduces radical efficiency gains across multimodal inference, recursive reasoning loops, and long-context processing.
 
 ---
@@ -908,6 +922,13 @@ With low-latency speculative decoding, Argon can generate and evaluate candidate
     },
     likesCount: 654,
     bookmarksCount: 290,
+    linkedSystem: {
+      enabled: true,
+      title: 'Autonomous Multi-Agent Architecture Sandbox',
+      url: '/problemhub',
+      systemType: 'Interactive Code System',
+      description: 'Launch the code execution sandbox and test multi-agent reasoning loops in real time.',
+    },
     content: `# AI Agents: How They Are Changing Software Development in 2026
 
 The shift from passive code generation to autonomous, self-correcting agents represents the largest productivity inflection in computing history.

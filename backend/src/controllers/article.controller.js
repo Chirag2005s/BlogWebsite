@@ -303,8 +303,34 @@ export const createArticle = async (req, res, next) => {
       coverImage,
       seoTitle,
       seoDescription,
+      linkedSystem,
       author: authorFromClient,
     } = req.body;
+
+    // Helper to format linkedSystem cleanly
+    const parseLinkedSystem = (input, body) => {
+      if (input && typeof input === 'object') {
+        const hasUrl = Boolean(input.url && input.url.trim());
+        return {
+          enabled: input.enabled !== undefined ? Boolean(input.enabled) : hasUrl,
+          title: (input.title || input.name || (hasUrl ? 'Launch Linked System' : '')).trim(),
+          url: (input.url || '').trim(),
+          systemType: (input.systemType || 'Live System').trim(),
+          description: (input.description || '').trim(),
+        };
+      }
+      if (body?.linkedSystemUrl !== undefined) {
+        const hasUrl = Boolean(body.linkedSystemUrl && body.linkedSystemUrl.trim());
+        return {
+          enabled: body.linkedSystemEnabled !== undefined ? Boolean(body.linkedSystemEnabled) : hasUrl,
+          title: (body.linkedSystemTitle || (hasUrl ? 'Launch Linked System' : '')).trim(),
+          url: (body.linkedSystemUrl || '').trim(),
+          systemType: (body.linkedSystemType || 'Live System').trim(),
+          description: (body.linkedSystemDescription || '').trim(),
+        };
+      }
+      return { enabled: false, title: '', url: '', systemType: 'Live System', description: '' };
+    };
 
     // Resolve author: prefer req.user._id, fallback to client author or database admin/user
     let authorId = req.user?._id;
@@ -345,6 +371,7 @@ export const createArticle = async (req, res, next) => {
       coverImage: coverImage || '',
       seoTitle,
       seoDescription,
+      linkedSystem: parseLinkedSystem(linkedSystem, req.body),
       author: authorId,
       publishedAt: status === 'Published' ? Date.now() : null,
       readingTime: content ? Math.ceil(content.split(/\s+/).filter(Boolean).length / 200) : 1,
@@ -385,6 +412,7 @@ export const updateArticle = async (req, res, next) => {
         coverImage,
         seoTitle,
         seoDescription,
+        linkedSystem,
       } = req.body;
 
       article.title = title || article.title;
@@ -412,6 +440,24 @@ export const updateArticle = async (req, res, next) => {
       article.coverImage = coverImage || article.coverImage;
       article.seoTitle = seoTitle || article.seoTitle;
       article.seoDescription = seoDescription || article.seoDescription;
+
+      if (linkedSystem !== undefined || req.body.linkedSystemUrl !== undefined) {
+        const raw = linkedSystem || {
+          enabled: req.body.linkedSystemEnabled,
+          title: req.body.linkedSystemTitle,
+          url: req.body.linkedSystemUrl,
+          systemType: req.body.linkedSystemType,
+          description: req.body.linkedSystemDescription,
+        };
+        const hasUrl = Boolean(raw.url && String(raw.url).trim());
+        article.linkedSystem = {
+          enabled: raw.enabled !== undefined ? Boolean(raw.enabled) : hasUrl,
+          title: (raw.title || raw.name || (hasUrl ? 'Launch Linked System' : '')).trim(),
+          url: (raw.url || '').trim(),
+          systemType: (raw.systemType || 'Live System').trim(),
+          description: (raw.description || '').trim(),
+        };
+      }
       
       if (content) {
         article.readingTime = Math.ceil(content.split(/\s+/).filter(Boolean).length / 200);

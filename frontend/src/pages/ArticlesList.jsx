@@ -235,6 +235,12 @@ const ArticlesList = () => {
                       <FileText size={12} />
                       {article.category?.name || 'Technical Article'}
                     </span>
+                    {(article.linkedSystem?.enabled || (article.linkedSystem?.url && article.linkedSystem?.url.trim())) && (
+                      <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        Linked System
+                      </span>
+                    )}
                   </div>
 
                   <h3 className="text-lg font-bold text-white group-hover:text-primary-400 transition-colors line-clamp-2 leading-snug">

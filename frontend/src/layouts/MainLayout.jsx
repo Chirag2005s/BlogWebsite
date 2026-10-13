@@ -279,10 +279,12 @@ export default function MainLayout() {
                           </div>
                           <div className="min-w-0">
                             <p className="text-xs font-bold text-heading truncate">{userInfo.name}</p>
-                            <p className="text-[11px] text-muted truncate">{userInfo.email || 'developer@techjourney.dev'}</p>
-                            <span className="inline-block mt-1 px-2 py-0.5 rounded-md text-[9px] font-mono font-bold uppercase tracking-wider bg-[#0F6B4F]/15 text-[#4FD1A5] border border-[#0F6B4F]/30">
-                              {userInfo.role || 'USER'}
-                            </span>
+                            <p className="text-[11px] text-muted truncate">{userInfo.email || `@${userInfo.username || 'user'}`}</p>
+                            <div className="flex items-center gap-1.5 mt-1">
+                              <span className="inline-block px-2 py-0.5 rounded-md text-[9px] font-mono font-bold uppercase tracking-wider bg-[#0F6B4F]/15 text-[#4FD1A5] border border-[#0F6B4F]/30">
+                                {userInfo.role || 'MEMBER'}
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -299,7 +301,7 @@ export default function MainLayout() {
                           </div>
                           <div>
                             <div className="font-semibold text-heading group-hover:text-[#4FD1A5]">My Profile</div>
-                            <div className="text-[10px] text-muted">View & update your profile</div>
+                            <div className="text-[10px] text-muted">View and edit your profile</div>
                           </div>
                         </Link>
 
@@ -545,9 +547,9 @@ export default function MainLayout() {
               <ul className="space-y-2 text-sm text-slate-400">
                 <li><Link to="/blog" className="hover:text-white transition-colors">Blog</Link></li>
                 <li><Link to="/articles" className="hover:text-white transition-colors">Articles</Link></li>
-                <li><Link to="/programming" className="hover:text-white transition-colors">Programming</Link></li>
                 <li><Link to="/problemhub" onClick={(e) => { if (!userInfo) { e.preventDefault(); setLoginModalOpen(true); } }} className="hover:text-white transition-colors">ProblemHub</Link></li>
                 <li><Link to="/roadmaps" onClick={(e) => { if (!userInfo) { e.preventDefault(); setLoginModalOpen(true); } }} className="hover:text-white transition-colors">Roadmaps</Link></li>
+                <li><Link to="/interview-questions" onClick={(e) => { if (!userInfo) { e.preventDefault(); setLoginModalOpen(true); } }} className="hover:text-white transition-colors">Interview Questions</Link></li>
                 <li><Link to="/news" className="hover:text-white transition-colors">Tech News</Link></li>
               </ul>
             </div>
