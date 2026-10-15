@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { 
   ArrowRight, Sparkles, BookOpen, Compass, Code2, Terminal, 
   Globe, Server, BrainCircuit, Binary, Network, Cpu, Clock, 
@@ -17,6 +18,33 @@ import Roadmap3DSection from '../components/Roadmap3DSection';
 import NewsletterBanner from '../components/NewsletterBanner';
 import AdvertisementSection from '../components/AdvertisementSection';
 import api from '../services/api';
+
+// Animation variants for Home page
+const heroContainerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.12, delayChildren: 0.05 }
+  }
+};
+
+const heroItemVariants = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }
+};
+
+const gridContainerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.07 }
+  }
+};
+
+const cardItemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' } }
+};
 
 // Map icon name string to Lucide component
 const getCategoryIcon = (iconName) => {
@@ -72,31 +100,36 @@ export default function Home() {
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             {/* Left Content (7 cols) */}
-            <div className="lg:col-span-7 space-y-6 sm:space-y-8 text-center lg:text-left">
+            <motion.div
+              variants={heroContainerVariants}
+              initial="hidden"
+              animate="show"
+              className="lg:col-span-7 space-y-6 sm:space-y-8 text-center lg:text-left"
+            >
               {/* Badge */}
-              <div className="eyebrow-badge shadow-sm">
+              <motion.div variants={heroItemVariants} className="eyebrow-badge shadow-sm">
                 <span className="w-2 h-2 rounded-full bg-[#0F6B4F] animate-pulse" />
                 <span>Developer Knowledge Platform</span>
                 <span className="text-[#D9E2DE]">|</span>
                 <span className="text-muted font-mono">v2.6</span>
-              </div>
+              </motion.div>
 
               {/* Main Heading */}
-              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-heading leading-[1.08]">
+              <motion.h1 variants={heroItemVariants} className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-heading leading-[1.08]">
                 Explore Technology.{' '}
                 <span className="tech-gradient-text block mt-1 sm:mt-2">
                   Build Skills.
                 </span>{' '}
                 Shape Your Journey.
-              </h1>
+              </motion.h1>
 
               {/* Description */}
-              <p className="text-base sm:text-xl text-muted leading-relaxed max-w-2xl mx-auto lg:mx-0">
+              <motion.p variants={heroItemVariants} className="text-base sm:text-xl text-muted leading-relaxed max-w-2xl mx-auto lg:mx-0">
                 TechJourney helps developers explore programming, technology, roadmaps, tutorials, and the latest trends in the software world.
-              </p>
+              </motion.p>
 
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+              <motion.div variants={heroItemVariants} className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
                 <Link
                   to="/blog"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-gradient-to-r from-[#0F6B4F] to-[#16805E] hover:opacity-95 text-white font-bold text-base shadow-xl shadow-[#0F6B4F]/20 transition-all duration-300 hover:scale-[1.02] active:scale-95 group"
@@ -113,10 +146,10 @@ export default function Home() {
                   <Compass size={18} className="text-[#0F6B4F] group-hover:rotate-45 transition-transform duration-300" />
                   <span>View Roadmaps</span>
                 </Link>
-              </div>
+              </motion.div>
 
               {/* Tech Badges Row */}
-              <div className="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-2.5 text-xs text-muted">
+              <motion.div variants={heroItemVariants} className="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-2.5 text-xs text-muted">
                 <span className="text-muted font-mono">Popular:</span>
                 {['React 19', 'System Design', 'AI Agents', 'Linux Kernel', 'TypeScript', 'eBPF'].map((topic) => (
                   <Link
@@ -127,14 +160,23 @@ export default function Home() {
                     #{topic}
                   </Link>
                 ))}
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
             {/* Right Futuristic Developer Illustration (5 cols) */}
-            <div className="lg:col-span-5 relative">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, x: 30 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+              className="lg:col-span-5 relative"
+            >
               <div className="relative mx-auto max-w-lg lg:max-w-none card-3d-perspective">
                 {/* 3D Floating Terminal Window */}
-                <div className="relative rounded-2xl bg-[#020617] border border-line p-5 shadow-2xl shadow-cyan-950/40 card-3d-tilt">
+                <motion.div
+                  whileHover={{ rotateY: -3, rotateX: 2, scale: 1.015 }}
+                  transition={{ duration: 0.3 }}
+                  className="relative rounded-2xl bg-[#020617] border border-line p-5 shadow-2xl shadow-cyan-950/40 card-3d-tilt"
+                >
                   {/* Window Bar */}
                   <div className="flex items-center justify-between pb-3 mb-4 border-b border-line">
                     <div className="flex items-center gap-2">
@@ -187,10 +229,14 @@ export default function Home() {
                       <span>Scale</span>
                     </div>
                   </div>
-                </div>
+                </motion.div>
 
                 {/* Floating Floating Code Badge 1 (Top Right) */}
-                <div className="absolute -top-6 -right-6 p-3 rounded-xl bg-[#1E293B]/90 border border-cyan-500/40 shadow-xl backdrop-blur-md animate-float-fast hidden sm:flex items-center gap-2.5">
+                <motion.div
+                  animate={{ y: [0, -7, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                  className="absolute -top-6 -right-6 p-3 rounded-xl bg-[#1E293B]/90 border border-cyan-500/40 shadow-xl backdrop-blur-md hidden sm:flex items-center gap-2.5"
+                >
                   <div className="w-8 h-8 rounded-lg bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center text-[#06B6D4]">
                     <BrainCircuit size={18} />
                   </div>
@@ -198,10 +244,14 @@ export default function Home() {
                     <div className="text-xs font-bold text-white">AI / LLM Agents</div>
                     <div className="text-[10px] text-cyan-300 font-mono">Autonomous Loop</div>
                   </div>
-                </div>
+                </motion.div>
 
                 {/* Floating Floating Code Badge 2 (Bottom Left) */}
-                <div className="absolute -bottom-8 -left-6 p-3 rounded-xl bg-[#1E293B]/90 border border-purple-500/40 shadow-xl backdrop-blur-md animate-float-slow hidden sm:flex items-center gap-2.5">
+                <motion.div
+                  animate={{ y: [0, 7, 0] }}
+                  transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
+                  className="absolute -bottom-8 -left-6 p-3 rounded-xl bg-[#1E293B]/90 border border-purple-500/40 shadow-xl backdrop-blur-md hidden sm:flex items-center gap-2.5"
+                >
                   <div className="w-8 h-8 rounded-lg bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-[#8B5CF6]">
                     <Layers size={18} />
                   </div>
@@ -209,9 +259,9 @@ export default function Home() {
                     <div className="text-xs font-bold text-white">Full Stack Node</div>
                     <div className="text-[10px] text-purple-300 font-mono">Connected &amp; Live</div>
                   </div>
-                </div>
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -250,42 +300,54 @@ export default function Home() {
         </div>
 
         {/* 8 Categories Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <motion.div
+          variants={gridContainerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: '-50px' }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
+        >
           {CATEGORIES.map((cat) => (
-            <Link
+            <motion.div
               key={cat.id}
-              to={`/blog?category=${encodeURIComponent(cat.name)}`}
-              className="group relative p-6 rounded-2xl surface-card border border-line hover:border-[#0F6B4F]/35 hover:-translate-y-1.5 transition-all duration-300 shadow-xl shadow-black/30 flex flex-col justify-between overflow-hidden"
+              variants={cardItemVariants}
+              whileHover={{ y: -6, scale: 1.02 }}
+              transition={{ type: 'spring', stiffness: 350, damping: 20 }}
             >
-              {/* Subtle top-right gradient flare on hover */}
-              <div className={`absolute -top-16 -right-16 w-32 h-32 bg-gradient-to-bl ${cat.color} opacity-0 group-hover:opacity-15 rounded-full blur-2xl transition-opacity duration-500 pointer-events-none`} />
+              <Link
+                to={`/blog?category=${encodeURIComponent(cat.name)}`}
+                className="group relative p-6 rounded-2xl surface-card border border-line hover:border-[#0F6B4F]/40 transition-colors duration-300 shadow-xl shadow-black/30 flex flex-col justify-between overflow-hidden h-full"
+              >
+                {/* Subtle top-right gradient flare on hover */}
+                <div className={`absolute -top-16 -right-16 w-32 h-32 bg-gradient-to-bl ${cat.color} opacity-0 group-hover:opacity-15 rounded-full blur-2xl transition-opacity duration-500 pointer-events-none`} />
 
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-soft border border-line flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    {getCategoryIcon(cat.icon)}
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-soft border border-line flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      {getCategoryIcon(cat.icon)}
+                    </div>
+                    <span className="text-xs font-mono text-muted px-2.5 py-1 rounded-full bg-page border border-line">
+                      {cat.articleCount} Articles
+                    </span>
                   </div>
-                  <span className="text-xs font-mono text-muted px-2.5 py-1 rounded-full bg-page border border-line">
-                    {cat.articleCount} Articles
-                  </span>
+
+                  <h3 className="text-lg font-bold text-heading group-hover:text-[#0F6B4F] transition-colors mb-2">
+                    {cat.name}
+                  </h3>
+
+                  <p className="text-xs text-muted leading-relaxed line-clamp-2">
+                    {cat.description}
+                  </p>
                 </div>
 
-                <h3 className="text-lg font-bold text-heading group-hover:text-[#0F6B4F] transition-colors mb-2">
-                  {cat.name}
-                </h3>
-
-                <p className="text-xs text-muted leading-relaxed line-clamp-2">
-                  {cat.description}
-                </p>
-              </div>
-
-              <div className="mt-5 pt-4 border-t border-line flex items-center justify-between text-xs font-semibold text-[#06B6D4]">
-                <span>Explore Domain</span>
-                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-              </div>
-            </Link>
+                <div className="mt-5 pt-4 border-t border-line flex items-center justify-between text-xs font-semibold text-[#06B6D4]">
+                  <span>Explore Domain</span>
+                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                </div>
+              </Link>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       {/* ═══════════════════════════════════════════
@@ -346,81 +408,94 @@ export default function Home() {
         </div>
 
         {/* Blog Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <motion.div
+          variants={gridContainerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: '-50px' }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
           {blogs.slice(0, 6).map((article) => (
-            <Link
+            <motion.div
               key={article._id || article.slug}
-              to={article.type === 'article' ? `/article/${article.slug}` : `/blog/${article.slug}`}
-              className="blog-card rounded-2xl overflow-hidden group flex flex-col hover:border-[#0F6B4F]/35 transition-all duration-300"
+              variants={cardItemVariants}
+              whileHover={{ y: -6, scale: 1.015 }}
+              transition={{ type: 'spring', stiffness: 350, damping: 22 }}
+              className="h-full"
             >
-              {/* Cover Image Container */}
-              <div className="aspect-[16/9] w-full overflow-hidden bg-[#111827] relative">
-                <img
-                  src={article.coverImage}
-                  alt={article.title}
-                  className="blog-card-image w-full h-full object-cover"
-                  loading="lazy"
-                />
+              <Link
+                to={article.type === 'article' ? `/article/${article.slug}` : `/blog/${article.slug}`}
+                className="blog-card rounded-2xl overflow-hidden group flex flex-col hover:border-[#0F6B4F]/35 transition-all duration-300 h-full"
+              >
+                {/* Cover Image Container */}
+                <div className="aspect-[16/9] w-full overflow-hidden bg-[#111827] relative">
+                  <img
+                    src={article.coverImage}
+                    alt={article.title}
+                    className="blog-card-image w-full h-full object-cover"
+                    loading="lazy"
+                  />
 
-                {/* Floating Badges */}
-                <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
-                  <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#0B1120]/80 text-[#06B6D4] border border-cyan-500/30 backdrop-blur-md">
-                    {article.category?.name || 'Engineering'}
-                  </span>
-
-                  {article.difficulty && (
-                    <span className="px-2.5 py-1 rounded-full text-[10px] font-medium bg-[#0B1120]/80 text-heading border border-line backdrop-blur-md">
-                      {article.difficulty}
+                  {/* Floating Badges */}
+                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
+                    <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#0B1120]/80 text-[#06B6D4] border border-cyan-500/30 backdrop-blur-md">
+                      {article.category?.name || 'Engineering'}
                     </span>
-                  )}
-                </div>
-              </div>
 
-              {/* Content Body */}
-              <div className="p-6 flex flex-col flex-grow space-y-3">
-                <div className="flex items-center gap-3 text-xs text-muted">
-                  <span className="flex items-center gap-1">
-                    <Clock size={12} /> {article.readingTime} min read
-                  </span>
-                  <span>•</span>
-                  <span>{new Date(article.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-                </div>
-
-                <h3 className="text-lg font-bold text-heading group-hover:text-[#0F6B4F] transition-colors line-clamp-2 leading-snug">
-                  {article.title}
-                </h3>
-
-                <p className="text-xs sm:text-sm text-muted line-clamp-2 flex-grow leading-relaxed">
-                  {article.excerpt}
-                </p>
-
-                {/* Author & Read More Footer */}
-                <div className="pt-4 border-t border-line flex items-center justify-between text-xs mt-auto">
-                  <div className="flex items-center gap-2">
-                    {article.author?.avatar ? (
-                      <img
-                        src={article.author.avatar}
-                        alt={article.author.name}
-                        className="w-6 h-6 rounded-full object-cover border border-line"
-                      />
-                    ) : (
-                      <div className="w-6 h-6 rounded-full bg-blue-600/30 flex items-center justify-center text-[10px] font-bold text-blue-300">
-                        {article.author?.name?.charAt(0) || 'A'}
-                      </div>
+                    {article.difficulty && (
+                      <span className="px-2.5 py-1 rounded-full text-[10px] font-medium bg-[#0B1120]/80 text-heading border border-line backdrop-blur-md">
+                        {article.difficulty}
+                      </span>
                     )}
-                    <span className="text-heading font-medium text-xs">
-                      {article.author?.name || 'TechJourney Contributor'}
+                  </div>
+                </div>
+
+                {/* Content Body */}
+                <div className="p-6 flex flex-col flex-grow space-y-3">
+                  <div className="flex items-center gap-3 text-xs text-muted">
+                    <span className="flex items-center gap-1">
+                      <Clock size={12} /> {article.readingTime} min read
                     </span>
+                    <span>•</span>
+                    <span>{new Date(article.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                   </div>
 
-                  <span className="font-semibold text-[#0F6B4F] group-hover:text-[#16805E] transition-colors flex items-center gap-1">
-                    Read More <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
-                  </span>
+                  <h3 className="text-lg font-bold text-heading group-hover:text-[#0F6B4F] transition-colors line-clamp-2 leading-snug">
+                    {article.title}
+                  </h3>
+
+                  <p className="text-xs sm:text-sm text-muted line-clamp-2 flex-grow leading-relaxed">
+                    {article.excerpt}
+                  </p>
+
+                  {/* Author & Read More Footer */}
+                  <div className="pt-4 border-t border-line flex items-center justify-between text-xs mt-auto">
+                    <div className="flex items-center gap-2">
+                      {article.author?.avatar ? (
+                        <img
+                          src={article.author.avatar}
+                          alt={article.author.name}
+                          className="w-6 h-6 rounded-full object-cover border border-line"
+                        />
+                      ) : (
+                        <div className="w-6 h-6 rounded-full bg-blue-600/30 flex items-center justify-center text-[10px] font-bold text-blue-300">
+                          {article.author?.name?.charAt(0) || 'A'}
+                        </div>
+                      )}
+                      <span className="text-heading font-medium text-xs">
+                        {article.author?.name || 'TechJourney Contributor'}
+                      </span>
+                    </div>
+
+                    <span className="font-semibold text-[#0F6B4F] group-hover:text-[#16805E] transition-colors flex items-center gap-1">
+                      Read More <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       {/* ═══════════════════════════════════════════
@@ -484,12 +559,20 @@ export default function Home() {
         </div>
 
         {/* Languages Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
-          {PROGRAMMING_LANGUAGES.map((lang, idx) => (
-            <div
+        <motion.div
+          variants={gridContainerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: '-50px' }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10"
+        >
+          {PROGRAMMING_LANGUAGES.map((lang) => (
+            <motion.div
               key={lang.slug}
-              className="group relative flex flex-col justify-between p-6 rounded-2xl surface-card hover:-translate-y-2 transition-all duration-500 overflow-hidden"
-              style={{ animationDelay: `${idx * 100}ms` }}
+              variants={cardItemVariants}
+              whileHover={{ y: -8, scale: 1.02 }}
+              transition={{ type: 'spring', stiffness: 350, damping: 20 }}
+              className="group relative flex flex-col justify-between p-6 rounded-2xl surface-card hover:border-[#0F6B4F]/40 transition-colors duration-300 overflow-hidden"
             >
               {/* Animated Glow on Hover */}
               <div className="absolute inset-0 bg-gradient-to-br from-[#0F6B4F]/0 to-[#0F6B4F]/0 group-hover:from-[#0F6B4F]/5 group-hover:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -537,9 +620,9 @@ export default function Home() {
                   <ArrowRight size={16} className="group-hover/btn:translate-x-1.5 transition-transform" />
                 </Link>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       {/* ═══════════════════════════════════════════
@@ -572,10 +655,19 @@ export default function Home() {
         </div>
 
         {/* Horizontal News Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <motion.div
+          variants={gridContainerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: '-50px' }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-5"
+        >
           {TECH_NEWS.slice(0, 4).map((item) => (
-            <div
+            <motion.div
               key={item.id}
+              variants={cardItemVariants}
+              whileHover={{ y: -4, scale: 1.01 }}
+              transition={{ type: 'spring', stiffness: 350, damping: 22 }}
               className="p-5 rounded-2xl surface-card border border-line hover:border-[#0F6B4F]/35 transition-all duration-300 flex flex-col sm:flex-row gap-4 sm:items-center group"
             >
               {/* Image */}
@@ -616,9 +708,9 @@ export default function Home() {
                   </Link>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       {/* ═══════════════════════════════════════════

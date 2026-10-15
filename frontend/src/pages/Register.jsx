@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserPlus, Mail, Lock, User, AlertCircle, ArrowRight, Eye, EyeOff, Check, X, ShieldCheck } from 'lucide-react';
 import api from '../services/api';
@@ -78,25 +79,37 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-[70vh] flex items-center justify-center py-12">
-      <div className="w-full max-w-md">
+    <div className="min-h-[70vh] flex items-center justify-center py-12 px-4">
+      <motion.div 
+        initial={{ opacity: 0, y: 25, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="w-full max-w-md"
+      >
         {/* Card */}
-        <div className="glass-card rounded-2xl p-8 sm:p-10 space-y-7">
+        <div className="glass-card rounded-2xl p-8 sm:p-10 space-y-7 shadow-2xl shadow-[#0F6B4F]/10 border border-line">
           {/* Header */}
           <div className="text-center space-y-2">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0F6B4F] to-[#16805E] flex items-center justify-center mx-auto mb-3 shadow-lg shadow-[#0F6B4F]/20">
+            <motion.div 
+              whileHover={{ scale: 1.1, rotate: -6 }}
+              className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0F6B4F] to-[#16805E] flex items-center justify-center mx-auto mb-3 shadow-lg shadow-[#0F6B4F]/20 cursor-pointer"
+            >
               <UserPlus size={22} className="text-white" />
-            </div>
+            </motion.div>
             <h1 className="text-2xl font-bold text-heading">Create Account</h1>
             <p className="text-sm text-muted">Join the TechJourney community</p>
           </div>
 
           {/* Error */}
           {error && (
-            <div className="flex items-center gap-3 bg-error/10 border border-error/20 text-red-400 px-4 py-3 rounded-xl text-sm animate-fade-in">
+            <motion.div 
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center gap-3 bg-error/10 border border-error/20 text-red-400 px-4 py-3 rounded-xl text-sm"
+            >
               <AlertCircle size={16} className="flex-shrink-0" />
               <span>{error}</span>
-            </div>
+            </motion.div>
           )}
 
           {/* Form */}
@@ -250,10 +263,12 @@ const Register = () => {
             </div>
 
             {/* Submit */}
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
               type="submit"
               disabled={loading || !canSubmit}
-              className="w-full bg-primary-600 hover:bg-primary-500 text-white font-semibold py-3 rounded-xl transition-all shadow-lg shadow-primary-600/20 hover:shadow-primary-500/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full bg-primary-600 hover:bg-primary-500 text-white font-semibold py-3 rounded-xl transition-all shadow-lg shadow-primary-600/20 hover:shadow-primary-500/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
             >
               {loading ? (
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -263,7 +278,7 @@ const Register = () => {
                   <ArrowRight size={16} />
                 </>
               )}
-            </button>
+            </motion.button>
           </form>
 
           {/* Footer */}
@@ -274,7 +289,7 @@ const Register = () => {
             </Link>
           </p>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

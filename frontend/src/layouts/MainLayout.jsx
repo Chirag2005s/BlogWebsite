@@ -225,8 +225,8 @@ export default function MainLayout() {
                   <button
                     onClick={() => setUserMenuOpen((prev) => !prev)}
                     className={`flex items-center gap-2 pl-1.5 pr-2.5 py-1 rounded-2xl border transition-all shadow-sm group ${userMenuOpen
-                        ? 'bg-soft border-[#0F6B4F] ring-2 ring-[#0F6B4F]/20'
-                        : 'bg-card/90 hover:bg-soft border-line hover:border-[#0F6B4F]/50'
+                      ? 'bg-soft border-[#0F6B4F] ring-2 ring-[#0F6B4F]/20'
+                      : 'bg-card/90 hover:bg-soft border-line hover:border-[#0F6B4F]/50'
                       }`}
                     aria-expanded={userMenuOpen}
                     title="User Profile & Settings"

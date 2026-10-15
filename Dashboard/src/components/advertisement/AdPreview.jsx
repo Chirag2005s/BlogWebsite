@@ -1,5 +1,5 @@
 import React from 'react';
-import { HiOutlineEye, HiOutlinePhotograph, HiOutlineVideoCamera } from 'react-icons/hi';
+import { HiOutlineEye, HiOutlinePhotograph, HiOutlineVideoCamera, HiOutlineExternalLink } from 'react-icons/hi';
 
 const AdPreview = ({ adData }) => {
   return (
@@ -38,9 +38,41 @@ const AdPreview = ({ adData }) => {
                 <span style={{ fontSize: '10px', fontFamily: 'monospace', textTransform: 'uppercase', color: '#00d4ff', fontWeight: 'bold', background: 'rgba(0,212,255,0.1)', padding: '4px 8px', borderRadius: '9999px', border: '1px solid rgba(0,212,255,0.2)', alignSelf: 'flex-start', marginBottom: '16px', boxShadow: '0 0 10px rgba(0,212,255,0.2)' }}>
                   Sponsored
                 </span>
-                <p style={{ fontSize: '1.25rem', fontWeight: 'bold', lineHeight: '1.625', whiteSpace: 'pre-wrap' }}>
+                <p style={{ fontSize: '1.25rem', fontWeight: 'bold', lineHeight: '1.625', whiteSpace: 'pre-wrap', marginBottom: '16px' }}>
                   {adData.text || "Your advertisement text..."}
                 </p>
+
+                <div style={{ marginTop: 'auto', paddingTop: '8px' }}>
+                  <a
+                    href={adData.buttonLink || '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => { if (!adData.buttonLink) e.preventDefault(); }}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '10px 18px',
+                      borderRadius: '10px',
+                      background: '#ffffff',
+                      color: '#000000',
+                      fontWeight: '700',
+                      fontSize: '13px',
+                      textDecoration: 'none',
+                      boxShadow: '0 4px 14px rgba(0,0,0,0.3)',
+                      width: 'fit-content',
+                      cursor: adData.buttonLink ? 'pointer' : 'default',
+                    }}
+                  >
+                    <span>Learn More</span>
+                    <HiOutlineExternalLink size={14} />
+                  </a>
+                  {adData.buttonLink && (
+                    <div style={{ fontSize: '11px', color: '#00d4ff', marginTop: '6px', wordBreak: 'break-all' }}>
+                      {adData.buttonLink}
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Right: Media Content */}

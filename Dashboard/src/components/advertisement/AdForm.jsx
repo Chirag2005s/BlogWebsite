@@ -1,5 +1,5 @@
 import React from 'react';
-import { HiOutlineSave, HiOutlinePhotograph, HiOutlineVideoCamera, HiOutlineMenuAlt2, HiOutlineUpload } from 'react-icons/hi';
+import { HiOutlineSave, HiOutlinePhotograph, HiOutlineVideoCamera, HiOutlineMenuAlt2, HiOutlineUpload, HiOutlineLink } from 'react-icons/hi';
 
 const AdForm = ({ adData, handleChange, handleSubmit, uploadFileHandler, loading, uploading }) => {
   return (
@@ -107,6 +107,25 @@ const AdForm = ({ adData, handleChange, handleSubmit, uploadFileHandler, loading
               required
             />
           </div>
+        </div>
+
+        {/* Button Link Input */}
+        <div className="form-group">
+          <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+            <HiOutlineLink size={16} /> Button Link (URL)
+          </label>
+          <input
+            type="url"
+            name="buttonLink"
+            value={adData.buttonLink || ''}
+            onChange={handleChange}
+            placeholder="https://example.com"
+            className="form-input"
+            style={{ width: '100%', boxSizing: 'border-box' }}
+          />
+          <span style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px', display: 'block' }}>
+            Destination URL for the 'Learn More' button in the sponsored section.
+          </span>
         </div>
 
         <div style={{ paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'flex-end' }}>

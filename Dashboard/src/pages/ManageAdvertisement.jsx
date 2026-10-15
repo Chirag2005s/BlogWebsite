@@ -11,6 +11,7 @@ const ManageAdvertisement = () => {
     mediaUrl: '',
     mediaType: 'image',
     isActive: true,
+    buttonLink: '',
   });
 
   const [loading, setLoading] = useState(false);
@@ -26,6 +27,7 @@ const ManageAdvertisement = () => {
             mediaUrl: data.mediaUrl || '',
             mediaType: data.mediaType || 'image',
             isActive: data.isActive !== undefined ? data.isActive : true,
+            buttonLink: data.buttonLink || data.link || '',
           });
         }
       } catch (err) {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Save, Image as ImageIcon, Video, Type } from 'lucide-react';
+import { Save, Image as ImageIcon, Video, Type, Link as LinkIcon, ExternalLink } from 'lucide-react';
 import api from '../../services/api';
 
 const ManageAdvertisement = () => {
@@ -8,6 +8,7 @@ const ManageAdvertisement = () => {
     mediaUrl: '',
     mediaType: 'image',
     isActive: true,
+    buttonLink: '',
   });
 
   const [message, setMessage] = useState('');
@@ -22,6 +23,7 @@ const ManageAdvertisement = () => {
             mediaUrl: data.mediaUrl || '',
             mediaType: data.mediaType || 'image',
             isActive: data.isActive !== undefined ? data.isActive : true,
+            buttonLink: data.buttonLink || data.link || '',
           });
         }
       } catch (err) {
@@ -146,6 +148,24 @@ const ManageAdvertisement = () => {
             />
           </div>
 
+          {/* Button Link Input */}
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 text-sm font-medium text-text-secondary">
+              <LinkIcon size={16} /> Button Link (URL)
+            </label>
+            <input
+              type="url"
+              name="buttonLink"
+              value={adData.buttonLink || ''}
+              onChange={handleChange}
+              placeholder="https://example.com"
+              className="w-full bg-surface-900 border border-line rounded-xl px-4 py-3 text-white placeholder-text-muted/50 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all"
+            />
+            <span className="text-xs text-text-muted block">
+              Destination URL for the 'Learn More' button in the Sponsored section.
+            </span>
+          </div>
+
           {message && (
             <div className="p-3 bg-green-500/10 border border-green-500/20 text-green-400 rounded-xl text-sm">
               {message}
@@ -171,9 +191,24 @@ const ManageAdvertisement = () => {
           <div className="border border-line rounded-2xl overflow-hidden bg-surface-800">
             <div className="grid grid-cols-1 md:grid-cols-2">
               <div className="p-8 flex flex-col justify-center">
-                <p className="text-lg text-white font-medium leading-relaxed whitespace-pre-wrap">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-[#06B6D4] font-bold bg-[#06B6D4]/10 px-2.5 py-1 rounded-full border border-[#06B6D4]/20 w-fit mb-3">
+                  Sponsored
+                </span>
+                <p className="text-lg text-white font-medium leading-relaxed whitespace-pre-wrap mb-6">
                   {adData.text}
                 </p>
+                <div>
+                  <a
+                    href={adData.buttonLink || '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => { if (!adData.buttonLink) e.preventDefault(); }}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white text-black font-bold text-xs shadow hover:bg-gray-200 transition-colors cursor-pointer"
+                  >
+                    <span>Learn More</span>
+                    <ExternalLink size={14} />
+                  </a>
+                </div>
               </div>
               <div className="bg-surface-900 flex items-center justify-center relative min-h-[250px]">
                 {adData.mediaType === 'image' ? (

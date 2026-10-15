@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { 
   Code2, 
@@ -430,7 +431,12 @@ const Programming = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
       {/* ═══ Header ═══ */}
-      <div className="relative py-8 sm:py-12 border-b border-line overflow-hidden">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="relative py-8 sm:py-12 border-b border-line overflow-hidden"
+      >
         <div className="relative max-w-3xl space-y-4">
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full surface-card border border-line text-xs font-mono text-[#0F6B4F]">
@@ -453,28 +459,33 @@ const Programming = () => {
 
           {/* Quick Metrics Bar */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 max-w-2xl">
-            <div className="p-3 rounded-xl bg-[#1E293B]/80 border border-line text-center">
+            <motion.div whileHover={{ scale: 1.05, y: -2 }} className="p-3 rounded-xl bg-[#1E293B]/80 border border-line text-center transition-shadow hover:shadow-lg hover:shadow-primary-500/10">
               <div className="text-xl font-bold text-white">6+</div>
               <div className="text-[11px] text-muted mt-0.5">Languages</div>
-            </div>
-            <div className="p-3 rounded-xl bg-[#1E293B]/80 border border-line text-center">
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05, y: -2 }} className="p-3 rounded-xl bg-[#1E293B]/80 border border-line text-center transition-shadow hover:shadow-lg hover:shadow-emerald-500/10">
               <div className="text-xl font-bold text-[#0F6B4F]">O(1)</div>
               <div className="text-[11px] text-muted mt-0.5">Optimized Patterns</div>
-            </div>
-            <div className="p-3 rounded-xl bg-[#1E293B]/80 border border-line text-center">
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05, y: -2 }} className="p-3 rounded-xl bg-[#1E293B]/80 border border-line text-center transition-shadow hover:shadow-lg hover:shadow-purple-500/10">
               <div className="text-xl font-bold text-[#8B5CF6]">Live</div>
               <div className="text-[11px] text-muted mt-0.5">Sandbox Preview</div>
-            </div>
-            <div className="p-3 rounded-xl bg-[#1E293B]/80 border border-line text-center">
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05, y: -2 }} className="p-3 rounded-xl bg-[#1E293B]/80 border border-line text-center transition-shadow hover:shadow-lg hover:shadow-green-500/10">
               <div className="text-xl font-bold text-[#22C55E]">100%</div>
               <div className="text-[11px] text-muted mt-0.5">Tested Snippets</div>
-            </div>
+            </motion.div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* ═══ Code Lab: Interactive Playground ═══ */}
-      <section className="space-y-4">
+      <motion.section 
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15, duration: 0.5 }}
+        className="space-y-4"
+      >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-2">
@@ -487,15 +498,19 @@ const Programming = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <button
+            <motion.button
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.94 }}
               onClick={handleRunCode}
               disabled={running}
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-xs font-semibold shadow-lg shadow-primary-600/20 transition-all disabled:opacity-60 cursor-pointer"
             >
               <Play size={13} className={running ? 'animate-spin' : ''} />
               {running ? 'Running...' : 'Run in Sandbox'}
-            </button>
-            <button
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.94 }}
               onClick={() => handleCopy(activeSnippet.id, activeSnippet.code)}
               className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl glass hover:bg-white/10 text-text-secondary hover:text-white text-xs font-medium transition-all cursor-pointer"
             >
@@ -510,18 +525,20 @@ const Programming = () => {
                   <span>Copy Code</span>
                 </>
               )}
-            </button>
+            </motion.button>
           </div>
         </div>
 
         {/* Playground Container */}
-        <div className="glass-card rounded-2xl overflow-hidden border border-white/8">
+        <div className="glass-card rounded-2xl overflow-hidden border border-white/8 shadow-2xl">
           {/* Editor Header Bar */}
           <div className="bg-surface-800/80 px-4 py-3 border-b border-white/6 flex flex-wrap items-center justify-between gap-3">
             {/* Snippet Selection Tabs */}
             <div className="flex items-center gap-1.5 overflow-x-auto max-w-full pb-1 sm:pb-0">
               {CODE_SNIPPETS.map((snippet) => (
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
                   key={snippet.id}
                   onClick={() => setActiveSnippet(snippet)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
@@ -532,7 +549,7 @@ const Programming = () => {
                 >
                   <FileCode size={12} />
                   {snippet.title}
-                </button>
+                </motion.button>
               ))}
             </div>
 
@@ -555,9 +572,18 @@ const Programming = () => {
                 <span>// {activeSnippet.description}</span>
                 <span className="text-[10px] text-primary-400 font-semibold uppercase tracking-wider">{activeSnippet.difficulty}</span>
               </div>
-              <pre className="text-slate-200 leading-relaxed">
-                <code>{activeSnippet.code}</code>
-              </pre>
+              <AnimatePresence mode="wait">
+                <motion.pre 
+                  key={activeSnippet.id}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 10 }}
+                  transition={{ duration: 0.2 }}
+                  className="text-slate-200 leading-relaxed"
+                >
+                  <code>{activeSnippet.code}</code>
+                </motion.pre>
+              </AnimatePresence>
             </div>
 
             {/* Terminal View (1 col) */}
@@ -573,9 +599,18 @@ const Programming = () => {
                   <span className="text-[10px] uppercase font-mono text-green-400 font-semibold">Active</span>
                 </div>
 
-                <div className="mt-4 font-mono text-xs text-emerald-400/90 whitespace-pre-line leading-relaxed">
-                  {terminalOutput}
-                </div>
+                <AnimatePresence mode="wait">
+                  <motion.div 
+                    key={terminalOutput}
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="mt-4 font-mono text-xs text-emerald-400/90 whitespace-pre-line leading-relaxed"
+                  >
+                    {terminalOutput}
+                  </motion.div>
+                </AnimatePresence>
               </div>
 
               <div className="pt-4 border-t border-white/5">
@@ -587,7 +622,7 @@ const Programming = () => {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* ═══ Code Explorer & Filter Section ═══ */}
       <section className="space-y-6">
@@ -619,7 +654,9 @@ const Programming = () => {
             {/* Language Pills */}
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
               {languages.map((lang) => (
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   key={lang}
                   onClick={() => setSelectedLanguage(lang)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap cursor-pointer ${
@@ -629,7 +666,7 @@ const Programming = () => {
                   }`}
                 >
                   {lang}
-                </button>
+                </motion.button>
               ))}
             </div>
           </div>
@@ -638,7 +675,9 @@ const Programming = () => {
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
             <span className="text-xs text-text-muted mr-1 whitespace-nowrap">Category:</span>
             {categories.map((cat) => (
-              <button
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-3 py-1 rounded-md text-[11px] font-medium transition-all whitespace-nowrap cursor-pointer ${
@@ -648,15 +687,20 @@ const Programming = () => {
                 }`}
               >
                 {cat}
-              </button>
+              </motion.button>
             ))}
           </div>
         </div>
 
         {/* Snippet Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filteredSnippets.map((snippet) => (
-            <div
+        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {filteredSnippets.map((snippet, idx) => (
+            <motion.div
+              layout
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: Math.min(idx * 0.04, 0.3) }}
+              whileHover={{ y: -5, scale: 1.01 }}
               key={snippet.id}
               className={`glass-card rounded-2xl p-5 flex flex-col justify-between hover:border-primary-500/30 transition-all group ${
                 activeSnippet.id === snippet.id ? 'border-primary-500/40 bg-primary-500/5' : ''
@@ -703,7 +747,7 @@ const Programming = () => {
                 </button>
                 <button
                   onClick={() => handleCopy(snippet.id, snippet.code)}
-                  className="p-1.5 rounded-lg text-text-muted hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+                  className="p-1.5 rounded-lg text-text-muted hover:text-white hover:bg-white/5 transition-colors cursor-pointer active:scale-90"
                   title="Copy code"
                 >
                   {copiedId === snippet.id ? (
@@ -713,9 +757,9 @@ const Programming = () => {
                   )}
                 </button>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       {/* ═══ Developer Roadmaps & Systems Tracks ═══ */}
@@ -734,9 +778,11 @@ const Programming = () => {
           {TRACKS.map((track) => {
             const Icon = track.icon;
             return (
-              <div
+              <motion.div
+                whileHover={{ y: -6, scale: 1.02 }}
+                transition={{ duration: 0.2 }}
                 key={track.title}
-                className={`glass-card rounded-2xl p-6 relative overflow-hidden border ${track.borderColor} flex flex-col justify-between group hover:-translate-y-1 transition-all`}
+                className={`glass-card rounded-2xl p-6 relative overflow-hidden border ${track.borderColor} flex flex-col justify-between group transition-all`}
               >
                 <div className="space-y-3">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center text-white">
@@ -761,7 +807,7 @@ const Programming = () => {
                     Explore track guides <ArrowRight size={12} />
                   </Link>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </div>
@@ -783,7 +829,12 @@ const Programming = () => {
           {CHEATSHEETS.map((sheet) => {
             const Icon = sheet.icon;
             return (
-              <div key={sheet.name} className="glass-card rounded-2xl p-5 border border-white/6 space-y-4">
+              <motion.div 
+                whileHover={{ y: -4 }}
+                transition={{ duration: 0.2 }}
+                key={sheet.name} 
+                className="glass-card rounded-2xl p-5 border border-white/6 space-y-4 shadow-lg"
+              >
                 <div className="flex items-center gap-2 pb-3 border-b border-white/5">
                   <Icon size={16} className="text-primary-400" />
                   <h3 className="text-sm font-bold text-white">{sheet.name}</h3>
@@ -791,7 +842,9 @@ const Programming = () => {
 
                 <div className="space-y-2.5">
                   {sheet.commands.map((cmdItem, i) => (
-                    <div
+                    <motion.div
+                      whileHover={{ scale: 1.02, x: 2 }}
+                      whileTap={{ scale: 0.98 }}
                       key={i}
                       onClick={() => handleCopy(`cmd-${sheet.name}-${i}`, cmdItem.cmd)}
                       className="p-2.5 rounded-xl bg-surface-900/60 hover:bg-surface-800 border border-white/4 hover:border-primary-500/20 transition-all cursor-pointer group"
@@ -811,10 +864,10 @@ const Programming = () => {
                       <p className="text-[10px] text-text-muted mt-1 leading-snug">
                         {cmdItem.desc}
                       </p>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </div>
@@ -843,29 +896,34 @@ const Programming = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {relatedArticles.map((art) => (
-              <Link
+              <motion.div
+                whileHover={{ y: -4, scale: 1.01 }}
+                transition={{ duration: 0.2 }}
                 key={art._id}
-                to={art.type === 'article' ? `/article/${art.slug}` : `/blog/${art.slug}`}
-                className="glass-card rounded-xl p-4 hover:border-primary-500/30 transition-all flex flex-col justify-between group"
               >
-                <div className="space-y-2">
-                  <span className="text-[10px] font-semibold text-primary-400 uppercase tracking-wider">
-                    {art.category?.name || 'Programming'}
-                  </span>
-                  <h4 className="text-sm font-bold text-white group-hover:text-primary-300 transition-colors line-clamp-2">
-                    {art.title}
-                  </h4>
-                  <p className="text-xs text-text-secondary line-clamp-2">
-                    {art.excerpt}
-                  </p>
-                </div>
-                <div className="text-[11px] text-text-muted pt-3 border-t border-white/5 mt-3 flex items-center justify-between">
-                  <span>{art.readingTime || 3} min read</span>
-                  <span className="text-primary-400 font-medium group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5">
-                    Read <ChevronRight size={12} />
-                  </span>
-                </div>
-              </Link>
+                <Link
+                  to={art.type === 'article' ? `/article/${art.slug}` : `/blog/${art.slug}`}
+                  className="glass-card rounded-xl p-4 hover:border-primary-500/30 transition-all flex flex-col justify-between group h-full"
+                >
+                  <div className="space-y-2">
+                    <span className="text-[10px] font-semibold text-primary-400 uppercase tracking-wider">
+                      {art.category?.name || 'Programming'}
+                    </span>
+                    <h4 className="text-sm font-bold text-white group-hover:text-primary-300 transition-colors line-clamp-2">
+                      {art.title}
+                    </h4>
+                    <p className="text-xs text-text-secondary line-clamp-2">
+                      {art.excerpt}
+                    </p>
+                  </div>
+                  <div className="text-[11px] text-text-muted pt-3 border-t border-white/5 mt-3 flex items-center justify-between">
+                    <span>{art.readingTime || 3} min read</span>
+                    <span className="text-primary-400 font-medium group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5">
+                      Read <ChevronRight size={12} />
+                    </span>
+                  </div>
+                </Link>
+              </motion.div>
             ))}
           </div>
         </section>
@@ -951,38 +1009,43 @@ const Programming = () => {
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {communityPosts.map((post) => (
-              <Link
+              <motion.div
+                whileHover={{ y: -5, scale: 1.01 }}
+                transition={{ duration: 0.2 }}
                 key={post._id}
-                to={`/article/${post.slug}`}
-                className="group glass-card rounded-2xl overflow-hidden border border-white/5 hover:border-primary-500/30 transition-all hover:-translate-y-1"
               >
-                {post.coverImage ? (
-                  <img
-                    src={post.coverImage}
-                    alt={post.title}
-                    className="w-full h-36 object-cover"
-                    onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                  />
-                ) : (
-                  <div className="w-full h-36 flex items-center justify-center text-4xl bg-gradient-to-br from-primary-600/20 to-purple-600/20">💻</div>
-                )}
-                <div className="p-4 space-y-2">
-                  <div className="flex items-center gap-1.5">
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-primary-500/15 text-primary-300 border border-primary-500/25">Programming</span>
-                    {post.difficulty && (
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-white/5 text-text-muted border border-white/5">{post.difficulty}</span>
-                    )}
+                <Link
+                  to={`/article/${post.slug}`}
+                  className="group glass-card rounded-2xl overflow-hidden border border-white/5 hover:border-primary-500/30 transition-all block h-full"
+                >
+                  {post.coverImage ? (
+                    <img
+                      src={post.coverImage}
+                      alt={post.title}
+                      className="w-full h-36 object-cover"
+                      onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                    />
+                  ) : (
+                    <div className="w-full h-36 flex items-center justify-center text-4xl bg-gradient-to-br from-primary-600/20 to-purple-600/20">💻</div>
+                  )}
+                  <div className="p-4 space-y-2">
+                    <div className="flex items-center gap-1.5">
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-primary-500/15 text-primary-300 border border-primary-500/25">Programming</span>
+                      {post.difficulty && (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-white/5 text-text-muted border border-white/5">{post.difficulty}</span>
+                      )}
+                    </div>
+                    <h3 className="text-sm font-semibold text-white group-hover:text-primary-300 transition-colors line-clamp-2">{post.title}</h3>
+                    <p className="text-xs text-text-secondary line-clamp-2">{post.excerpt}</p>
+                    <div className="text-[11px] text-text-muted pt-2 border-t border-white/5 flex items-center justify-between">
+                      <span>by {post.author?.name || 'Community'}</span>
+                      <span className="text-primary-400 font-medium group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5">
+                        Read <ChevronRight size={12} />
+                      </span>
+                    </div>
                   </div>
-                  <h3 className="text-sm font-semibold text-white group-hover:text-primary-300 transition-colors line-clamp-2">{post.title}</h3>
-                  <p className="text-xs text-text-secondary line-clamp-2">{post.excerpt}</p>
-                  <div className="text-[11px] text-text-muted pt-2 border-t border-white/5 flex items-center justify-between">
-                    <span>by {post.author?.name || 'Community'}</span>
-                    <span className="text-primary-400 font-medium group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5">
-                      Read <ChevronRight size={12} />
-                    </span>
-                  </div>
-                </div>
-              </Link>
+                </Link>
+              </motion.div>
             ))}
           </div>
           <div className="text-center pt-2">

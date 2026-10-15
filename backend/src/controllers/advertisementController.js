@@ -19,7 +19,8 @@ export const getAdvertisement = async (req, res) => {
 // @route   PUT /api/advertisements
 // @access  Private/Admin
 export const updateAdvertisement = async (req, res) => {
-  const { text, mediaUrl, mediaType, isActive } = req.body;
+  const { text, mediaUrl, mediaType, isActive, buttonLink, link } = req.body;
+  const targetLink = buttonLink !== undefined ? buttonLink : link;
 
   try {
     let advertisement = await Advertisement.findOne({ placement: 'home' });
@@ -29,6 +30,10 @@ export const updateAdvertisement = async (req, res) => {
       advertisement.mediaUrl = mediaUrl !== undefined ? mediaUrl : advertisement.mediaUrl;
       advertisement.mediaType = mediaType !== undefined ? mediaType : advertisement.mediaType;
       advertisement.isActive = isActive !== undefined ? isActive : advertisement.isActive;
+      if (targetLink !== undefined) {
+        advertisement.buttonLink = targetLink;
+        advertisement.link = targetLink;
+      }
 
       const updatedAd = await advertisement.save();
       res.json(updatedAd);
@@ -38,6 +43,8 @@ export const updateAdvertisement = async (req, res) => {
         mediaUrl,
         mediaType,
         isActive,
+        buttonLink: targetLink !== undefined ? targetLink : '',
+        link: targetLink !== undefined ? targetLink : '',
         placement: 'home'
       });
       const savedAd = await newAd.save();

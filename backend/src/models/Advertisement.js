@@ -24,6 +24,16 @@ const advertisementSchema = new mongoose.Schema(
       type: String,
       default: 'home', // For future extension
     },
+    buttonLink: {
+      type: String,
+      default: '',
+      trim: true,
+    },
+    link: {
+      type: String,
+      default: '',
+      trim: true,
+    },
   },
   { timestamps: true }
 );

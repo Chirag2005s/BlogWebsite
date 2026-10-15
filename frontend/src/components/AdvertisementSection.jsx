@@ -25,6 +25,17 @@ const AdvertisementSection = () => {
     return null;
   }
 
+  const rawLink = (adData.buttonLink || adData.link || '').trim();
+  const getDestinationUrl = (url) => {
+    if (!url) return '#';
+    if (url.startsWith('/') || url.startsWith('#')) return url;
+    if (/^[a-zA-Z][a-zA-Z\d+\-.]*:\/\//.test(url)) return url;
+    return `https://${url}`;
+  };
+
+  const finalHref = rawLink ? getDestinationUrl(rawLink) : '#';
+  const isExternal = finalHref.startsWith('http://') || finalHref.startsWith('https://');
+
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 mb-16">
       <div className="relative rounded-3xl overflow-hidden border border-[#0F6B4F]/30 bg-gradient-to-br from-[#0B1120] to-[#111827] shadow-2xl shadow-[#0F6B4F]/10 flex flex-col md:flex-row group">
@@ -45,7 +56,17 @@ const AdvertisementSection = () => {
           </h3>
 
           <div className="mt-4 sm:mt-8">
-            <a href="#" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-black font-bold text-sm hover:bg-gray-200 transition-colors shadow-lg hover:shadow-xl group/btn">
+            <a 
+              href={finalHref}
+              target={isExternal ? "_blank" : undefined}
+              rel={isExternal ? "noopener noreferrer" : undefined}
+              onClick={(e) => {
+                if (!rawLink) {
+                  e.preventDefault();
+                }
+              }}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-black font-bold text-sm hover:bg-gray-200 transition-colors shadow-lg hover:shadow-xl group/btn cursor-pointer"
+            >
               <span>Learn More</span>
               <ExternalLink size={16} className="group-hover/btn:translate-x-0.5 transition-transform" />
             </a>

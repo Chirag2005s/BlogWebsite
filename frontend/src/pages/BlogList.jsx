@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   BookOpen, Clock, ArrowRight, Search, Filter, Sparkles,
   ChevronLeft, ChevronRight, SlidersHorizontal, Calendar, Eye,
@@ -8,6 +9,19 @@ import {
 import { ARTICLES, BLOGS } from '../data/mockData';
 import PageHeader from '../components/PageHeader';
 import api from '../services/api';
+
+const blogGridVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.07, delayChildren: 0.05 }
+  }
+};
+
+const blogCardVariants = {
+  hidden: { opacity: 0, y: 22 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } }
+};
 
 const CATEGORIES_LIST = [
   'All',
@@ -134,7 +148,12 @@ export default function BlogList() {
 
       {/* ═══ FEATURED ARTICLE BANNER ═══ */}
       {featuredArticle && (
-        <div className="relative rounded-3xl overflow-hidden surface-card border border-line shadow-2xl shadow-black/60 group hover:border-[#0F6B4F]/35 transition-all duration-300">
+        <motion.div
+          initial={{ opacity: 0, y: 24, scale: 0.99 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="relative rounded-3xl overflow-hidden surface-card border border-line shadow-2xl shadow-black/60 group hover:border-[#0F6B4F]/40 transition-colors duration-300"
+        >
           <div className="grid grid-cols-1 lg:grid-cols-12 items-center">
             {/* Image (7 cols) */}
             <div className="lg:col-span-7 h-64 sm:h-80 lg:h-full relative overflow-hidden">
@@ -199,7 +218,7 @@ export default function BlogList() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
 
       {/* ═══ FILTER & CONTROLS TOOLBAR ═══ */}
@@ -264,8 +283,10 @@ export default function BlogList() {
         {/* Category Filter Pills (Horizontal Scroll) */}
         <div className="flex items-center gap-2.5 overflow-x-auto pb-4 scrollbar-none px-1">
           {CATEGORIES_LIST.map((cat) => (
-            <button
+            <motion.button
               key={cat}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.94 }}
               onClick={() => {
                 setSelectedCategory(cat);
                 setCurrentPage(1);
@@ -276,7 +297,7 @@ export default function BlogList() {
                 }`}
             >
               {cat}
-            </button>
+            </motion.button>
           ))}
         </div>
       </div>
@@ -313,81 +334,94 @@ export default function BlogList() {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <motion.div
+          key={`${selectedCategory}-${selectedDifficulty}-${currentPage}-${searchQuery}`}
+          variants={blogGridVariants}
+          initial="hidden"
+          animate="show"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
           {gridArticles.map((article) => (
-            <Link
+            <motion.div
               key={article._id || article.slug}
-              to={`/blog/${article.slug}`}
-              className="blog-card rounded-2xl overflow-hidden group flex flex-col hover:border-[#0F6B4F]/35 transition-all duration-300"
+              variants={blogCardVariants}
+              whileHover={{ y: -6, scale: 1.015 }}
+              transition={{ type: 'spring', stiffness: 350, damping: 22 }}
+              className="h-full"
             >
-              {/* Cover Image Container */}
-              <div className="aspect-[16/9] w-full overflow-hidden bg-[#111827] relative">
-                <img
-                  src={article.coverImage}
-                  alt={article.title}
-                  className="blog-card-image w-full h-full object-cover"
-                  loading="lazy"
-                />
+              <Link
+                to={`/blog/${article.slug}`}
+                className="blog-card rounded-2xl overflow-hidden group flex flex-col hover:border-[#0F6B4F]/35 transition-all duration-300 h-full"
+              >
+                {/* Cover Image Container */}
+                <div className="aspect-[16/9] w-full overflow-hidden bg-[#111827] relative">
+                  <img
+                    src={article.coverImage}
+                    alt={article.title}
+                    className="blog-card-image w-full h-full object-cover"
+                    loading="lazy"
+                  />
 
-                {/* Badges */}
-                <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
-                  <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#0B1120]/80 text-[#06B6D4] border border-cyan-500/30 backdrop-blur-md">
-                    {article.category?.name || 'Engineering'}
-                  </span>
-
-                  {article.difficulty && (
-                    <span className="px-2.5 py-1 rounded-full text-[10px] font-medium bg-[#0B1120]/80 text-heading border border-line backdrop-blur-md">
-                      {article.difficulty}
+                  {/* Badges */}
+                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
+                    <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#0B1120]/80 text-[#06B6D4] border border-cyan-500/30 backdrop-blur-md">
+                      {article.category?.name || 'Engineering'}
                     </span>
-                  )}
-                </div>
-              </div>
 
-              {/* Content Body */}
-              <div className="p-6 flex flex-col flex-grow space-y-3">
-                <div className="flex items-center gap-3 text-xs text-muted">
-                  <span className="flex items-center gap-1">
-                    <Clock size={12} /> {article.readingTime} min read
-                  </span>
-                  <span>•</span>
-                  <span>{new Date(article.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-                </div>
-
-                <h3 className="text-lg font-bold text-heading group-hover:text-[#0F6B4F] transition-colors line-clamp-2 leading-snug">
-                  {article.title}
-                </h3>
-
-                <p className="text-xs sm:text-sm text-muted line-clamp-2 flex-grow leading-relaxed">
-                  {article.excerpt}
-                </p>
-
-                {/* Author & Read More Footer */}
-                <div className="pt-4 border-t border-line flex items-center justify-between text-xs mt-auto">
-                  <div className="flex items-center gap-2">
-                    {article.author?.avatar ? (
-                      <img
-                        src={article.author.avatar}
-                        alt={article.author.name}
-                        className="w-6 h-6 rounded-full object-cover border border-line"
-                      />
-                    ) : (
-                      <div className="w-6 h-6 rounded-full bg-blue-600/30 flex items-center justify-center text-[10px] font-bold text-blue-300">
-                        {article.author?.name?.charAt(0) || 'A'}
-                      </div>
+                    {article.difficulty && (
+                      <span className="px-2.5 py-1 rounded-full text-[10px] font-medium bg-[#0B1120]/80 text-heading border border-line backdrop-blur-md">
+                        {article.difficulty}
+                      </span>
                     )}
-                    <span className="text-heading font-medium text-xs">
-                      {article.author?.name || 'TechJourney Contributor'}
+                  </div>
+                </div>
+
+                {/* Content Body */}
+                <div className="p-6 flex flex-col flex-grow space-y-3">
+                  <div className="flex items-center gap-3 text-xs text-muted">
+                    <span className="flex items-center gap-1">
+                      <Clock size={12} /> {article.readingTime} min read
                     </span>
+                    <span>•</span>
+                    <span>{new Date(article.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                   </div>
 
-                  <span className="font-semibold text-[#0F6B4F] group-hover:text-[#16805E] transition-colors flex items-center gap-1">
-                    Read More <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
-                  </span>
+                  <h3 className="text-lg font-bold text-heading group-hover:text-[#0F6B4F] transition-colors line-clamp-2 leading-snug">
+                    {article.title}
+                  </h3>
+
+                  <p className="text-xs sm:text-sm text-muted line-clamp-2 flex-grow leading-relaxed">
+                    {article.excerpt}
+                  </p>
+
+                  {/* Author & Read More Footer */}
+                  <div className="pt-4 border-t border-line flex items-center justify-between text-xs mt-auto">
+                    <div className="flex items-center gap-2">
+                      {article.author?.avatar ? (
+                        <img
+                          src={article.author.avatar}
+                          alt={article.author.name}
+                          className="w-6 h-6 rounded-full object-cover border border-line"
+                        />
+                      ) : (
+                        <div className="w-6 h-6 rounded-full bg-blue-600/30 flex items-center justify-center text-[10px] font-bold text-blue-300">
+                          {article.author?.name?.charAt(0) || 'A'}
+                        </div>
+                      )}
+                      <span className="text-heading font-medium text-xs">
+                        {article.author?.name || 'TechJourney Contributor'}
+                      </span>
+                    </div>
+
+                    <span className="font-semibold text-[#0F6B4F] group-hover:text-[#16805E] transition-colors flex items-center gap-1">
+                      Read More <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       )}
 
       {/* ═══ PAGINATION ═══ */}
