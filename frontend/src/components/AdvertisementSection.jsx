@@ -47,7 +47,7 @@ const AdvertisementSection = () => {
         <div className="flex-1 p-8 sm:p-12 flex flex-col justify-center relative z-10">
           <div className="inline-flex items-center gap-2 mb-4">
             <span className="text-[10px] font-mono uppercase tracking-widest text-[#06B6D4] font-bold bg-[#06B6D4]/10 px-2.5 py-1 rounded-full border border-[#06B6D4]/20">
-              Sponsored
+              GET INFORMATION
             </span>
           </div>
           
