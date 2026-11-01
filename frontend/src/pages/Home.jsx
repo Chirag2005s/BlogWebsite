@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  ArrowRight, Sparkles, BookOpen, Compass, Code2, Terminal, 
-  Globe, Server, BrainCircuit, Binary, Network, Cpu, Clock, 
+import {
+  ArrowRight, Sparkles, BookOpen, Compass, Code2, Terminal,
+  Globe, Server, BrainCircuit, Binary, Network, Cpu, Clock,
   User, ExternalLink, Flame, CheckCircle2, ChevronRight, Zap,
   Layers, Newspaper, ShieldCheck
 } from 'lucide-react';
-import { 
-  CATEGORIES, ROADMAPS, PROGRAMMING_LANGUAGES, 
-  TECH_NEWS, ARTICLES 
+import {
+  CATEGORIES, ROADMAPS, PROGRAMMING_LANGUAGES,
+  TECH_NEWS, ARTICLES
 } from '../data/mockData';
 import CodeEditorSnippet from '../components/CodeEditorSnippet';
 import StatsCounter from '../components/StatsCounter';
@@ -347,7 +347,7 @@ export default function Home() {
 
         {/* Blog Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {blogs.slice(0, 6).map((article) => (
+          {blogs.slice(0, 3).map((article) => (
             <Link
               key={article._id || article.slug}
               to={article.type === 'article' ? `/article/${article.slug}` : `/blog/${article.slug}`}
@@ -455,7 +455,7 @@ export default function Home() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* Decorative background glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[120%] bg-gradient-to-br from-[#0F6B4F]/5 via-transparent to-[#16805E]/5 blur-3xl pointer-events-none rounded-full" />
-        
+
         <div className="relative flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-3">
@@ -493,7 +493,7 @@ export default function Home() {
             >
               {/* Animated Glow on Hover */}
               <div className="absolute inset-0 bg-gradient-to-br from-[#0F6B4F]/0 to-[#0F6B4F]/0 group-hover:from-[#0F6B4F]/5 group-hover:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-              
+
               {/* Glowing Top Border Effect */}
               <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#0F6B4F]/0 to-transparent group-hover:via-[#0F6B4F]/50 transition-all duration-500" />
 
