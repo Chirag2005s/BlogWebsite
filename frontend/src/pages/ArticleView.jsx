@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 import 'highlight.js/styles/atom-one-dark.css';
@@ -127,12 +126,7 @@ const LinkedSystemButton = ({ linkedSystem }) => {
   const description = linkedSystem.description?.trim();
 
   const buttonInner = (
-    <motion.div
-      whileHover={{ scale: 1.025, y: -2 }}
-      whileTap={{ scale: 0.97 }}
-      transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-      className="relative group overflow-hidden rounded-2xl p-4 bg-gradient-to-br from-[#0c1f17] via-surface-card to-[#091712] border border-[#0F6B4F]/40 hover:border-[#22C55E]/70 transition-all duration-300 shadow-xl shadow-black/40 hover:shadow-[#0F6B4F]/25 cursor-pointer"
-    >
+    <div className="relative group overflow-hidden rounded-2xl p-4 bg-gradient-to-br from-[#0c1f17] via-surface-card to-[#091712] border border-[#0F6B4F]/40 hover:border-[#22C55E]/70 transition-all duration-300 shadow-xl shadow-black/40 hover:shadow-[#0F6B4F]/25 hover:scale-[1.01] cursor-pointer">
       {/* Top subtle decorative gradient bar */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#0F6B4F] via-[#22C55E] to-[#16805E]" />
 
@@ -192,7 +186,7 @@ const LinkedSystemButton = ({ linkedSystem }) => {
           </span>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 
   if (isExternal) {
@@ -514,12 +508,7 @@ export default function ArticleView() {
         </Link>
 
         {/* ═══ ARTICLE HERO HEADER ═══ */}
-        <motion.header
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
-          className="max-w-4xl space-y-6 pb-8 border-b border-line"
-        >
+        <header className="max-w-4xl space-y-6 pb-8 border-b border-line">
           <div className="flex flex-wrap items-center gap-2.5">
             <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[#0F6B4F]/10 text-[#0F6B4F] border border-[#0F6B4F]/20 shadow-sm">
               {article.category?.name || 'Technical Deep Dive'}
@@ -585,9 +574,7 @@ export default function ArticleView() {
                 </Link>
               )}
 
-              <motion.button
-                whileTap={{ scale: 0.88 }}
-                whileHover={{ scale: 1.05 }}
+              <button
                 onClick={handleLike}
                 className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all ${
                   isLiked
@@ -598,11 +585,9 @@ export default function ArticleView() {
               >
                 <Heart size={15} className={isLiked ? 'fill-current text-red-400' : ''} />
                 <span>{likesCount}</span>
-              </motion.button>
+              </button>
 
-              <motion.button
-                whileTap={{ scale: 0.88 }}
-                whileHover={{ scale: 1.05 }}
+              <button
                 onClick={handleBookmark}
                 className={`p-2 rounded-xl border transition-all ${
                   isBookmarked
@@ -612,11 +597,9 @@ export default function ArticleView() {
                 title={isBookmarked ? 'Bookmarked' : 'Save bookmark'}
               >
                 <Bookmark size={15} className={isBookmarked ? 'fill-current text-blue-400' : ''} />
-              </motion.button>
+              </button>
 
-              <motion.button
-                whileTap={{ scale: 0.88 }}
-                whileHover={{ scale: 1.05 }}
+              <button
                 onClick={handleShare}
                 className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl surface-card border border-line text-xs font-semibold text-muted hover:text-heading hover:border-[#0F6B4F]/30 hover:text-[#0F6B4F] hover:bg-[#0F6B4F]/5 transition-all"
                 title="Share article"
@@ -632,10 +615,10 @@ export default function ArticleView() {
                     <span>Share</span>
                   </>
                 )}
-              </motion.button>
+              </button>
             </div>
           </div>
-        </motion.header>
+        </header>
 
         {/* ═══ TWO-COLUMN ARTICLE BODY + TOC ═══ */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 pt-10">
@@ -766,12 +749,7 @@ export default function ArticleView() {
           {/* Sticky Sidebar: Article Page Details & Table of Contents (4 cols) */}
           <aside className="lg:col-span-4 space-y-6">
             {/* ═══ ARTICLE PAGE DETAILS SECTION ═══ */}
-            <motion.div
-              initial={{ opacity: 0, x: 24 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.12, ease: 'easeOut' }}
-              className="p-6 rounded-2xl bg-page border border-line space-y-5 shadow-xl"
-            >
+            <div className="p-6 rounded-2xl bg-page border border-line space-y-5 shadow-xl">
               <div className="flex items-center justify-between pb-3 border-b border-line">
                 <div className="flex items-center gap-2">
                   <div className="p-1.5 rounded-lg bg-[#0F6B4F]/15 text-[#0F6B4F]">
@@ -869,7 +847,7 @@ export default function ArticleView() {
                   </div>
                 )}
               </div>
-            </motion.div>
+            </div>
 
             {/* Table of Contents */}
             {tableOfContents.length > 0 && (

@@ -1,27 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { BookOpen, Clock, Eye, ArrowRight, Search, FileText, Sparkles, Filter } from 'lucide-react';
 import api from '../services/api';
 import { CURATED_ARTICLES } from '../data/mockData';
-
-const articleDeckVariants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.08, delayChildren: 0.04 }
-  }
-};
-
-const articleCardPerspectiveVariants = {
-  hidden: { opacity: 0, y: 28, scale: 0.95 },
-  show: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
-  }
-};
 
 /* ─── Skeleton ─── */
 const SkeletonCard = () => (
@@ -141,10 +122,8 @@ const ArticlesList = () => {
           {/* Difficulty Filter Pills */}
           <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-none px-1">
             {difficulties.map((diff) => (
-              <motion.button
+              <button
                 key={diff}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.94 }}
                 onClick={() => setSelectedDifficulty(diff)}
                 className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap shadow-sm shrink-0 ${
                   selectedDifficulty === diff
@@ -153,7 +132,7 @@ const ArticlesList = () => {
                 }`}
               >
                 {diff}
-              </motion.button>
+              </button>
             ))}
           </div>
         </div>
@@ -161,10 +140,8 @@ const ArticlesList = () => {
         {/* Category Filter Pills */}
         <div className="flex items-center gap-2.5 overflow-x-auto pb-4 scrollbar-none px-1">
           {categories.map((cat) => (
-            <motion.button
+            <button
               key={cat}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.94 }}
               onClick={() => setSelectedCategory(cat)}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap shadow-sm shrink-0 ${
                 selectedCategory === cat
@@ -173,7 +150,7 @@ const ArticlesList = () => {
               }`}
             >
               {cat}
-            </motion.button>
+            </button>
           ))}
         </div>
       </div>
@@ -215,95 +192,82 @@ const ArticlesList = () => {
             </span>
           </div>
 
-          <motion.div
-            key={`${selectedCategory}-${selectedDifficulty}-${searchQuery}`}
-            variants={articleDeckVariants}
-            initial="hidden"
-            animate="show"
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredArticles.map((article) => (
-              <motion.div
+              <Link
                 key={article._id}
-                variants={articleCardPerspectiveVariants}
-                whileHover={{ y: -8, rotateX: 2, scale: 1.02 }}
-                transition={{ type: 'spring', stiffness: 320, damping: 20 }}
-                className="h-full"
+                to={`/article/${article.slug}`}
+                className="article-card glass-card rounded-2xl overflow-hidden group flex flex-col hover:border-primary-500/30 transition-all"
               >
-                <Link
-                  to={`/article/${article.slug}`}
-                  className="article-card glass-card rounded-2xl overflow-hidden group flex flex-col hover:border-primary-500/40 transition-colors h-full"
-                >
-                  {/* Image */}
-                  <div className="aspect-video overflow-hidden bg-surface-700 relative">
-                    {article.coverImage ? (
-                      <img
-                        src={article.coverImage}
-                        alt={article.title}
-                        className="blog-card-image w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary-900/40 via-surface-800 to-surface-900">
-                        <FileText size={34} className="text-primary-400/60" />
-                      </div>
-                    )}
-                    {article.difficulty && (
-                      <div className="absolute top-3 right-3">
-                        <span className={`px-2.5 py-1 rounded-full text-xs font-medium backdrop-blur-md ${
-                          article.difficulty === 'Beginner'
-                            ? 'bg-success/15 text-green-400 border border-success/20'
-                            : article.difficulty === 'Intermediate'
-                            ? 'bg-warning/15 text-yellow-400 border border-warning/20'
-                            : 'bg-error/15 text-red-400 border border-error/20'
-                        }`}>
-                          {article.difficulty}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-5 sm:p-6 flex flex-col flex-grow space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-primary-400 uppercase tracking-wider">
-                        <FileText size={12} />
-                        {article.category?.name || 'Technical Article'}
+                {/* Image */}
+                <div className="aspect-video overflow-hidden bg-surface-700 relative">
+                  {article.coverImage ? (
+                    <img
+                      src={article.coverImage}
+                      alt={article.title}
+                      className="blog-card-image w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary-900/40 via-surface-800 to-surface-900">
+                      <FileText size={34} className="text-primary-400/60" />
+                    </div>
+                  )}
+                  {article.difficulty && (
+                    <div className="absolute top-3 right-3">
+                      <span className={`px-2.5 py-1 rounded-full text-xs font-medium backdrop-blur-md ${
+                        article.difficulty === 'Beginner'
+                          ? 'bg-success/15 text-green-400 border border-success/20'
+                          : article.difficulty === 'Intermediate'
+                          ? 'bg-warning/15 text-yellow-400 border border-warning/20'
+                          : 'bg-error/15 text-red-400 border border-error/20'
+                      }`}>
+                        {article.difficulty}
                       </span>
-                      {(article.linkedSystem?.enabled || (article.linkedSystem?.url && article.linkedSystem?.url.trim())) && (
-                        <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                          Linked System
-                        </span>
-                      )}
                     </div>
+                  )}
+                </div>
 
-                    <h3 className="text-lg font-bold text-white group-hover:text-primary-400 transition-colors line-clamp-2 leading-snug">
-                      {article.title}
-                    </h3>
-
-                    <p className="text-sm text-text-secondary line-clamp-2 flex-grow leading-relaxed">
-                      {article.excerpt}
-                    </p>
-
-                    <div className="flex items-center justify-between text-xs text-text-muted pt-4 border-t border-white/5 mt-auto">
-                      <div className="flex items-center gap-3">
-                        <span className="flex items-center gap-1">
-                          <Clock size={12} />
-                          {article.readingTime || 3} min
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Eye size={12} />
-                          {article.views || 0}
-                        </span>
-                      </div>
-                      <span>{new Date(article.publishedAt || article.createdAt).toLocaleDateString()}</span>
-                    </div>
+                {/* Content */}
+                <div className="p-5 sm:p-6 flex flex-col flex-grow space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-primary-400 uppercase tracking-wider">
+                      <FileText size={12} />
+                      {article.category?.name || 'Technical Article'}
+                    </span>
+                    {(article.linkedSystem?.enabled || (article.linkedSystem?.url && article.linkedSystem?.url.trim())) && (
+                      <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        Linked System
+                      </span>
+                    )}
                   </div>
-                </Link>
-              </motion.div>
+
+                  <h3 className="text-lg font-bold text-white group-hover:text-primary-400 transition-colors line-clamp-2 leading-snug">
+                    {article.title}
+                  </h3>
+
+                  <p className="text-sm text-text-secondary line-clamp-2 flex-grow leading-relaxed">
+                    {article.excerpt}
+                  </p>
+
+                  <div className="flex items-center justify-between text-xs text-text-muted pt-4 border-t border-white/5 mt-auto">
+                    <div className="flex items-center gap-3">
+                      <span className="flex items-center gap-1">
+                        <Clock size={12} />
+                        {article.readingTime || 3} min
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Eye size={12} />
+                        {article.views || 0}
+                      </span>
+                    </div>
+                    <span>{new Date(article.publishedAt || article.createdAt).toLocaleDateString()}</span>
+                  </div>
+                </div>
+              </Link>
             ))}
-          </motion.div>
+          </div>
         </>
       )}
     </div>

@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import {
   HelpCircle,
   Search,
@@ -782,47 +781,25 @@ export default function InterviewQuestions() {
       <section className="relative pt-12 pb-14 px-4 sm:px-6 lg:px-8 border-b border-[#1E293B] overflow-hidden">
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-gradient-to-tr from-cyan-500/10 via-blue-600/10 to-purple-600/10 rounded-full blur-3xl pointer-events-none" />
 
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-7xl mx-auto relative z-10 text-center"
-        >
-          <motion.div 
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.1, duration: 0.4 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono font-semibold mb-5 shadow-sm"
-          >
+        <div className="max-w-7xl mx-auto relative z-10 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono font-semibold mb-5 shadow-sm">
             <Sparkles size={14} />
             <span>Developer Interview Mastery Suite</span>
-          </motion.div>
+          </div>
 
-          <motion.h1 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-4"
-          >
+          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-4">
             Tech <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-400">Interview Questions & Answers</span>
-          </motion.h1>
+          </h1>
 
-          <motion.p 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-            className="max-w-2xl mx-auto text-base sm:text-lg text-muted leading-relaxed mb-8"
-          >
+          <p className="max-w-2xl mx-auto text-base sm:text-lg text-muted leading-relaxed mb-8">
             Curated questions, in-depth architectural answers, code examples, and practice modes for Node.js, React, JavaScript, System Design, Python, and Databases.
-          </motion.p>
+          </p>
 
           {/* Quick Toolbar & Mode Switcher */}
           <div className="flex items-center justify-center gap-3 flex-wrap">
             {/* View Mode Switcher */}
             <div className="bg-[#111827] p-1.5 rounded-2xl border border-line flex items-center gap-1 shadow-lg">
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.96 }}
+              <button
                 onClick={() => setViewMode('list')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
                   viewMode === 'list'
@@ -832,11 +809,9 @@ export default function InterviewQuestions() {
               >
                 <BookOpen size={14} />
                 <span>Question List</span>
-              </motion.button>
+              </button>
 
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.96 }}
+              <button
                 onClick={() => setViewMode('practice')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
                   viewMode === 'practice'
@@ -846,32 +821,28 @@ export default function InterviewQuestions() {
               >
                 <Zap size={14} />
                 <span>Practice Mode</span>
-              </motion.button>
+              </button>
             </div>
 
-            <motion.button
-              whileHover={{ scale: 1.04, y: -2 }}
-              whileTap={{ scale: 0.96 }}
+            <button
               onClick={() => setShowGithubModal(true)}
               className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-[#111827] border border-line text-muted hover:text-white shadow-lg transition-all hover:bg-[#1E293B]"
             >
               <GithubIcon size={14} />
               <span>GitHub Questions Repos</span>
-            </motion.button>
+            </button>
 
             {/* Random Question Generator */}
-            <motion.button
-              whileHover={{ scale: 1.04, y: -2 }}
-              whileTap={{ scale: 0.96 }}
+            <button
               onClick={handleRandomQuestion}
               className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-[#1E293B] hover:bg-[#334155] border border-line text-xs font-semibold text-cyan-400 hover:text-white transition-all shadow-sm"
               title="Pick a random question"
             >
               <Shuffle size={14} />
               <span>Random Question</span>
-            </motion.button>
+            </button>
           </div>
-        </motion.div>
+        </div>
       </section>
 
       {/* ═══ FILTER & CONTROLS TOOLBAR ═══ */}
@@ -953,9 +924,7 @@ export default function InterviewQuestions() {
               const Icon = cat.Icon;
               const active = selectedCategory.toLowerCase() === cat.name.toLowerCase();
               return (
-                <motion.button
-                  whileHover={{ scale: 1.05, y: -1 }}
-                  whileTap={{ scale: 0.95 }}
+                <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.name)}
                   className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all border ${
@@ -973,7 +942,7 @@ export default function InterviewQuestions() {
                   >
                     {cat.count}
                   </span>
-                </motion.button>
+                </button>
               );
             })}
           </div>
@@ -1026,17 +995,13 @@ export default function InterviewQuestions() {
               </button>
             </div>
           ) : (
-            <motion.div layout className="space-y-4">
+            <div className="space-y-4">
               {filteredQuestions.map((q, index) => {
                 const isExpanded = expandedIds.has(q._id);
                 const isBookmarked = !!bookmarks[q._id];
 
                 return (
-                  <motion.div
-                    layout
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: Math.min(index * 0.03, 0.3) }}
+                  <div
                     key={q._id}
                     id={q._id}
                     className={`rounded-2xl transition-all duration-200 border ${
@@ -1093,9 +1058,7 @@ export default function InterviewQuestions() {
 
                       {/* Right Action Icons */}
                       <div className="flex items-center gap-2 flex-shrink-0 pt-1">
-                        <motion.button
-                          whileTap={{ scale: 0.85 }}
-                          whileHover={{ scale: 1.08 }}
+                        <button
                           onClick={(e) => toggleBookmark(q._id, e)}
                           className={`p-2 rounded-xl border transition-all ${
                             isBookmarked
@@ -1105,11 +1068,9 @@ export default function InterviewQuestions() {
                           title={isBookmarked ? 'Remove Bookmark' : 'Bookmark Question'}
                         >
                           <Bookmark size={14} className={isBookmarked ? 'fill-amber-400' : ''} />
-                        </motion.button>
+                        </button>
 
-                        <motion.button
-                          whileTap={{ scale: 0.85 }}
-                          whileHover={{ scale: 1.08 }}
+                        <button
                           onClick={(e) => handleShareQuestion(q, e)}
                           className="p-2 rounded-xl bg-[#1E293B]/80 hover:surface-card border border-line text-muted hover:text-white transition-all"
                           title="Copy direct link to question"
@@ -1119,101 +1080,86 @@ export default function InterviewQuestions() {
                           ) : (
                             <Share2 size={14} />
                           )}
-                        </motion.button>
+                        </button>
 
-                        <motion.div 
-                          animate={{ rotate: isExpanded ? 180 : 0 }}
-                          transition={{ duration: 0.2 }}
-                          className="w-8 h-8 rounded-xl surface-card border border-line flex items-center justify-center text-muted"
-                        >
-                          <ChevronDown size={16} />
-                        </motion.div>
+                        <div className="w-8 h-8 rounded-xl surface-card border border-line flex items-center justify-center text-muted">
+                          {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                        </div>
                       </div>
                     </div>
 
-                    {/* Animated Accordion Body */}
-                    <AnimatePresence initial={false}>
-                      {isExpanded && (
-                        <motion.div
-                          key="answer-body"
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                          className="overflow-hidden"
-                        >
-                          <div className="px-5 sm:px-6 pb-6 pt-2 border-t border-line space-y-5">
-                            <div className="space-y-2">
-                              <h4 className="text-xs font-mono uppercase tracking-wider font-semibold text-cyan-400 flex items-center gap-1.5">
-                                <Check size={14} /> Comprehensive Answer
+                    {/* Body */}
+                    {isExpanded && (
+                      <div className="px-5 sm:px-6 pb-6 pt-2 border-t border-line animate-fade-in space-y-5">
+                        <div className="space-y-2">
+                          <h4 className="text-xs font-mono uppercase tracking-wider font-semibold text-cyan-400 flex items-center gap-1.5">
+                            <Check size={14} /> Comprehensive Answer
+                          </h4>
+                          <div className="text-sm text-[#CBD5E1] leading-relaxed whitespace-pre-line bg-[#0B1120]/60 p-4 rounded-xl border border-line/50">
+                            {q.answer}
+                          </div>
+                        </div>
+
+                        {q.codeSnippet && (
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <h4 className="text-xs font-mono uppercase tracking-wider font-semibold text-purple-400 flex items-center gap-1.5">
+                                <Code2 size={14} /> Code Example
                               </h4>
-                              <div className="text-sm text-[#CBD5E1] leading-relaxed whitespace-pre-line bg-[#0B1120]/60 p-4 rounded-xl border border-line/50">
-                                {q.answer}
-                              </div>
+                              <button
+                                onClick={() => handleCopyCode(q.codeSnippet, q._id)}
+                                className="flex items-center gap-1.5 text-xs text-muted hover:text-white bg-[#1E293B] px-2.5 py-1 rounded-lg border border-line transition-all"
+                              >
+                                {copiedId === q._id ? (
+                                  <>
+                                    <Check size={13} className="text-emerald-400" />
+                                    <span className="text-emerald-400">Copied!</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <Copy size={13} />
+                                    <span>Copy Code</span>
+                                  </>
+                                )}
+                              </button>
                             </div>
 
-                            {q.codeSnippet && (
-                              <div className="space-y-2">
-                                <div className="flex items-center justify-between">
-                                  <h4 className="text-xs font-mono uppercase tracking-wider font-semibold text-purple-400 flex items-center gap-1.5">
-                                    <Code2 size={14} /> Code Example
-                                  </h4>
-                                  <button
-                                    onClick={() => handleCopyCode(q.codeSnippet, q._id)}
-                                    className="flex items-center gap-1.5 text-xs text-muted hover:text-white bg-[#1E293B] px-2.5 py-1 rounded-lg border border-line transition-all active:scale-95"
-                                  >
-                                    {copiedId === q._id ? (
-                                      <>
-                                        <Check size={13} className="text-emerald-400" />
-                                        <span className="text-emerald-400">Copied!</span>
-                                      </>
-                                    ) : (
-                                      <>
-                                        <Copy size={13} />
-                                        <span>Copy Code</span>
-                                      </>
-                                    )}
-                                  </button>
-                                </div>
-
-                                <pre className="p-4 rounded-xl bg-[#090D16] border border-line font-mono text-xs sm:text-sm text-cyan-300 overflow-x-auto leading-relaxed shadow-inner">
-                                  <code>{q.codeSnippet}</code>
-                                </pre>
-                              </div>
-                            )}
-
-                            {q.explanation && (
-                              <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/30 space-y-1">
-                                <h4 className="text-xs font-semibold text-blue-400 flex items-center gap-1.5">
-                                  <Zap size={13} /> Key Interview Takeaway
-                                </h4>
-                                <p className="text-xs text-blue-200 leading-relaxed">
-                                  {q.explanation}
-                                </p>
-                              </div>
-                            )}
-
-                            {q.tags && q.tags.length > 0 && (
-                              <div className="flex items-center gap-1.5 flex-wrap pt-2">
-                                <span className="text-[11px] text-muted">Topics:</span>
-                                {q.tags.map((t) => (
-                                  <span
-                                    key={t}
-                                    className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-[#1E293B] text-muted border border-line"
-                                  >
-                                    #{t}
-                                  </span>
-                                ))}
-                              </div>
-                            )}
+                            <pre className="p-4 rounded-xl bg-[#090D16] border border-line font-mono text-xs sm:text-sm text-cyan-300 overflow-x-auto leading-relaxed shadow-inner">
+                              <code>{q.codeSnippet}</code>
+                            </pre>
                           </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
+                        )}
+
+                        {q.explanation && (
+                          <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/30 space-y-1">
+                            <h4 className="text-xs font-semibold text-blue-400 flex items-center gap-1.5">
+                              <Zap size={13} /> Key Interview Takeaway
+                            </h4>
+                            <p className="text-xs text-blue-200 leading-relaxed">
+                              {q.explanation}
+                            </p>
+                          </div>
+                        )}
+
+                        {q.tags && q.tags.length > 0 && (
+                          <div className="flex items-center gap-1.5 flex-wrap pt-2">
+                            <span className="text-[11px] text-muted">Topics:</span>
+                            {q.tags.map((t) => (
+                              <span
+                                key={t}
+                                className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-[#1E293B] text-muted border border-line"
+                              >
+                                #{t}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 );
               })}
-            </motion.div>
+            </div>
           )}
         </section>
       )}
@@ -1248,226 +1194,187 @@ export default function InterviewQuestions() {
                   </span>
                 </div>
                 <div className="w-full bg-[#1E293B] h-2 rounded-full overflow-hidden">
-                  <motion.div
-                    className="bg-gradient-to-r from-cyan-500 to-blue-500 h-full"
-                    initial={{ width: 0 }}
-                    animate={{
+                  <div
+                    className="bg-gradient-to-r from-cyan-500 to-blue-500 h-full transition-all duration-300"
+                    style={{
                       width: `${((practiceIndex + 1) / filteredQuestions.length) * 100}%`,
                     }}
-                    transition={{ duration: 0.4, ease: 'easeOut' }}
                   />
                 </div>
               </div>
 
               {/* Flashcard Card */}
-              <AnimatePresence mode="wait">
-                {currentPracticeQ && (
-                  <motion.div
-                    key={currentPracticeQ._id}
-                    initial={{ opacity: 0, scale: 0.95, y: 16 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95, y: -16 }}
-                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                    className="p-6 sm:p-8 rounded-3xl bg-[#111827] border border-cyan-500/30 shadow-2xl space-y-6 relative"
-                  >
-                    {/* Top Bar */}
-                    <div className="flex items-center justify-between gap-4 flex-wrap">
-                      <div className="flex items-center gap-2">
-                        <span className="px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
-                          {currentPracticeQ.category}
-                        </span>
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-semibold border ${
-                            currentPracticeQ.difficulty === 'Easy'
-                              ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
-                              : currentPracticeQ.difficulty === 'Hard'
-                              ? 'bg-rose-500/15 text-rose-400 border-rose-500/30'
-                              : 'bg-amber-500/15 text-amber-400 border-amber-500/30'
-                          }`}
-                        >
-                          {currentPracticeQ.difficulty}
-                        </span>
-                      </div>
-
-                      <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => toggleMastered(currentPracticeQ._id)}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all border ${
-                          masteredIds.has(currentPracticeQ._id)
-                            ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40'
-                            : 'bg-[#1E293B] text-muted border-line hover:text-white'
+              {currentPracticeQ && (
+                <div className="p-6 sm:p-8 rounded-3xl bg-[#111827] border border-cyan-500/30 shadow-2xl space-y-6 relative">
+                  {/* Top Bar */}
+                  <div className="flex items-center justify-between gap-4 flex-wrap">
+                    <div className="flex items-center gap-2">
+                      <span className="px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
+                        {currentPracticeQ.category}
+                      </span>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-semibold border ${
+                          currentPracticeQ.difficulty === 'Easy'
+                            ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
+                            : currentPracticeQ.difficulty === 'Hard'
+                            ? 'bg-rose-500/15 text-rose-400 border-rose-500/30'
+                            : 'bg-amber-500/15 text-amber-400 border-amber-500/30'
                         }`}
                       >
-                        <CheckCircle2 size={15} />
-                        <span>
-                          {masteredIds.has(currentPracticeQ._id) ? 'Mastered' : 'Mark as Mastered'}
-                        </span>
-                      </motion.button>
-                    </div>
-
-                    {/* Question */}
-                    <div className="space-y-3 pt-2">
-                      <span className="text-xs font-mono uppercase tracking-wider text-muted font-bold">
-                        Question #{practiceIndex + 1}
+                        {currentPracticeQ.difficulty}
                       </span>
-                      <h2 className="text-xl sm:text-2xl font-bold text-white leading-snug">
-                        {currentPracticeQ.question}
-                      </h2>
                     </div>
 
-                    {/* Toggle Answer Button */}
-                    <div className="pt-2">
-                      <motion.button
-                        whileHover={{ scale: 1.01 }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={() => setShowAnswer(!showAnswer)}
-                        className="w-full py-3 rounded-2xl bg-cyan-600/15 hover:bg-cyan-600/25 border border-cyan-500/40 text-cyan-300 font-semibold text-sm flex items-center justify-center gap-2 transition-all shadow-sm"
-                      >
-                        {showAnswer ? <EyeOff size={16} /> : <Eye size={16} />}
-                        <span>{showAnswer ? 'Hide Answer' : 'Reveal Comprehensive Answer'}</span>
-                      </motion.button>
-                    </div>
+                    <button
+                      onClick={() => toggleMastered(currentPracticeQ._id)}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all border ${
+                        masteredIds.has(currentPracticeQ._id)
+                          ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40'
+                          : 'bg-[#1E293B] text-muted border-line hover:text-white'
+                      }`}
+                    >
+                      <CheckCircle2 size={15} />
+                      <span>
+                        {masteredIds.has(currentPracticeQ._id) ? 'Mastered' : 'Mark as Mastered'}
+                      </span>
+                    </button>
+                  </div>
 
-                    {/* Answer Content */}
-                    <AnimatePresence>
-                      {showAnswer && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="overflow-hidden space-y-5 pt-4 border-t border-line"
-                        >
-                          <div className="text-sm text-[#CBD5E1] leading-relaxed whitespace-pre-line bg-[#0B1120]/80 p-5 rounded-2xl border border-line">
-                            {currentPracticeQ.answer}
+                  {/* Question */}
+                  <div className="space-y-3 pt-2">
+                    <span className="text-xs font-mono uppercase tracking-wider text-muted font-bold">
+                      Question #{practiceIndex + 1}
+                    </span>
+                    <h2 className="text-xl sm:text-2xl font-bold text-white leading-snug">
+                      {currentPracticeQ.question}
+                    </h2>
+                  </div>
+
+                  {/* Toggle Answer Button */}
+                  <div className="pt-2">
+                    <button
+                      onClick={() => setShowAnswer(!showAnswer)}
+                      className="w-full py-3 rounded-2xl bg-cyan-600/15 hover:bg-cyan-600/25 border border-cyan-500/40 text-cyan-300 font-semibold text-sm flex items-center justify-center gap-2 transition-all shadow-sm"
+                    >
+                      {showAnswer ? <EyeOff size={16} /> : <Eye size={16} />}
+                      <span>{showAnswer ? 'Hide Answer' : 'Reveal Comprehensive Answer'}</span>
+                    </button>
+                  </div>
+
+                  {/* Answer Content */}
+                  {showAnswer && (
+                    <div className="space-y-5 pt-4 border-t border-line animate-fade-in">
+                      <div className="text-sm text-[#CBD5E1] leading-relaxed whitespace-pre-line bg-[#0B1120]/80 p-5 rounded-2xl border border-line">
+                        {currentPracticeQ.answer}
+                      </div>
+
+                      {currentPracticeQ.codeSnippet && (
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-mono uppercase tracking-wider font-semibold text-purple-400">
+                              Code Solution
+                            </span>
+                            <button
+                              onClick={() => handleCopyCode(currentPracticeQ.codeSnippet, currentPracticeQ._id)}
+                              className="text-xs text-muted hover:text-white flex items-center gap-1"
+                            >
+                              <Copy size={13} /> Copy
+                            </button>
                           </div>
-
-                          {currentPracticeQ.codeSnippet && (
-                            <div className="space-y-2">
-                              <div className="flex items-center justify-between">
-                                <span className="text-xs font-mono uppercase tracking-wider font-semibold text-purple-400">
-                                  Code Solution
-                                </span>
-                                <button
-                                  onClick={() => handleCopyCode(currentPracticeQ.codeSnippet, currentPracticeQ._id)}
-                                  className="text-xs text-muted hover:text-white flex items-center gap-1 active:scale-95"
-                                >
-                                  <Copy size={13} /> Copy
-                                </button>
-                              </div>
-                              <pre className="p-4 rounded-xl bg-[#090D16] border border-line font-mono text-xs sm:text-sm text-cyan-300 overflow-x-auto">
-                                <code>{currentPracticeQ.codeSnippet}</code>
-                              </pre>
-                            </div>
-                          )}
-
-                          {currentPracticeQ.explanation && (
-                            <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/30 text-xs text-blue-200">
-                              <strong>💡 Key Insight:</strong> {currentPracticeQ.explanation}
-                            </div>
-                          )}
-                        </motion.div>
+                          <pre className="p-4 rounded-xl bg-[#090D16] border border-line font-mono text-xs sm:text-sm text-cyan-300 overflow-x-auto">
+                            <code>{currentPracticeQ.codeSnippet}</code>
+                          </pre>
+                        </div>
                       )}
-                    </AnimatePresence>
 
-                    {/* Bottom Navigation Control */}
-                    <div className="flex items-center justify-between pt-6 border-t border-line">
-                      <motion.button
-                        whileHover={{ scale: 1.04 }}
-                        whileTap={{ scale: 0.94 }}
-                        onClick={() => {
-                          setPracticeIndex((prev) => Math.max(0, prev - 1));
-                          setShowAnswer(false);
-                        }}
-                        disabled={practiceIndex === 0}
-                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#1E293B] hover:bg-[#334155] disabled:opacity-40 text-xs font-semibold text-white transition-all"
-                      >
-                        <ChevronLeft size={16} /> Previous
-                      </motion.button>
-
-                      <motion.button
-                        whileHover={{ scale: 1.04 }}
-                        whileTap={{ scale: 0.94 }}
-                        onClick={() => {
-                          setPracticeIndex((prev) =>
-                            Math.min(filteredQuestions.length - 1, prev + 1)
-                          );
-                          setShowAnswer(false);
-                        }}
-                        disabled={practiceIndex === filteredQuestions.length - 1}
-                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-[#0F6B4F] to-[#16805E] hover:from-blue-500 hover:to-cyan-500 disabled:opacity-40 text-xs font-semibold text-white transition-all shadow-md"
-                      >
-                        Next <ChevronRight size={16} />
-                      </motion.button>
+                      {currentPracticeQ.explanation && (
+                        <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/30 text-xs text-blue-200">
+                          <strong>💡 Key Insight:</strong> {currentPracticeQ.explanation}
+                        </div>
+                      )}
                     </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                  )}
+
+                  {/* Bottom Navigation Control */}
+                  <div className="flex items-center justify-between pt-6 border-t border-line">
+                    <button
+                      onClick={() => {
+                        setPracticeIndex((prev) => Math.max(0, prev - 1));
+                        setShowAnswer(false);
+                      }}
+                      disabled={practiceIndex === 0}
+                      className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#1E293B] hover:bg-[#334155] disabled:opacity-40 text-xs font-semibold text-white transition-all"
+                    >
+                      <ChevronLeft size={16} /> Previous
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setPracticeIndex((prev) =>
+                          Math.min(filteredQuestions.length - 1, prev + 1)
+                        );
+                        setShowAnswer(false);
+                      }}
+                      disabled={practiceIndex === filteredQuestions.length - 1}
+                      className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-[#0F6B4F] to-[#16805E] hover:from-blue-500 hover:to-cyan-500 disabled:opacity-40 text-xs font-semibold text-white transition-all shadow-md"
+                    >
+                      Next <ChevronRight size={16} />
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </section>
       )}
 
       {/* GitHub Repos Modal */}
-      <AnimatePresence>
-        {showGithubModal && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-              onClick={() => setShowGithubModal(false)}
-            />
-            <motion.div 
-              initial={{ scale: 0.9, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-md bg-card border border-line rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh]"
-            >
-              <div className="p-4 border-b border-line flex items-center justify-between bg-[#111827]">
-                <div className="flex items-center gap-2 text-heading font-semibold">
-                  <GithubIcon size={18} />
-                  <h3>GitHub Repositories</h3>
+      {showGithubModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div 
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setShowGithubModal(false)}
+          />
+          <div className="relative w-full max-w-md bg-card border border-line rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh] animate-scale-up">
+            <div className="p-4 border-b border-line flex items-center justify-between bg-[#111827]">
+              <div className="flex items-center gap-2 text-heading font-semibold">
+                <GithubIcon size={18} />
+                <h3>GitHub Repositories</h3>
+              </div>
+              <button 
+                onClick={() => setShowGithubModal(false)}
+                className="p-1.5 rounded-lg text-muted hover:bg-white/10 hover:text-white transition-colors"
+              >
+                <XCircle size={20} />
+              </button>
+            </div>
+            
+            <div className="p-4 overflow-y-auto space-y-3">
+              {githubRepos.length === 0 ? (
+                <div className="text-center py-6 text-muted text-sm">
+                  No repositories available at the moment.
                 </div>
-                <button 
-                  onClick={() => setShowGithubModal(false)}
-                  className="p-1.5 rounded-lg text-muted hover:bg-white/10 hover:text-white transition-colors"
-                >
-                  <XCircle size={20} />
-                </button>
-              </div>
-              
-              <div className="p-4 overflow-y-auto space-y-3">
-                {githubRepos.length === 0 ? (
-                  <div className="text-center py-6 text-muted text-sm">
-                    No repositories available at the moment.
-                  </div>
-                ) : (
-                  githubRepos.map((repo, idx) => (
-                    <motion.a
-                      whileHover={{ x: 4 }}
-                      key={idx}
-                      href={repo.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-between p-4 rounded-xl border border-line bg-page hover:bg-soft hover:border-[#0F6B4F]/40 transition-all group"
-                    >
-                      <div className="flex flex-col">
-                        <span className="text-sm font-semibold text-heading group-hover:text-[#0F6B4F] transition-colors">{repo.title || 'GitHub Repository'}</span>
-                        <span className="text-xs text-muted truncate max-w-[200px] mt-0.5">{repo.url}</span>
-                      </div>
-                      <ChevronRight size={16} className="text-muted group-hover:text-[#0F6B4F]" />
-                    </motion.a>
-                  ))
-                )}
-              </div>
-            </motion.div>
+              ) : (
+                githubRepos.map((repo, idx) => (
+                  <a
+                    key={idx}
+                    href={repo.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between p-4 rounded-xl border border-line bg-page hover:bg-soft hover:border-[#0F6B4F]/40 transition-all group"
+                  >
+                    <div className="flex flex-col">
+                      <span className="text-sm font-semibold text-heading group-hover:text-[#0F6B4F] transition-colors">{repo.title || 'GitHub Repository'}</span>
+                      <span className="text-xs text-muted truncate max-w-[200px] mt-0.5">{repo.url}</span>
+                    </div>
+                    <ChevronRight size={16} className="text-muted group-hover:text-[#0F6B4F]" />
+                  </a>
+                ))
+              )}
+            </div>
           </div>
-        )}
-      </AnimatePresence>
+        </div>
+      )}
 
     </div>
   );

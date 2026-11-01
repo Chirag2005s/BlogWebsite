@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { LogIn, Mail, Lock, AlertCircle, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { GoogleLogin } from '@react-oauth/google';
@@ -66,33 +65,21 @@ const Login = () => {
 
   return (
     <div className="min-h-[70vh] flex items-center justify-center py-12 px-4">
-      <motion.div 
-        initial={{ opacity: 0, y: 25, scale: 0.98 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-md"
-      >
-        <div className="glass-card rounded-2xl p-8 sm:p-10 space-y-7 shadow-2xl shadow-[#0F6B4F]/10 border border-line">
+      <div className="w-full max-w-md">
+        <div className="glass-card rounded-2xl p-8 sm:p-10 space-y-7 shadow-lg shadow-[#0F6B4F]/5">
           <div className="text-center space-y-2">
-            <motion.div 
-              whileHover={{ scale: 1.1, rotate: 6 }}
-              className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0F6B4F] to-[#16805E] flex items-center justify-center mx-auto mb-3 shadow-lg shadow-[#0F6B4F]/20 cursor-pointer"
-            >
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0F6B4F] to-[#16805E] flex items-center justify-center mx-auto mb-3 shadow-lg shadow-[#0F6B4F]/20">
               <LogIn size={22} className="text-white" />
-            </motion.div>
+            </div>
             <h1 className="text-2xl font-bold text-heading">Welcome Back</h1>
             <p className="text-sm text-muted">Sign in to your TechJourney account</p>
           </div>
 
           {error && (
-            <motion.div 
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex items-center gap-3 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm"
-            >
+            <div className="flex items-center gap-3 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm animate-fade-in">
               <AlertCircle size={16} className="flex-shrink-0" />
               <span>{error}</span>
-            </motion.div>
+            </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -134,12 +121,10 @@ const Login = () => {
                 </button>
               </div>
             </div>
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.97 }}
+            <button
               type="submit"
               disabled={loading}
-              className="w-full btn-primary py-3 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              className="w-full btn-primary py-3 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -149,7 +134,7 @@ const Login = () => {
                   <ArrowRight size={16} />
                 </>
               )}
-            </motion.button>
+            </button>
           </form>
 
           <div className="flex items-center gap-4">
@@ -177,7 +162,7 @@ const Login = () => {
             </Link>
           </p>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };

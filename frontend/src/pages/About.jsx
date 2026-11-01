@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
   Sparkles,
@@ -86,68 +85,40 @@ export default function About() {
         <div className="absolute inset-0 hero-grid opacity-50 pointer-events-none" />
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-[#0F6B4F]/10 via-[#16805E]/10 to-[#F4A62A]/10 rounded-full blur-3xl pointer-events-none" />
 
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-5xl mx-auto relative z-10 text-center space-y-6"
-        >
-          <motion.div 
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.1, duration: 0.4 }}
-            className="eyebrow-badge mx-auto"
-          >
+        <div className="max-w-5xl mx-auto relative z-10 text-center space-y-6">
+          <div className="eyebrow-badge mx-auto">
             <Sparkles size={14} />
             <span>About TechJourney</span>
-          </motion.div>
+          </div>
 
-          <motion.h1 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            className="text-3xl sm:text-6xl font-extrabold tracking-tight text-heading leading-tight"
-          >
+          <h1 className="text-3xl sm:text-6xl font-extrabold tracking-tight text-heading leading-tight">
             Empowering Engineers to Build the <span className="tech-gradient-text">Future of Software</span>
-          </motion.h1>
+          </h1>
 
-          <motion.p 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-            className="max-w-3xl mx-auto text-base sm:text-xl text-muted leading-relaxed"
-          >
+          <p className="max-w-3xl mx-auto text-base sm:text-xl text-muted leading-relaxed">
             TechJourney is a developer-first platform for software engineers, architects, and learners seeking high-impact articles, visual roadmaps, and interview mastery.
-          </motion.p>
+          </p>
 
           {/* Key Stats Bar */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-8">
             {stats.map((s, idx) => (
-              <motion.div
-                whileHover={{ y: -6, scale: 1.03 }}
-                transition={{ duration: 0.2 }}
+              <div
                 key={idx}
-                className="p-5 rounded-2xl surface-card surface-card-hover shadow-lg"
+                className="p-5 rounded-2xl surface-card surface-card-hover"
               >
                 <div className={`text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r ${s.color}`}>
                   {s.value}
                 </div>
                 <div className="text-xs font-medium text-muted mt-1">{s.label}</div>
-              </motion.div>
+              </div>
             ))}
           </div>
-        </motion.div>
+        </div>
       </section>
 
       {/* ═══ OUR MISSION & CORE VALUES ═══ */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.5 }}
-          className="text-center max-w-2xl mx-auto mb-16 space-y-3"
-        >
+        <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
           <h2 className="text-xs font-mono uppercase tracking-wider text-cyan-400 font-bold">
             Engineered for Excellence
           </h2>
@@ -157,18 +128,13 @@ export default function About() {
           <p className="text-sm sm:text-base text-muted">
             We bridge the gap between superficial tutorial blogs and complex production software engineering.
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {coreValues.map((item, index) => {
             const Icon = item.icon;
             return (
-              <motion.div
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-50px' }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-                whileHover={{ y: -8, scale: 1.02 }}
+              <div
                 key={index}
                 className="group p-6 rounded-2xl bg-page border border-line hover:bg-[#111827]/90 transition-all duration-300 shadow-xl flex flex-col justify-between"
               >
@@ -183,7 +149,7 @@ export default function About() {
                     {item.description}
                   </p>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>
@@ -194,13 +160,7 @@ export default function About() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Narrative */}
-            <motion.div 
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 0.6 }}
-              className="lg:col-span-5 space-y-6"
-            >
+            <div className="lg:col-span-5 space-y-6">
               <TechJourneyLogo size={42} />
               <h2 className="text-2xl sm:text-4xl font-extrabold text-white leading-tight">
                 Everything You Need to Scale Your Engineering Skills
@@ -216,44 +176,30 @@ export default function About() {
                   'Node.js Event Loop & Memory Profiling',
                   'Interactive FAANG+ Interview Practice Cards',
                 ].map((point, i) => (
-                  <motion.div 
-                    initial={{ opacity: 0, x: -10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1, duration: 0.3 }}
-                    key={i} 
-                    className="flex items-center gap-2.5 text-xs sm:text-sm text-cyan-200"
-                  >
+                  <div key={i} className="flex items-center gap-2.5 text-xs sm:text-sm text-cyan-200">
                     <CheckCircle2 size={16} className="text-cyan-400 flex-shrink-0" />
                     <span>{point}</span>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
 
               <div className="pt-4">
-                <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} className="inline-block">
-                  <Link
-                    to="/roadmaps"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#0F6B4F] to-[#16805E] hover:from-blue-500 hover:to-cyan-500 text-white text-xs font-semibold transition-all shadow-md"
-                  >
-                    <span>Explore Roadmaps</span>
-                    <ArrowRight size={14} />
-                  </Link>
-                </motion.div>
+                <Link
+                  to="/roadmaps"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#0F6B4F] to-[#16805E] hover:from-blue-500 hover:to-cyan-500 text-white text-xs font-semibold transition-all shadow-md"
+                >
+                  <span>Explore Roadmaps</span>
+                  <ArrowRight size={14} />
+                </Link>
               </div>
-            </motion.div>
+            </div>
 
             {/* Right Features Cards */}
             <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
               {features.map((feat, i) => {
                 const Icon = feat.icon;
                 return (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: '-60px' }}
-                    transition={{ duration: 0.4, delay: i * 0.08 }}
-                    whileHover={{ y: -6, scale: 1.02 }}
+                  <div
                     key={i}
                     className="p-6 rounded-2xl bg-page border border-line hover:border-cyan-500/50 transition-all space-y-3 shadow-lg"
                   >
@@ -262,7 +208,7 @@ export default function About() {
                     </div>
                     <h4 className="text-base font-bold text-white">{feat.title}</h4>
                     <p className="text-xs text-muted leading-relaxed">{feat.desc}</p>
-                  </motion.div>
+                  </div>
                 );
               })}
             </div>
@@ -272,13 +218,7 @@ export default function About() {
 
       {/* ═══ CALL TO ACTION ═══ */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.96 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.5 }}
-          className="max-w-5xl mx-auto rounded-3xl bg-gradient-to-r from-blue-900/40 via-cyan-950/40 to-purple-900/40 border border-cyan-500/30 p-8 sm:p-14 text-center space-y-6 relative overflow-hidden shadow-2xl"
-        >
+        <div className="max-w-5xl mx-auto rounded-3xl bg-gradient-to-r from-blue-900/40 via-cyan-950/40 to-purple-900/40 border border-cyan-500/30 p-8 sm:p-14 text-center space-y-6 relative overflow-hidden shadow-2xl">
           <div className="absolute top-0 right-0 -mt-10 -mr-10 w-48 h-48 bg-cyan-500/20 rounded-full blur-2xl pointer-events-none" />
 
           <h2 className="text-2xl sm:text-4xl font-extrabold text-white">
@@ -289,24 +229,20 @@ export default function About() {
           </p>
 
           <div className="flex items-center justify-center gap-4 flex-wrap pt-2">
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link
-                to="/blog"
-                className="inline-block px-6 py-3 rounded-xl bg-gradient-to-r from-[#0F6B4F] to-[#16805E] hover:from-blue-500 hover:to-cyan-500 text-white text-xs sm:text-sm font-semibold transition-all shadow-lg"
-              >
-                Browse Articles
-              </Link>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link
-                to="/interview-questions"
-                className="inline-block px-6 py-3 rounded-xl bg-[#1E293B] hover:bg-[#334155] text-white text-xs sm:text-sm font-semibold border border-line transition-all"
-              >
-                Practice Interviews
-              </Link>
-            </motion.div>
+            <Link
+              to="/blog"
+              className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#0F6B4F] to-[#16805E] hover:from-blue-500 hover:to-cyan-500 text-white text-xs sm:text-sm font-semibold transition-all shadow-lg"
+            >
+              Browse Articles
+            </Link>
+            <Link
+              to="/interview-questions"
+              className="px-6 py-3 rounded-xl bg-[#1E293B] hover:bg-[#334155] text-white text-xs sm:text-sm font-semibold border border-line transition-all"
+            >
+              Practice Interviews
+            </Link>
           </div>
-        </motion.div>
+        </div>
       </section>
     </div>
   );

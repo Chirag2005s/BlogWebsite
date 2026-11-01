@@ -349,19 +349,9 @@ export default function Profile() {
   }
 
   return (
-    <motion.div 
-      className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
-      initial={{ opacity: 0, y: 15 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-    >
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in">
       {/* ═══ TOP HERO BANNER & AVATAR ═══ */}
-      <motion.div 
-        className="relative rounded-3xl overflow-hidden border border-line bg-card mb-8 shadow-xl"
-        initial={{ opacity: 0, scale: 0.98 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-      >
+      <div className="relative rounded-3xl overflow-hidden border border-line bg-card mb-8 shadow-xl">
         {/* Cover Background Graphic */}
         <div className="h-44 sm:h-56 bg-gradient-to-r from-[#07241B] via-[#0F6B4F]/40 to-[#0A192F] relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(#2BAF85_1px,transparent_1px)] [background-size:16px_16px] opacity-20" />
@@ -373,11 +363,7 @@ export default function Profile() {
         <div className="px-6 sm:px-10 pb-8 pt-0 relative flex flex-col md:flex-row md:items-end justify-between gap-6 -mt-16 sm:-mt-20">
           {/* Avatar and Basic Info */}
           <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6 text-center sm:text-left">
-            <motion.div 
-              className="relative group"
-              whileHover={{ scale: 1.03 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            >
+            <div className="relative group">
               <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden bg-card border-4 border-card shadow-2xl relative flex items-center justify-center">
                 {profileData.profileImage ? (
                   <img
@@ -398,13 +384,13 @@ export default function Profile() {
               {isOwnProfile && (
                 <button
                   onClick={() => setActiveTab('edit')}
-                  className="absolute bottom-1 right-1 p-2.5 rounded-2xl bg-[#0F6B4F] hover:bg-[#16805E] text-white shadow-lg border border-white/20 transition-all hover:scale-110 active:scale-95"
+                  className="absolute bottom-1 right-1 p-2.5 rounded-2xl bg-[#0F6B4F] hover:bg-[#16805E] text-white shadow-lg border border-white/20 transition-all hover:scale-110"
                   title="Change avatar in edit mode"
                 >
                   <Camera size={16} />
                 </button>
               )}
-            </motion.div>
+            </div>
 
             <div className="space-y-1.5 pb-1">
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2.5">
@@ -460,9 +446,7 @@ export default function Profile() {
 
           {/* Action Buttons */}
           <div className="flex items-center justify-center sm:justify-end gap-3 pt-2">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+            <button
               onClick={handleShareProfile}
               className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-soft hover:bg-line border border-line text-xs font-semibold text-heading transition-all shadow-sm"
               title="Share profile link"
@@ -478,12 +462,10 @@ export default function Profile() {
                   <span>Share</span>
                 </>
               )}
-            </motion.button>
+            </button>
 
             {isOwnProfile && (
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+              <button
                 onClick={() => setActiveTab(activeTab === 'edit' ? 'overview' : 'edit')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all shadow-sm ${
                   activeTab === 'edit'
@@ -493,19 +475,17 @@ export default function Profile() {
               >
                 <Edit3 size={14} />
                 <span>{activeTab === 'edit' ? 'View Profile' : 'Edit Profile'}</span>
-              </motion.button>
+              </button>
             )}
 
             {isOwnProfile && (
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link
-                  to="/admin"
-                  className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-card hover:bg-soft border border-[#0F6B4F]/40 text-[#4FD1A5] text-xs font-semibold transition-all shadow-sm"
-                >
-                  <span>Content Studio</span>
-                  <ArrowRight size={13} />
-                </Link>
-              </motion.div>
+              <Link
+                to="/admin"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-card hover:bg-soft border border-[#0F6B4F]/40 text-[#4FD1A5] text-xs font-semibold transition-all shadow-sm"
+              >
+                <span>Content Studio</span>
+                <ArrowRight size={13} />
+              </Link>
             )}
           </div>
         </div>
@@ -543,7 +523,7 @@ export default function Profile() {
             );
           })}
         </div>
-      </motion.div>
+      </div>
 
       {/* ═══ FEEDBACK NOTIFICATION ═══ */}
       <AnimatePresence>
@@ -1241,6 +1221,6 @@ export default function Profile() {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </div>
   );
 }
