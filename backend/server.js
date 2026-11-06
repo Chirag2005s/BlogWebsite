@@ -19,6 +19,7 @@ import contactRoutes from './src/routes/contact.routes.js';
 import advertisementRoutes from './src/routes/advertisementRoutes.js';
 import uploadRoutes from './src/routes/upload.routes.js';
 import problemRoutes from './src/routes/problemRoutes.js';
+import projectRoutes from './src/routes/projectRoutes.js';
 import settingRoutes from './src/routes/settingRoutes.js';
 import { syncCategories } from './src/controllers/category.controller.js';
 
@@ -68,8 +69,8 @@ app.use(
   })
 );
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 
 if (process.env.NODE_ENV === 'development') {
@@ -124,6 +125,7 @@ app.use('/api/interviews', interviewRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/advertisement', advertisementRoutes);
 app.use('/api/problems', problemRoutes);
+app.use('/api/projects', projectRoutes);
 app.use('/api/settings', settingRoutes);
 app.use('/api/upload', uploadRoutes);
 

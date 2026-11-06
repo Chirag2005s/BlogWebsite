@@ -26,7 +26,7 @@ const storage = multer.diskStorage({
 });
 
 const checkFileType = (file, cb) => {
-  const filetypes = /jpg|jpeg|png|webp|mp4|webm|mkv/;
+  const filetypes = /jpg|jpeg|png|webp|gif|mp4|webm|mkv/;
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
   const mimetype = filetypes.test(file.mimetype);
 
@@ -44,11 +44,11 @@ const upload = multer({
   },
 });
 
-router.post('/', protect, admin, upload.single('media'), (req, res) => {
+router.post('/', protect, upload.single('media'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: 'No file uploaded' });
   }
-  
+
   // Return the path that will be statically served
   res.json({
     message: 'File uploaded successfully',

@@ -292,7 +292,7 @@ export default function Home() {
           3. CODE OF THE DAY COMPONENT
           ═══════════════════════════════════════════ */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-xl mx-auto mb-8 space-y-2">
+        {/* <div className="text-center max-w-xl mx-auto mb-8 space-y-2">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full surface-card border border-line text-xs font-mono text-[#06B6D4]">
             <Flame size={13} />
             <span>Interactive Terminal</span>
@@ -303,9 +303,9 @@ export default function Home() {
           <p className="text-sm text-muted">
             Sharpen your fundamentals with daily syntax snippets and computational mental models.
           </p>
-        </div>
+        </div> */}
 
-        <CodeEditorSnippet />
+        {/* <CodeEditorSnippet /> */}
       </section>
 
       {/* ═══════════════════════════════════════════
@@ -421,17 +421,17 @@ export default function Home() {
             </Link>
           ))}
         </div>
-      </section>
+      </section >
 
       {/* ═══════════════════════════════════════════
           4.5 ADVERTISEMENT SECTION
           ═══════════════════════════════════════════ */}
-      <AdvertisementSection />
+      < AdvertisementSection />
 
       {/* ═══════════════════════════════════════════
           5. DEVELOPER ROADMAPS (INTERACTIVE JOURNEY)
           ═══════════════════════════════════════════ */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      < section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" >
         <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full surface-card border border-line text-xs font-mono text-[#8B5CF6]">
             <Compass size={14} />
@@ -447,105 +447,13 @@ export default function Home() {
 
         {/* Connected Node Flow Component */}
         <RoadmapInteractiveFlow />
-      </section>
+      </section >
 
-      {/* ═══════════════════════════════════════════
-          6. LEARN PROGRAMMING
-          ═══════════════════════════════════════════ */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        {/* Decorative background glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[120%] bg-gradient-to-br from-[#0F6B4F]/5 via-transparent to-[#16805E]/5 blur-3xl pointer-events-none rounded-full" />
-
-        <div className="relative flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
-          <div className="relative z-10">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-soft border border-line text-[#0F6B4F]">
-                <Code2 size={16} />
-              </div>
-              <span className="text-xs font-mono uppercase tracking-wider text-[#0F6B4F] font-bold">
-                Language Hub
-              </span>
-            </div>
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-heading tracking-tight mb-2">
-              Learn <span className="tech-gradient-text">Programming</span>
-            </h2>
-            <p className="text-sm sm:text-base text-muted max-w-xl leading-relaxed">
-              Master the core syntax, paradigms, and design patterns across industry-standard languages through comprehensive, interactive guides.
-            </p>
-          </div>
-
-          <Link
-            to="/programming"
-            className="relative z-10 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-soft border border-line hover:border-[#0F6B4F]/40 text-sm font-semibold text-heading hover:text-[#0F6B4F] transition-all group shrink-0 shadow-sm hover:shadow-md"
-          >
-            <span>Explore All Languages</span>
-            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </div>
-
-        {/* Languages Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
-          {PROGRAMMING_LANGUAGES.map((lang, idx) => (
-            <div
-              key={lang.slug}
-              className="group relative flex flex-col justify-between p-6 rounded-2xl surface-card hover:-translate-y-2 transition-all duration-500 overflow-hidden"
-              style={{ animationDelay: `${idx * 100}ms` }}
-            >
-              {/* Animated Glow on Hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#0F6B4F]/0 to-[#0F6B4F]/0 group-hover:from-[#0F6B4F]/5 group-hover:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
-              {/* Glowing Top Border Effect */}
-              <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#0F6B4F]/0 to-transparent group-hover:via-[#0F6B4F]/50 transition-all duration-500" />
-
-              <div className="relative z-10">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="w-14 h-14 rounded-2xl bg-page border border-line flex items-center justify-center text-4xl group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500 shadow-inner">
-                    {lang.icon}
-                  </div>
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-[#0F6B4F] bg-[#0F6B4F]/10 border border-[#0F6B4F]/20 px-3 py-1 rounded-full font-bold shadow-sm">
-                    {lang.difficulty}
-                  </span>
-                </div>
-
-                <h3 className="text-xl font-extrabold text-heading group-hover:text-[#0F6B4F] transition-colors mb-2 tracking-tight">
-                  {lang.name}
-                </h3>
-
-                <p className="text-sm text-muted leading-relaxed line-clamp-2 mb-4">
-                  {lang.description}
-                </p>
-
-                <div className="flex items-center gap-3 text-xs font-medium text-muted bg-page/50 rounded-lg p-2.5 border border-line/50">
-                  <div className="flex items-center gap-1.5">
-                    <BookOpen size={14} className="text-[#0F6B4F]/70" />
-                    <span>{lang.tutorialCount} Guides</span>
-                  </div>
-                  <div className="w-1 h-1 rounded-full bg-line" />
-                  <div className="flex items-center gap-1.5">
-                    <Flame size={14} className="text-orange-500/70" />
-                    <span>{lang.popularity}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-6 pt-5 border-t border-line/50 relative z-10">
-                <Link
-                  to="/programming"
-                  className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-page border border-line hover:border-[#0F6B4F]/50 hover:bg-[#0F6B4F]/5 text-sm font-bold text-heading hover:text-[#0F6B4F] transition-all group/btn shadow-sm"
-                >
-                  <span>Start Learning</span>
-                  <ArrowRight size={16} className="group-hover/btn:translate-x-1.5 transition-transform" />
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
 
       {/* ═══════════════════════════════════════════
           7. WHAT'S HAPPENING IN TECH? (TECH NEWS)
           ═══════════════════════════════════════════ */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      < section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" >
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -619,21 +527,21 @@ export default function Home() {
             </div>
           ))}
         </div>
-      </section>
+      </section >
 
       {/* ═══════════════════════════════════════════
           8. ANIMATED STATISTICS
           ═══════════════════════════════════════════ */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      < section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" >
         <StatsCounter />
-      </section>
+      </section >
 
       {/* ═══════════════════════════════════════════
           9. NEWSLETTER BANNER
           ═══════════════════════════════════════════ */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      < section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" >
         <NewsletterBanner />
-      </section>
-    </div>
+      </section >
+    </div >
   );
 }

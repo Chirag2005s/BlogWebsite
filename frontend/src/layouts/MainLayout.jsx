@@ -3,9 +3,8 @@ import { Outlet, Link, useNavigate, useLocation, useOutlet } from 'react-router-
 import {
   Menu, X, Search, ChevronRight,
   PenTool, LogOut, ChevronDown, FileText, PlusCircle,
-  User, Code2, Sparkles, Shield
+  User, Code2, Sparkles, Shield, FolderGit2, ArrowUp
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 
 const GithubIcon = ({ size = 16, className = '' }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -46,6 +45,7 @@ export default function MainLayout() {
   const location = useLocation();
   const currentOutlet = useOutlet();
   const [scrolled, setScrolled] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
@@ -90,9 +90,28 @@ export default function MainLayout() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // High-performance rAF-throttled scroll handler (only re-renders on threshold crossings)
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const y = window.scrollY;
+          setScrolled((prev) => {
+            const next = y > 20;
+            return prev === next ? prev : next;
+          });
+          setShowScrollTop((prev) => {
+            const next = y > 350;
+            return prev === next ? prev : next;
+          });
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
     window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -118,7 +137,7 @@ export default function MainLayout() {
     }
     setMobileMenuOpen(false);
     setUserMenuOpen(false);
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   }, [location.pathname]);
 
   const handleLogout = async () => {
@@ -140,7 +159,8 @@ export default function MainLayout() {
     { to: '/articles', label: 'Articles' },
     // { to: '/programming', label: 'Programming' },
     { to: '/problemhub', label: 'Problem', requiresLogin: true },
-    { to: '/roadmaps', label: 'Roadmaps', requiresLogin: true },
+    { to: '/projecthub', label: 'Project Hub', requiresLogin: true },
+    // { to: '/roadmaps', label: 'Roadmaps', requiresLogin: true },
     { to: '/interview-questions', label: 'Interview', requiresLogin: true },
     { to: '/news', label: 'Tech News' },
   ];
@@ -316,6 +336,20 @@ export default function MainLayout() {
                           <div>
                             <div className="font-semibold text-heading group-hover:text-blue-400">My ProblemHub</div>
                             <div className="text-[10px] text-muted">View posted problems & stats</div>
+                          </div>
+                        </Link>
+
+                        <Link
+                          to="/projecthub/my-projects"
+                          onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-heading hover:bg-soft hover:text-emerald-400 transition-colors group"
+                        >
+                          <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 group-hover:scale-105 transition-transform">
+                            <FolderGit2 size={14} />
+                          </div>
+                          <div>
+                            <div className="font-semibold text-heading group-hover:text-emerald-400">My ProjectHub</div>
+                            <div className="text-[10px] text-muted">Manage projects & bookmarks</div>
                           </div>
                         </Link>
 
@@ -507,19 +541,22 @@ export default function MainLayout() {
 
       {/* ═══ MAIN CONTENT OUTLET ═══ */}
       <main className="flex-grow pt-24 pb-16">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={location.pathname}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3, ease: 'easeOut' }}
-            className="w-full h-full"
-          >
-            {currentOutlet}
-          </motion.div>
-        </AnimatePresence>
+        <div key={location.pathname} className="w-full h-full animate-fade-in">
+          {currentOutlet}
+        </div>
       </main>
+
+      {/* ═══ FLOATING SMOOTH SCROLL-TO-TOP BUTTON ═══ */}
+      {showScrollTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })}
+          aria-label="Scroll to top"
+          title="Back to top"
+          className="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-2xl bg-gradient-to-tr from-[#0F6B4F] to-[#16805E] text-white shadow-lg shadow-[#0F6B4F]/30 border border-[#4FD1A5]/30 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform duration-200 animate-fade-in cursor-pointer"
+        >
+          <ArrowUp size={18} />
+        </button>
+      )}
 
       {/* ═══ MULTI-COLUMN FOOTER ═══ */}
       <footer className="border-t border-line bg-footer">
@@ -548,6 +585,7 @@ export default function MainLayout() {
                 <li><Link to="/blog" className="hover:text-white transition-colors">Blog</Link></li>
                 <li><Link to="/articles" className="hover:text-white transition-colors">Articles</Link></li>
                 <li><Link to="/problemhub" onClick={(e) => { if (!userInfo) { e.preventDefault(); setLoginModalOpen(true); } }} className="hover:text-white transition-colors">ProblemHub</Link></li>
+                <li><Link to="/projecthub" onClick={(e) => { if (!userInfo) { e.preventDefault(); setLoginModalOpen(true); } }} className="hover:text-white transition-colors">ProjectHub</Link></li>
                 <li><Link to="/roadmaps" onClick={(e) => { if (!userInfo) { e.preventDefault(); setLoginModalOpen(true); } }} className="hover:text-white transition-colors">Roadmaps</Link></li>
                 <li><Link to="/interview-questions" onClick={(e) => { if (!userInfo) { e.preventDefault(); setLoginModalOpen(true); } }} className="hover:text-white transition-colors">Interview Questions</Link></li>
                 <li><Link to="/news" className="hover:text-white transition-colors">Tech News</Link></li>
