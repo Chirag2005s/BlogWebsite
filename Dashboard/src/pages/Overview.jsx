@@ -205,12 +205,12 @@ const Overview = () => {
   const defaultTrendData = monthlyPublicationData.length > 0
     ? monthlyPublicationData
     : [
-        { name: 'May', Blogs: 4, Articles: 2, Views: 240, Likes: 45 },
-        { name: 'Jun', Blogs: 7, Articles: 3, Views: 580, Likes: 92 },
-        { name: 'Jul', Blogs: 12, Articles: 5, Views: 890, Likes: 140 },
-        { name: 'Aug', Blogs: 15, Articles: 8, Views: 1200, Likes: 210 },
-        { name: 'Sep', Blogs: 18, Articles: 10, Views: 1650, Likes: 310 },
-      ];
+      { name: 'May', Blogs: 4, Articles: 2, Views: 240, Likes: 45 },
+      { name: 'Jun', Blogs: 7, Articles: 3, Views: 580, Likes: 92 },
+      { name: 'Jul', Blogs: 12, Articles: 5, Views: 890, Likes: 140 },
+      { name: 'Aug', Blogs: 15, Articles: 8, Views: 1200, Likes: 210 },
+      { name: 'Sep', Blogs: 18, Articles: 10, Views: 1650, Likes: 310 },
+    ];
 
   // 2. Category Donut Data
   const categoryChartData = (stats?.contentByCategory || [])
@@ -223,12 +223,12 @@ const Overview = () => {
   const defaultCategoryData = categoryChartData.length > 0
     ? categoryChartData
     : [
-        { name: 'Web Development', value: 12 },
-        { name: 'Frontend & React', value: 9 },
-        { name: 'Backend Node.js', value: 8 },
-        { name: 'DevOps & Cloud', value: 5 },
-        { name: 'AI & Data Science', value: 4 },
-      ];
+      { name: 'Web Development', value: 12 },
+      { name: 'Frontend & React', value: 9 },
+      { name: 'Backend Node.js', value: 8 },
+      { name: 'DevOps & Cloud', value: 5 },
+      { name: 'AI & Data Science', value: 4 },
+    ];
 
   // 3. Platform Health Radar Data
   const radarData = [
@@ -261,7 +261,7 @@ const Overview = () => {
 
   return (
     <div className="animate-fade-in" style={{ paddingBottom: '40px', display: 'flex', flexDirection: 'column', gap: '28px' }}>
-      
+
       {/* ═════════ 1. Executive Banner & Telemetry Hub ═════════ */}
       <div
         className="card"
@@ -396,7 +396,7 @@ const Overview = () => {
 
       {/* ═════════ 3. Primary Graphs Grid (2 Columns) ═════════ */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: '24px' }}>
-        
+
         {/* Graph 1: Reader Traffic & Engagement Trajectory */}
         <div className="chart-card" style={{ padding: '24px', borderRadius: '20px', background: 'var(--bg-card)', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-md)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
@@ -467,7 +467,7 @@ const Overview = () => {
 
       {/* ═════════ 4. Secondary Graphs Grid (3 Columns) ═════════ */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
-        
+
         {/* Graph 3: Category Share Donut */}
         <div className="chart-card" style={{ padding: '24px', borderRadius: '20px', background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
@@ -583,7 +583,7 @@ const Overview = () => {
 
       {/* ═════════ 5. Data Feeds & Recent Activity Section ═════════ */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '24px' }}>
-        
+
         {/* Left: Registered Users Feed */}
         <div
           className="card"
@@ -693,7 +693,7 @@ const Overview = () => {
             <HiOutlineCheckCircle style={{ color: 'var(--accent-purple)', fontSize: '20px' }} />
             <div style={{ fontWeight: 700, fontSize: '16px', color: '#fff' }}>User Insights & Information</div>
           </div>
-          
+
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {/* Quick Stats Banner */}
             <div style={{
@@ -717,7 +717,7 @@ const Overview = () => {
             {/* Role Explanations */}
             <div style={{ padding: '16px', borderRadius: '12px', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
               <h5 style={{ margin: '0 0 12px 0', fontSize: '13px', color: '#fff', fontWeight: 600 }}>Role Capabilities</h5>
-              
+
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 <div style={{ display: 'flex', gap: '10px' }}>
                   <span className="badge badge-admin" style={{ fontSize: '10px', height: 'fit-content' }}>ADMIN</span>
