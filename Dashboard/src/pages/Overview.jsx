@@ -17,6 +17,8 @@ import {
   HiOutlineCheckCircle,
   HiOutlineGlobeAlt,
   HiOutlineChartPie,
+  HiOutlineCube,
+  HiOutlineStar,
 } from 'react-icons/hi';
 import {
   ResponsiveContainer,
@@ -83,6 +85,17 @@ const Overview = () => {
   const [lastUpdated, setLastUpdated] = useState(new Date());
 
   const fetchStats = async (isManualRefresh = false) => {
+    let projectList = [];
+    try {
+      const projRes = await api.get('/projects');
+      projectList = Array.isArray(projRes.data) ? projRes.data : (projRes.data?.data || []);
+    } catch (e) {
+      projectList = [];
+    }
+
+    const featuredProjectsCount = projectList.filter((p) => p.isFeatured).length;
+    const contributorProjectsCount = projectList.filter((p) => p.lookingForContributors).length;
+
     try {
       if (isManualRefresh) setRefreshing(true);
       else setLoading(true);
@@ -90,7 +103,13 @@ const Overview = () => {
 
       const { data } = await api.get('/admin/stats');
       if (data.success) {
-        setStats(data.data);
+        setStats({
+          ...data.data,
+          totalProjects: projectList.length || data.data.totalProjects || 0,
+          featuredProjectsCount,
+          contributorProjectsCount,
+          recentProjects: projectList.slice(0, 5),
+        });
         setLastUpdated(new Date());
       }
     } catch (err) {
@@ -119,6 +138,10 @@ const Overview = () => {
         setStats({
           totalBlogs: blogs.length,
           totalArticles: standardArticles.length,
+          totalProjects: projectList.length,
+          featuredProjectsCount,
+          contributorProjectsCount,
+          recentProjects: projectList.slice(0, 5),
           totalUsers: totalUserCount || 1,
           totalCategories: 7,
           totalRoadmaps: 5,
@@ -309,14 +332,17 @@ const Overview = () => {
           <button className="btn btn-secondary" onClick={() => navigate('/add-article')} style={{ fontSize: '13px' }}>
             <HiOutlinePlus /> New Article
           </button>
+          <button className="btn btn-secondary" onClick={() => navigate('/projects')} style={{ fontSize: '13px' }}>
+            <HiOutlineCube /> Manage Projects
+          </button>
           <button className="btn btn-primary" onClick={() => navigate('/add-roadmap')} style={{ fontSize: '13px' }}>
             <HiOutlinePlus /> Add Roadmap
           </button>
         </div>
       </div>
 
-      {/* ═════════ 2. KPI Metrics Row (6 Glass Cards) ═════════ */}
-      <div className="stats-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '18px' }}>
+      {/* ═════════ 2. KPI Metrics Row (7 Glass Cards) ═════════ */}
+      <div className="stats-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(175px, 1fr))', gap: '18px' }}>
         <StatsCard
           icon={HiOutlinePencilAlt}
           label="Total Blogs"
@@ -330,6 +356,13 @@ const Overview = () => {
           value={stats?.totalArticles || 0}
           trend="+8% this mo"
           accentColor="purple"
+        />
+        <StatsCard
+          icon={HiOutlineCube}
+          label="Total Projects"
+          value={stats?.totalProjects || 0}
+          trend={`${stats?.featuredProjectsCount || 0} Featured`}
+          accentColor="green"
         />
         <StatsCard
           icon={HiOutlineMap}
@@ -713,6 +746,124 @@ const Overview = () => {
                 <HiOutlineSparkles /> <strong>Pro Tip:</strong> Regularly review user roles to maintain platform security.
               </p>
             </div>
+          </div>
+        </div>
+
+        {/* Project Hub & Management Feed */}
+        <div
+          className="card"
+          style={{
+            padding: '24px',
+            borderRadius: '20px',
+            background: 'var(--bg-card)',
+            border: '1px solid var(--border-color)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            boxShadow: 'var(--shadow-md)',
+          }}
+        >
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: '16px', color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <HiOutlineCube style={{ color: '#10b981', fontSize: '20px' }} />
+                  Total Projects & Management
+                </div>
+                <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: '2px 0 0 0' }}>
+                  Project Hub showcase builds and contributor activity.
+                </p>
+              </div>
+
+              <Link
+                to="/projects"
+                style={{
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  color: '#10b981',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  textDecoration: 'none',
+                }}
+              >
+                Manage Projects <HiOutlineArrowRight />
+              </Link>
+            </div>
+
+            {/* Total Projects Banner */}
+            <div
+              style={{
+                background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(0, 212, 255, 0.06) 100%)',
+                border: '1px solid rgba(16, 185, 129, 0.25)',
+                borderRadius: '12px',
+                padding: '14px 16px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '16px',
+              }}
+            >
+              <div>
+                <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-muted)' }}>Total Projects Published</p>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginTop: '4px' }}>
+                  <h4 style={{ margin: 0, fontSize: '24px', color: '#fff', fontWeight: 800 }}>
+                    {stats?.totalProjects || 0}
+                  </h4>
+                  <span style={{ fontSize: '11px', color: '#34d399', fontWeight: 600 }}>
+                    {stats?.featuredProjectsCount || 0} Featured • {stats?.contributorProjectsCount || 0} Collab Open
+                  </span>
+                </div>
+              </div>
+              <div style={{ background: 'rgba(16, 185, 129, 0.2)', color: '#34d399', padding: '8px', borderRadius: '8px' }}>
+                <HiOutlineCube size={24} />
+              </div>
+            </div>
+
+            {stats?.recentProjects && stats.recentProjects.length > 0 ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {stats.recentProjects.slice(0, 4).map((proj) => (
+                  <div
+                    key={proj._id}
+                    onClick={() => navigate('/projects')}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '10px 14px',
+                      borderRadius: '12px',
+                      background: 'rgba(255, 255, 255, 0.025)',
+                      border: '1px solid rgba(255, 255, 255, 0.05)',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <div style={{ minWidth: 0, paddingRight: '10px' }}>
+                      <div style={{ fontWeight: 600, color: '#fff', fontSize: '13px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {proj.title}
+                      </div>
+                      <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                        {proj.creator?.name || proj.creatorName || 'Developer'} • {proj.category || 'Full Stack'}
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+                      {proj.isFeatured && (
+                        <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '6px', background: 'rgba(245, 158, 11, 0.15)', color: '#fbbf24' }}>
+                          <HiOutlineStar style={{ verticalAlign: 'middle' }} /> Featured
+                        </span>
+                      )}
+                      <span style={{ fontSize: '10px', padding: '2px 8px', borderRadius: '6px', background: 'rgba(0, 212, 255, 0.1)', color: 'var(--accent-cyan)' }}>
+                        {proj.difficulty || 'Intermediate'}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div style={{ textAlign: 'center', padding: '24px 0', color: 'var(--text-muted)', fontSize: '13px' }}>
+                No projects found. Click Manage Projects to publish one.
+              </div>
+            )}
           </div>
         </div>
 

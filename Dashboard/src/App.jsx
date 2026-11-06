@@ -18,6 +18,7 @@ import Categories from './pages/Categories';
 import ManageInterviewQuestions from './pages/ManageInterviewQuestions';
 import ManageInterviewRepos from './pages/ManageInterviewRepos';
 import ManageProblemHub from './pages/ManageProblemHub';
+import ManageProjects from './pages/ManageProjects';
 import Users from './pages/Users';
 import ContactMessages from './pages/ContactMessages';
 import Profile from './pages/Profile';
@@ -71,6 +72,7 @@ function App() {
             <Route path="/add-roadmap" element={<AddRoadmap />} />
             <Route path="/manage-roadmaps" element={<ManageRoadmaps />} />
             <Route path="/problem-hub" element={<ManageProblemHub />} />
+            <Route path="/projects" element={<ManageProjects />} />
             <Route path="/content" element={<ManageContent />} />
             <Route path="/edit/:id" element={<EditContent />} />
             <Route path="/categories" element={<Categories />} />
